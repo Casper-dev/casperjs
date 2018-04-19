@@ -4,8 +4,10 @@
   "description": "js api for casper distributed fs infrastructure",
   "main": "index.js",
   "scripts": {
+    "dev": "webpack -w --mode=development --hide-modules",
     "test": "jest",
-    "build": "rollup -c"
+    "build": "webpack --mode=production --hide-modules",
+    "build-dev": "webpack --mode=development --hide-modules"
   },
   "repository": {
     "type": "git",
@@ -18,15 +20,15 @@
   },
   "homepage": "https://github.com/Casper-dev/casperjs#readme",
   "devDependencies": {
+    "babel-loader": "^7.1.4",
     "jest": "^22.4.3",
-    "rollup": "^0.57.1",
-    "rollup-plugin-json": "^2.3.0",
-    "web3": "^1.0.0-beta.33"
+    "rollup-plugin-commonjs": "^9.1.0",
+    "web3": "^1.0.0-beta.33",
+    "webpack": "^4.6.0",
+    "webpack-cli": "^2.0.14"
   },
   "dependencies": {
-    "axios": "^0.18.0"
-  },
-  "peerDependencies": {
-    "web3": "^1.0.0-beta.33"
+    "axios": "^0.18.0",
+    "formdata": "^0.10.4"
   }
 }
