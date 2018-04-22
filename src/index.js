@@ -1,7 +1,9 @@
 // we use commonsjs for node export
 const scEth = require('./eth/sc')
-const CasperPromise = require('./promise')
-const axios = require('axios')
+const CasperPromise = require('./promise').default
+const requestAny = require('./requestAny').default
+const utils = require('./utils')
+const FormData = typeof window !== 'undefined' ? window.FormData : require('form-data')
 
 
 const DEFAULT_LINK_LIFETIME = 1000 * 60 * 60 * 5
@@ -18,45 +20,57 @@ class Casper {
     if(this.blockchain === 'eth') this.blockchainAPI = api.eth
   }
 
+ 
+
   /**
    * Writes file into casper storage.
    * If uuid is present file is overwritten
-   * @param {(File | Blob)} file 
+   * @param {(Blob | Buffer | ArrayBuffer)} file 
    * @param {String} uuid file's unique id (from previous upload)
    * @return {CasperPromise} resolves with uuid
    */
   save(file, uuid = false) {
     return new CasperPromise((resolve, reject, emit) => {
+      if( ! utils.isFile(file)) {
+        throw new TypeError('Casper: file type must be File | Blob | ArrayBuffer | Buffer')
+      }
+
+      const fileSize = utils.getFileSize(file)
+
+  
       sc[this.blockchain]
-        .getUploadNode(this.blockchainAPI)
-        .then(ip => {
-          console.log(targetIp)
-          // const nodeAddr = ''
-          // emit('node-found')
-          
-          // // Uploading to the node
-          // const data = null
-          // const config = {
-          //   onUploadProgress: event => emit('progress', event)
-          // }
-
-          // let axiosPromise
-          // if(uuid) {
-          //   axiosPromise = axios.post(`https://${nodeAddr}/api/v0/file/`, data, config)
-          // } else {
-          //   axiosPromise = axios.put(`https://${nodeAddr}/api/v0/file/${uuid}`, data, config)
-          // }
-
-          // axiosPromise
-          //   .then(resolve)
-          //   .catch(reject) // actually manual handling would be there
+        .getUploadNode(this.blockchainAPI, { fileSize: fileSize })
+        .then(ips => {
+          emit('sc-connected')
+          return ips
         })
+        .then(ips => new Promise((resolve, reject) => {
+          const form = new FormData()
+          form.append('file', file)
+
+          let method, url
+          if(uuid) {
+            // Update
+            method = 'PUT'
+            url = `https://{host}:5001/casper/v0/file/${uuid}`
+          } else {
+            method = 'POST'
+            url = 'https://{host}:5001/casper/v0/file'
+          }
+
+          requestAny(method, url, ips, form)
+            .on('progress', (ip, event) => emit('progress', event))
+            .on('node-found', ip => emit('node-found', ip))
+            .then(resolve)
+            .catch(reject)
+        }))
+        .then(resolve)
         .catch(reject)
     })
   }
 
   /**
-   * Deletes file from casper storage.
+   * Deletes file from casper storage.  
    * @param {String} uuid file's unique id (from upload)
    * @return {CasperPromise} resolves with void
    */
@@ -70,7 +84,7 @@ class Casper {
    * @param {String} uuid file's unique id (from upload)
    * @return {CasperPromise} resolves with Blob, after the whole file is downloaded
    */
-  fetch(uuid) {
+  getFile(uuid) {
     return new CasperPromise((resolve, reject, emit) => {
     })
   }
