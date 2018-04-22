@@ -5,7 +5,6 @@ const CasperPromise = require('./promise')
 const requestAny = (method, url, hosts, data) => new CasperPromise((resolve, reject, emit) => {
   if(hosts.length === 0) reject(new Error('No hosts to handle request'))
   
-  hosts = ['localhost', '127.0.0.1']
   
   const controllers = hosts.map(host => ({
     host,
