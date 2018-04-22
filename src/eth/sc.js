@@ -1,15 +1,15 @@
-import { hexToString } from '../utils'
+const hexToString = require('../utils').hexToString
 
-import SC_INTERFACE from './sc.abi.json'
+
+const SC_INTERFACE = require('./sc.abi.json')
 const SC_ADDR = 'F837c5CdE708c05E39169E3aE0343B9f0dBB4DF2'
-
 let sc
+const ensureSC = eth => { if( ! sc) sc = new eth.Contract(SC_INTERFACE, SC_ADDR) }
 
 
-export const getAllNodes = eth => new Promise((resolve, reject) => {
-  if( ! sc) sc = new eth.Contract(SC_INTERFACE, SC_ADDR)
+const getAllNodes = eth => new Promise((resolve, reject) => {
+  ensureSC(eth)
 
-  
   sc.methods.getAllPeers().call()
     .then(data => {
       const hex = data[0]
@@ -23,8 +23,9 @@ export const getAllNodes = eth => new Promise((resolve, reject) => {
     .then(resolve)
 })
 
-export const getUploadNode = (eth, { fileSize }) => new Promise((resolve, reject) => {
-  if( ! sc) sc = new eth.Contract(SC_INTERFACE, SC_ADDR)
+
+const getUploadNode = (eth, { fileSize }) => new Promise((resolve, reject) => {
+  ensureSC(eth)
 
   sc.methods.getPeers(fileSize).call()
     .then(data => {
@@ -41,3 +42,9 @@ export const getUploadNode = (eth, { fileSize }) => new Promise((resolve, reject
     .then(resolve)
     .catch(err => console.error(err))
 })
+
+
+module.exports = {
+  getAllNodes,
+  getUploadNode
+}

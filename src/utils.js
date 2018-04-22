@@ -1,6 +1,4 @@
-import { DEFAULT_ECDH_CURVE } from "tls";
-
-export const hexToString = hash => {
+const hexToString = hash => {
   const val = hash.substring(2)
   const codes = []
 
@@ -12,25 +10,34 @@ export const hexToString = hash => {
 }
 
 
-export const isFile = file => {
-  return (
-    // Hybrid
-    file instanceof ArrayBuffer 
-    // Browser
-    || (typeof Blob !== 'undefined' && file instanceof Blob)
-    // Node
-    || (typeof Buffer !== 'undefined' && file instanceof Buffer)
-  )
+const isFile = file => {
+  if(file instanceof ArrayBuffer ) return true
+  
+  if(CASPER_BUNDLE_TARGET === 'node') {
+    if(file instanceof Buffer) return true 
+  }
+
+  if(CASPER_BUNDLE_TARGET === 'browser') {
+    if(file instanceof Blob) return true
+  }
 }
 
 
-export const getFileSize = file => {
-  // Hybrid
-  if ( file instanceof ArrayBuffer) return file.byteLength / 8
+const getFileSize = file => {
+  if (file instanceof ArrayBuffer) return file.byteLength / 8
   
-  // Browser
-  if(typeof Blob !== 'undefined' && file instanceof Blob ) return file.size / 8
-  
-  // Node
-  if ( file instanceof Buffer ) return file.byteLength / 8
+  if(CASPER_BUNDLE_TARGET === 'browser') {
+    if (file instanceof Blob) return file.size / 8
+  }
+
+  if (CASPER_BUNDLE_TARGET === 'node') {
+    if(file instanceof Buffer) return file.byteLength / 8
+  }
+}
+
+
+module.exports = {
+  hexToString,
+  isFile,
+  getFileSize
 }

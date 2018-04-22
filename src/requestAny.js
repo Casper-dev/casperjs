@@ -1,10 +1,11 @@
-import axios from 'axios'
-import CasperPromise from './promise'
+const axios = require('axios')
+const CasperPromise = require('./promise')
 
 
 const requestAny = (method, url, hosts, data) => new CasperPromise((resolve, reject, emit) => {
   if(hosts.length === 0) reject(new Error('No hosts to handle request'))
-
+  
+  
   const controllers = hosts.map(host => ({
     host,
     
@@ -14,24 +15,28 @@ const requestAny = (method, url, hosts, data) => new CasperPromise((resolve, rej
     canceller: axios.CancelToken.source(),
     cancel() {
       if(this.canceled) return 
-
+      
       this.canceled = true
       this.canceller.cancel()
     },
   }))
-
+  
   let championHost = ''
   const handleProgress = progressHost => event => {
     if( ! championHost) {
       championHost = progressHost
       emit('node-found', championHost)
     }
-
+    
     controllers
-      .filter(controller.host !== championHost)
-      .map(controller => controller.cancel())
-
+    .filter(controller.host !== championHost)
+    .map(controller => controller.cancel())
+    
     emit('progress', { progressHost, event })
+  }
+  if(CASPER_BUNDLE_TARGET === 'node') {
+    // we want headers to hoist
+    if(data) var headers = data.getHeaders()
   }
 
 
@@ -40,7 +45,7 @@ const requestAny = (method, url, hosts, data) => new CasperPromise((resolve, rej
       method,
       url: url.replace('{host}', controller.host),
 
-      headers: (typeof data !== 'undefined' && data.getHeaders()) ? data.getHeaders() : {},
+      headers,
       data,
 
       cancelToken: controller.canceller.token,
@@ -77,4 +82,4 @@ const requestAny = (method, url, hosts, data) => new CasperPromise((resolve, rej
 })
 
 
-export default requestAny
+module.exports = requestAny

@@ -29,4 +29,4 @@ class CasperPromise extends Promise {
 }
 
 
-export default CasperPromise
+module.exports = CasperPromise

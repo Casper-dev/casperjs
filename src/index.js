@@ -1,15 +1,17 @@
 // we use commonsjs for node export
 const scEth = require('./eth/sc')
-const CasperPromise = require('./promise').default
-const requestAny = require('./requestAny').default
+const CasperPromise = require('./promise')
+const requestAny = require('./requestAny')
 const utils = require('./utils')
-const FormData = typeof window !== 'undefined' ? window.FormData : require('form-data')
 
 
 const DEFAULT_LINK_LIFETIME = 1000 * 60 * 60 * 5
-
 const sc = {
   eth: scEth
+}
+if(CASPER_BUNDLE_TARGET === 'node') {
+  // var is here because we want hoisting
+  var FormData = require('form-data')
 }
 
 
@@ -33,11 +35,9 @@ class Casper {
         throw new TypeError('Casper: file type must be File | Blob | ArrayBuffer | Buffer')
       }
 
-      const fileSize = utils.getFileSize(file)
-
   
       sc[this.blockchain]
-        .getUploadNode(this.blockchainAPI, { fileSize: fileSize })
+        .getUploadNode(this.blockchainAPI, { fileSize: utils.getFileSize(file) })
         .then(ips => {
           emit('sc-connected')
           return ips
