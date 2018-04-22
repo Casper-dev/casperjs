@@ -20,8 +20,6 @@ class Casper {
     if(this.blockchain === 'eth') this.blockchainAPI = api.eth
   }
 
- 
-
   /**
    * Writes file into casper storage.
    * If uuid is present file is overwritten
@@ -54,6 +52,7 @@ class Casper {
             method = 'PUT'
             url = `https://{host}:5001/casper/v0/file/${uuid}`
           } else {
+            // Save new
             method = 'POST'
             url = 'https://{host}:5001/casper/v0/file'
           }
@@ -99,7 +98,9 @@ class Casper {
     })
   }
 
-  // REMOVE
+  /**
+   * Mostly useful for debugging
+   */
   getNodes() {
     return sc[this.blockchain].getAllNodes(this.blockchainAPI)
   }

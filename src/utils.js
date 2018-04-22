@@ -13,9 +13,14 @@ export const hexToString = hash => {
 
 
 export const isFile = file => {
-  return (file instanceof ArrayBuffer 
+  return (
+    // Hybrid
+    file instanceof ArrayBuffer 
+    // Browser
     || (typeof Blob !== 'undefined' && file instanceof Blob)
-    || (typeof Buffer !== 'undefined' && file instanceof Buffer))
+    // Node
+    || (typeof Buffer !== 'undefined' && file instanceof Buffer)
+  )
 }
 
 

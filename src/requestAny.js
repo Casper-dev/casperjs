@@ -5,13 +5,12 @@ import CasperPromise from './promise'
 const requestAny = (method, url, hosts, data) => new CasperPromise((resolve, reject, emit) => {
   if(hosts.length === 0) reject(new Error('No hosts to handle request'))
 
-  let championHost = ''
-  
   const controllers = hosts.map(host => ({
     host,
     
     rejected: false,
     canceled: false,
+    
     canceller: axios.CancelToken.source(),
     cancel() {
       if(this.canceled) return 
@@ -20,7 +19,8 @@ const requestAny = (method, url, hosts, data) => new CasperPromise((resolve, rej
       this.canceller.cancel()
     },
   }))
-  
+
+  let championHost = ''
   const handleProgress = progressHost => event => {
     if( ! championHost) {
       championHost = progressHost
@@ -34,16 +34,17 @@ const requestAny = (method, url, hosts, data) => new CasperPromise((resolve, rej
     emit('progress', { progressHost, event })
   }
 
+
   controllers.forEach(controller => {
     axios({
       method,
       url: url.replace('{host}', controller.host),
 
-      headers: data ? data.getHeaders() : {},
-      
+      headers: (typeof data !== 'undefined' && data.getHeaders()) ? data.getHeaders() : {},
       data,
 
       cancelToken: controller.canceller.token,
+      
       // only one will trigger anyway
       onUploadProgress: handleProgress(controller.host),
       onDownloadProgress: handleProgress(controller.host)
@@ -68,10 +69,7 @@ const requestAny = (method, url, hosts, data) => new CasperPromise((resolve, rej
             .catch(err => {
               reject(new Error('All hosts are unreachable'))
             })
-        }
-
-        if(controllers.filter(x => !x.rejected).length === 0) {
-          // All given nodes failed
+        } else if(controllers.filter(x => !x.rejected || x.canceled).length === 0) {
           reject(new Error('All hosts are unreachable'))
         }
       })
