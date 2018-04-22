@@ -42,7 +42,7 @@ class Casper {
           emit('sc-connected')
           return ips
         })
-        .then(ips => new Promise((resolve, reject) => {
+        .then(ips => {
           const form = new FormData()
           form.append('file', file)
 
@@ -50,20 +50,19 @@ class Casper {
           if(uuid) {
             // Update
             method = 'PUT'
-            url = `https://{host}:5001/casper/v0/file/${uuid}`
+            url = `http://{host}:5001/casper/v0/file/${uuid}`
           } else {
             // Save new
             method = 'POST'
-            url = 'https://{host}:5001/casper/v0/file'
+            url = 'http://{host}:5001/casper/v0/file'
           }
 
           requestAny(method, url, ips, form)
             .on('progress', (ip, event) => emit('progress', event))
-            .on('node-found', ip => emit('node-found', ip))
-            .then(resolve)
+            .on('new-champion', ip => emit('node-found', ip))
+            .then(response => resolve(response.data))
             .catch(reject)
-        }))
-        .then(resolve)
+        })
         .catch(reject)
     })
   }

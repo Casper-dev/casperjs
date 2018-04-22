@@ -11,9 +11,9 @@ const main = async () => {
     const file = fs.readFileSync(__dirname + '/file.txt')
     const uuid = await casper.save(file)
                              .on('sc-connected', () => console.log('sc'))
-                             .on('progress', console.log)
-                             .on('node-found', console.log)
-    // console.log('RESULT', uuid)
+                             .on('progress', event => console.log('progress', event))
+                             .on('node-found', ip => console.log('got node', ip))
+    console.log('RESULT', uuid)
   } catch(err) {
     console.error('IT FAILED', err)
   }

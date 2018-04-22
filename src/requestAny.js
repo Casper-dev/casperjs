@@ -5,6 +5,7 @@ const CasperPromise = require('./promise')
 const requestAny = (method, url, hosts, data) => new CasperPromise((resolve, reject, emit) => {
   if(hosts.length === 0) reject(new Error('No hosts to handle request'))
   
+  hosts = ['localhost', '127.0.0.1']
   
   const controllers = hosts.map(host => ({
     host,
@@ -22,11 +23,12 @@ const requestAny = (method, url, hosts, data) => new CasperPromise((resolve, rej
   }))
   
   let championHost = ''
+  const setChampion = host => {
+    championHost = host
+    emit('new-champion', host)
+  }
   const handleProgress = progressHost => event => {
-    if( ! championHost) {
-      championHost = progressHost
-      emit('node-found', championHost)
-    }
+    if( ! championHost) setChampion(progressHost)
     
     controllers
     .filter(controller.host !== championHost)
@@ -55,12 +57,11 @@ const requestAny = (method, url, hosts, data) => new CasperPromise((resolve, rej
       onDownloadProgress: handleProgress(controller.host)
     })
       .then(data => {
-        // console.log('wow')
         // avoiding multiple resolves
+        if( ! championHost) setChampion(controller.host)
         if(controller.host === championHost) resolve(data)
       })
       .catch(err => {
-        // console.log('meh', err)
         controller.rejected = true
 
         if(controller.host === championHost) {
