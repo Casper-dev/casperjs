@@ -24,7 +24,7 @@ const getAllNodes = eth => new Promise((resolve, reject) => {
 })
 
 
-const getUploadNode = (eth, { fileSize }) => new Promise((resolve, reject) => {
+const getUploadNodes = (eth, { fileSize }) => new Promise((resolve, reject) => {
   ensureSC(eth)
 
   sc.methods.getPeers(fileSize).call()
@@ -44,7 +44,27 @@ const getUploadNode = (eth, { fileSize }) => new Promise((resolve, reject) => {
 })
 
 
+const getStoringNodes = (eth, { uuid }) => new Promise((resolve, reject) => {
+  ensureSC(eth)
+
+  sc.methods.showStoringPeers(uuid).call()
+    .then(data => {
+      console.log('peers for', uuid, data)
+      const nodeHashes = data.map(s => s.substring(0, s.length - 2))
+                             .map(hexToString)
+      
+      return Promise.all(
+        nodeHashes.map(node => sc.methods.getIpPort(node).call())
+      )
+    })
+    .then(ipPorts => ipPorts.map(ipPort => ipPort.replace(/:.*/, '')))
+    .then(resolve)
+    .catch(err => console.error(err))
+})
+
+
 module.exports = {
   getAllNodes,
-  getUploadNode
+  getUploadNodes,
+  getStoringNodes
 }

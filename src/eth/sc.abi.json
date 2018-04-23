@@ -1,1 +1,575 @@
-[{"constant":false,"inputs":[{"name":"id","type":"string"},{"name":"hash","type":"string"},{"name":"size","type":"uint256"}],"name":"confirmUpload","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"amount","type":"uint256"}],"name":"addToken","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"srcID","type":"string"}],"name":"getPingTarget","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"hash","type":"string"}],"name":"showStoringPeers","outputs":[{"name":"","type":"bytes32[4]"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"ipfsAddr","type":"string"}],"name":"getIpPort","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"confirmDownload","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"getSystemState","outputs":[{"name":"","type":"uint256"},{"name":"","type":"uint256"},{"name":"","type":"uint256"},{"name":"","type":"uint256"},{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getAllPeers","outputs":[{"name":"","type":"bytes32[]"},{"name":"","type":"uint256[]"},{"name":"","type":"bytes32[]"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"nodeHash","type":"string"},{"name":"telegram","type":"bytes32"},{"name":"udpIpPort","type":"string"},{"name":"ipPort","type":"string"},{"name":"id","type":"string"},{"name":"size","type":"uint256"}],"name":"registerProvider","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"ipfsAddr","type":"string"},{"name":"newIpPort","type":"string"}],"name":"updateIpPort","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"id","type":"string"}],"name":"removeProviderMachine","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"id","type":"string"},{"name":"hash","type":"string"},{"name":"size","type":"uint256"}],"name":"confirmUpdate","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"ipfsAddr","type":"string"}],"name":"getUDPIpPort","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"hash","type":"string"}],"name":"getStoringPeers","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"id","type":"string"},{"name":"n","type":"uint256"}],"name":"getFile","outputs":[{"name":"","type":"string"},{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"clearPrepay","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"client","type":"address"}],"name":"isPrepaid","outputs":[{"name":"prepaid","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"size","type":"uint256"}],"name":"getPeers","outputs":[{"name":"id1","type":"string"},{"name":"id2","type":"string"},{"name":"id3","type":"string"},{"name":"id4","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"UUID","type":"string"},{"name":"consensus","type":"bool[16]"},{"name":"nodeIds","type":"bytes32[4]"}],"name":"checkVerification","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"id","type":"string"}],"name":"setBootstrap","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"pay","type":"uint256"}],"name":"prePay","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"id","type":"string"}],"name":"getNumberOfFiles","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"confirmTransfer","outputs":[],"payable":false,"stateMutability":"pure","type":"function"},{"constant":true,"inputs":[{"name":"ipfsAddr","type":"string"}],"name":"getNodeHash","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getBannedPeers","outputs":[{"name":"","type":"bytes32[]"},{"name":"","type":"uint256[]"},{"name":"","type":"bytes32[]"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"removeAllPeers","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"id","type":"string"}],"name":"verifyReplication","outputs":[{"name":"isBanned","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"nodeHash","type":"string"},{"name":"telegram","type":"bytes32"},{"name":"udpIpPort","type":"string"},{"name":"ipPort","type":"string"},{"name":"id","type":"string"},{"name":"size","type":"uint256"}],"name":"addProviderMachine","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"uuid","type":"uint128"}],"name":"notifyDelete","outputs":[],"payable":false,"stateMutability":"pure","type":"function"},{"constant":false,"inputs":[{"name":"uuid","type":"string"},{"name":"id","type":"string"}],"name":"notifyVerificationTarget","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"getBootstrap","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"id","type":"string"},{"name":"success","type":"bool"}],"name":"sendPingResult","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"ipfsAddr","type":"string"},{"name":"newUDPIpPort","type":"string"}],"name":"updateUDPIpPort","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"id","type":"string"},{"name":"hash","type":"string"},{"name":"size","type":"uint256"}],"name":"notifySpaceFreed","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"id","type":"string"}],"name":"machineInformation","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"name":"info","type":"string"}],"name":"Log","type":"event"},{"anonymous":false,"inputs":[],"name":"ProviderCheckEvent","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"banned","type":"string"}],"name":"ProviderOffline","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"val","type":"string"}],"name":"ReturnString","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"UUID","type":"string"},{"indexed":false,"name":"id","type":"string"}],"name":"verificationTarget","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"UUID","type":"string"},{"indexed":false,"name":"consensus","type":"bytes32[4]"}],"name":"ConsensusResult","type":"event"}]
+[{
+  "constant": false,
+  "inputs": [{
+    "name": "id",
+    "type": "string"
+  }, {
+    "name": "hash",
+    "type": "string"
+  }, {
+    "name": "size",
+    "type": "uint256"
+  }],
+  "name": "confirmUpload",
+  "outputs": [],
+  "payable": false,
+  "stateMutability": "nonpayable",
+  "type": "function"
+}, {
+  "constant": false,
+  "inputs": [{
+    "name": "amount",
+    "type": "uint256"
+  }],
+  "name": "addToken",
+  "outputs": [],
+  "payable": false,
+  "stateMutability": "nonpayable",
+  "type": "function"
+}, {
+  "constant": false,
+  "inputs": [{
+    "name": "srcID",
+    "type": "string"
+  }],
+  "name": "getPingTarget",
+  "outputs": [],
+  "payable": false,
+  "stateMutability": "nonpayable",
+  "type": "function"
+}, {
+  "constant": true,
+  "inputs": [{
+    "name": "hash",
+    "type": "string"
+  }],
+  "name": "showStoringPeers",
+  "outputs": [{
+    "name": "",
+    "type": "bytes32[4]"
+  }],
+  "payable": false,
+  "stateMutability": "view",
+  "type": "function"
+}, {
+  "constant": true,
+  "inputs": [{
+    "name": "ipfsAddr",
+    "type": "string"
+  }],
+  "name": "getIpPort",
+  "outputs": [{
+    "name": "",
+    "type": "string"
+  }],
+  "payable": false,
+  "stateMutability": "view",
+  "type": "function"
+}, {
+  "constant": false,
+  "inputs": [],
+  "name": "confirmDownload",
+  "outputs": [],
+  "payable": false,
+  "stateMutability": "nonpayable",
+  "type": "function"
+}, {
+  "constant": true,
+  "inputs": [],
+  "name": "getSystemState",
+  "outputs": [{
+    "name": "",
+    "type": "uint256"
+  }, {
+    "name": "",
+    "type": "uint256"
+  }, {
+    "name": "",
+    "type": "uint256"
+  }, {
+    "name": "",
+    "type": "uint256"
+  }, {
+    "name": "",
+    "type": "uint256"
+  }],
+  "payable": false,
+  "stateMutability": "view",
+  "type": "function"
+}, {
+  "constant": true,
+  "inputs": [],
+  "name": "getAllPeers",
+  "outputs": [{
+    "name": "",
+    "type": "bytes32[]"
+  }, {
+    "name": "",
+    "type": "uint256[]"
+  }, {
+    "name": "",
+    "type": "bytes32[]"
+  }],
+  "payable": false,
+  "stateMutability": "view",
+  "type": "function"
+}, {
+  "constant": false,
+  "inputs": [{
+    "name": "nodeHash",
+    "type": "string"
+  }, {
+    "name": "telegram",
+    "type": "bytes32"
+  }, {
+    "name": "udpIpPort",
+    "type": "string"
+  }, {
+    "name": "ipPort",
+    "type": "string"
+  }, {
+    "name": "id",
+    "type": "string"
+  }, {
+    "name": "size",
+    "type": "uint256"
+  }],
+  "name": "registerProvider",
+  "outputs": [],
+  "payable": false,
+  "stateMutability": "nonpayable",
+  "type": "function"
+}, {
+  "constant": false,
+  "inputs": [{
+    "name": "ipfsAddr",
+    "type": "string"
+  }, {
+    "name": "newIpPort",
+    "type": "string"
+  }],
+  "name": "updateIpPort",
+  "outputs": [],
+  "payable": false,
+  "stateMutability": "nonpayable",
+  "type": "function"
+}, {
+  "constant": false,
+  "inputs": [{
+    "name": "id",
+    "type": "string"
+  }],
+  "name": "removeProviderMachine",
+  "outputs": [],
+  "payable": false,
+  "stateMutability": "nonpayable",
+  "type": "function"
+}, {
+  "constant": false,
+  "inputs": [{
+    "name": "id",
+    "type": "string"
+  }, {
+    "name": "hash",
+    "type": "string"
+  }, {
+    "name": "size",
+    "type": "uint256"
+  }],
+  "name": "confirmUpdate",
+  "outputs": [],
+  "payable": false,
+  "stateMutability": "nonpayable",
+  "type": "function"
+}, {
+  "constant": true,
+  "inputs": [{
+    "name": "ipfsAddr",
+    "type": "string"
+  }],
+  "name": "getUDPIpPort",
+  "outputs": [{
+    "name": "",
+    "type": "string"
+  }],
+  "payable": false,
+  "stateMutability": "view",
+  "type": "function"
+}, {
+  "constant": true,
+  "inputs": [{
+    "name": "hash",
+    "type": "string"
+  }],
+  "name": "getStoringPeers",
+  "outputs": [{
+    "name": "",
+    "type": "uint256"
+  }],
+  "payable": false,
+  "stateMutability": "view",
+  "type": "function"
+}, {
+  "constant": true,
+  "inputs": [{
+    "name": "id",
+    "type": "string"
+  }, {
+    "name": "n",
+    "type": "uint256"
+  }],
+  "name": "getFile",
+  "outputs": [{
+    "name": "",
+    "type": "string"
+  }, {
+    "name": "",
+    "type": "uint256"
+  }],
+  "payable": false,
+  "stateMutability": "view",
+  "type": "function"
+}, {
+  "constant": false,
+  "inputs": [],
+  "name": "clearPrepay",
+  "outputs": [],
+  "payable": false,
+  "stateMutability": "nonpayable",
+  "type": "function"
+}, {
+  "constant": true,
+  "inputs": [{
+    "name": "client",
+    "type": "address"
+  }],
+  "name": "isPrepaid",
+  "outputs": [{
+    "name": "prepaid",
+    "type": "bool"
+  }],
+  "payable": false,
+  "stateMutability": "view",
+  "type": "function"
+}, {
+  "constant": true,
+  "inputs": [{
+    "name": "size",
+    "type": "uint256"
+  }],
+  "name": "getPeers",
+  "outputs": [{
+    "name": "id1",
+    "type": "string"
+  }, {
+    "name": "id2",
+    "type": "string"
+  }, {
+    "name": "id3",
+    "type": "string"
+  }, {
+    "name": "id4",
+    "type": "string"
+  }],
+  "payable": false,
+  "stateMutability": "view",
+  "type": "function"
+}, {
+  "constant": false,
+  "inputs": [{
+    "name": "UUID",
+    "type": "string"
+  }, {
+    "name": "consensus",
+    "type": "bool[16]"
+  }, {
+    "name": "nodeIds",
+    "type": "bytes32[4]"
+  }],
+  "name": "checkVerification",
+  "outputs": [],
+  "payable": false,
+  "stateMutability": "nonpayable",
+  "type": "function"
+}, {
+  "constant": false,
+  "inputs": [{
+    "name": "id",
+    "type": "string"
+  }],
+  "name": "setBootstrap",
+  "outputs": [],
+  "payable": false,
+  "stateMutability": "nonpayable",
+  "type": "function"
+}, {
+  "constant": false,
+  "inputs": [{
+    "name": "pay",
+    "type": "uint256"
+  }],
+  "name": "prePay",
+  "outputs": [],
+  "payable": false,
+  "stateMutability": "nonpayable",
+  "type": "function"
+}, {
+  "constant": true,
+  "inputs": [{
+    "name": "id",
+    "type": "string"
+  }],
+  "name": "getNumberOfFiles",
+  "outputs": [{
+    "name": "",
+    "type": "uint256"
+  }],
+  "payable": false,
+  "stateMutability": "view",
+  "type": "function"
+}, {
+  "constant": true,
+  "inputs": [],
+  "name": "confirmTransfer",
+  "outputs": [],
+  "payable": false,
+  "stateMutability": "pure",
+  "type": "function"
+}, {
+  "constant": true,
+  "inputs": [{
+    "name": "ipfsAddr",
+    "type": "string"
+  }],
+  "name": "getNodeHash",
+  "outputs": [{
+    "name": "",
+    "type": "string"
+  }],
+  "payable": false,
+  "stateMutability": "view",
+  "type": "function"
+}, {
+  "constant": true,
+  "inputs": [],
+  "name": "getBannedPeers",
+  "outputs": [{
+    "name": "",
+    "type": "bytes32[]"
+  }, {
+    "name": "",
+    "type": "uint256[]"
+  }, {
+    "name": "",
+    "type": "bytes32[]"
+  }],
+  "payable": false,
+  "stateMutability": "view",
+  "type": "function"
+}, {
+  "constant": false,
+  "inputs": [],
+  "name": "removeAllPeers",
+  "outputs": [],
+  "payable": false,
+  "stateMutability": "nonpayable",
+  "type": "function"
+}, {
+  "constant": true,
+  "inputs": [{
+    "name": "id",
+    "type": "string"
+  }],
+  "name": "verifyReplication",
+  "outputs": [{
+    "name": "isBanned",
+    "type": "bool"
+  }],
+  "payable": false,
+  "stateMutability": "view",
+  "type": "function"
+}, {
+  "constant": false,
+  "inputs": [{
+    "name": "nodeHash",
+    "type": "string"
+  }, {
+    "name": "telegram",
+    "type": "bytes32"
+  }, {
+    "name": "udpIpPort",
+    "type": "string"
+  }, {
+    "name": "ipPort",
+    "type": "string"
+  }, {
+    "name": "id",
+    "type": "string"
+  }, {
+    "name": "size",
+    "type": "uint256"
+  }],
+  "name": "addProviderMachine",
+  "outputs": [],
+  "payable": false,
+  "stateMutability": "nonpayable",
+  "type": "function"
+}, {
+  "constant": true,
+  "inputs": [{
+    "name": "uuid",
+    "type": "uint128"
+  }],
+  "name": "notifyDelete",
+  "outputs": [],
+  "payable": false,
+  "stateMutability": "pure",
+  "type": "function"
+}, {
+  "constant": false,
+  "inputs": [{
+    "name": "uuid",
+    "type": "string"
+  }, {
+    "name": "id",
+    "type": "string"
+  }],
+  "name": "notifyVerificationTarget",
+  "outputs": [],
+  "payable": false,
+  "stateMutability": "nonpayable",
+  "type": "function"
+}, {
+  "constant": true,
+  "inputs": [],
+  "name": "getBootstrap",
+  "outputs": [{
+    "name": "",
+    "type": "string"
+  }],
+  "payable": false,
+  "stateMutability": "view",
+  "type": "function"
+}, {
+  "constant": false,
+  "inputs": [{
+    "name": "id",
+    "type": "string"
+  }, {
+    "name": "success",
+    "type": "bool"
+  }],
+  "name": "sendPingResult",
+  "outputs": [],
+  "payable": false,
+  "stateMutability": "nonpayable",
+  "type": "function"
+}, {
+  "constant": false,
+  "inputs": [{
+    "name": "ipfsAddr",
+    "type": "string"
+  }, {
+    "name": "newUDPIpPort",
+    "type": "string"
+  }],
+  "name": "updateUDPIpPort",
+  "outputs": [],
+  "payable": false,
+  "stateMutability": "nonpayable",
+  "type": "function"
+}, {
+  "constant": false,
+  "inputs": [{
+    "name": "id",
+    "type": "string"
+  }, {
+    "name": "hash",
+    "type": "string"
+  }, {
+    "name": "size",
+    "type": "uint256"
+  }],
+  "name": "notifySpaceFreed",
+  "outputs": [],
+  "payable": false,
+  "stateMutability": "nonpayable",
+  "type": "function"
+}, {
+  "constant": true,
+  "inputs": [{
+    "name": "id",
+    "type": "string"
+  }],
+  "name": "machineInformation",
+  "outputs": [{
+    "name": "",
+    "type": "uint256"
+  }],
+  "payable": false,
+  "stateMutability": "view",
+  "type": "function"
+}, {
+  "inputs": [],
+  "payable": false,
+  "stateMutability": "nonpayable",
+  "type": "constructor"
+}, {
+  "anonymous": false,
+  "inputs": [{
+    "indexed": false,
+    "name": "info",
+    "type": "string"
+  }],
+  "name": "Log",
+  "type": "event"
+}, {
+  "anonymous": false,
+  "inputs": [],
+  "name": "ProviderCheckEvent",
+  "type": "event"
+}, {
+  "anonymous": false,
+  "inputs": [{
+    "indexed": false,
+    "name": "banned",
+    "type": "string"
+  }],
+  "name": "ProviderOffline",
+  "type": "event"
+}, {
+  "anonymous": false,
+  "inputs": [{
+    "indexed": false,
+    "name": "val",
+    "type": "string"
+  }],
+  "name": "ReturnString",
+  "type": "event"
+}, {
+  "anonymous": false,
+  "inputs": [{
+    "indexed": false,
+    "name": "UUID",
+    "type": "string"
+  }, {
+    "indexed": false,
+    "name": "id",
+    "type": "string"
+  }],
+  "name": "verificationTarget",
+  "type": "event"
+}, {
+  "anonymous": false,
+  "inputs": [{
+    "indexed": false,
+    "name": "UUID",
+    "type": "string"
+  }, {
+    "indexed": false,
+    "name": "consensus",
+    "type": "bytes32[4]"
+  }],
+  "name": "ConsensusResult",
+  "type": "event"
+}]

@@ -37,7 +37,7 @@ class Casper {
 
   
       sc[this.blockchain]
-        .getUploadNode(this.blockchainAPI, { fileSize: utils.getFileSize(file) })
+        .getUploadNodes(this.blockchainAPI, { fileSize: utils.getFileSize(file) })
         .then(ips => {
           emit('sc-connected')
           return ips
@@ -84,6 +84,21 @@ class Casper {
    */
   getFile(uuid) {
     return new CasperPromise((resolve, reject, emit) => {
+      sc[this.blockchain]
+        .getStoringNodes(this.blockchainAPI, { uuid })
+        .then(ips => {
+          emit('sc-connected')
+          console.log(ips)
+          return ips
+        })
+        .then(ips => {
+          requestAny('GET', 'http://{host}:5001/casper/v0/file/' + uuid, ips)
+            .on('progress', (ip, event) => emit('progress', event))
+            .on('new-champion', ip => emit('node-found', ip))
+            .then(response => resolve(response.data))
+            .catch(reject)
+        })
+        .catch(reject)
     })
   }
 
