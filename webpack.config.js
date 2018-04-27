@@ -38,6 +38,10 @@ module.exports = (env, options) => {
       }
     }))
   }
+
+  if(options.mode === 'development') {
+    baseConfig.devtool = 'source-map'
+  }
   
   
   const nodeConfig = merge(baseConfig, {

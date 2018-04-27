@@ -6,6 +6,7 @@ const utils = require('./utils')
 
 
 const DEFAULT_LINK_LIFETIME = 1000 * 60 * 60 * 5
+const REST_PORT = 5001
 const sc = {
   eth: scEth
 }
@@ -39,28 +40,24 @@ class Casper {
       sc[this.blockchain]
         .getUploadNodes(this.blockchainAPI, { fileSize: utils.getFileSize(file) })
         .then(ips => {
-          emit('sc-connected')
-          return ips
-        })
-        .then(ips => {
-          const form = new FormData()
-          form.append('file', file)
-
+          emit('sc-connected')         
           let method, url
           if(uuid) {
             // Update
             method = 'PUT'
-            url = `http://{host}:5001/casper/v0/file/${uuid}`
+            url = `http://{host}:${REST_PORT}/casper/v0/file/${uuid}`
           } else {
             // Save new
             method = 'POST'
-            url = 'http://{host}:5001/casper/v0/file'
+            url = `http://{host}:${REST_PORT}/casper/v0/file`
           }
 
-          requestAny(method, url, ips, form)
-            .on('progress', (ip, event) => emit('progress', event))
+          requestAny(method, url, ips, { file })
+            .on('progress', event => emit('progress', event))
             .on('new-champion', ip => emit('node-found', ip))
-            .then(response => resolve(response.data))
+            .then(data => {
+              resolve(JSON.parse(data).Hash)
+            })
             .catch(reject)
         })
         .catch(reject)
@@ -74,6 +71,16 @@ class Casper {
    */
   delete(uuid) {
     return new CasperPromise((resolve, reject, emit) => {
+      sc[this.blockchain]
+        .getStoringNodes(this.blockchainAPI, { uuid })
+        .then(ips => {
+          emit('sc-connected')
+          requestAny('DELETE', `http://{host}:${REST_PORT}/casper/v0/file/${uuid}`, ips)
+            .on('new-champion', ip => emit('node-found', ip))
+            .then(resolve)
+            .catch(reject)
+        })
+        .catch(reject)
     })
   }
 
@@ -88,14 +95,13 @@ class Casper {
         .getStoringNodes(this.blockchainAPI, { uuid })
         .then(ips => {
           emit('sc-connected')
-          console.log(ips)
           return ips
         })
         .then(ips => {
-          requestAny('GET', 'http://{host}:5001/casper/v0/file/' + uuid, ips)
-            .on('progress', (ip, event) => emit('progress', event))
+          requestAny('GET', `http://{host}:${REST_PORT}/casper/v0/file/${uuid}`, ips, { encoding: null })
+            .on('progress', event => emit('progress', event))
             .on('new-champion', ip => emit('node-found', ip))
-            .then(response => resolve(response.data))
+            .then(resolve)
             .catch(reject)
         })
         .catch(reject)
@@ -109,6 +115,19 @@ class Casper {
    */
   getLink(uuid, time = DEFAULT_LINK_LIFETIME) {
     return new CasperPromise((resolve, reject, emit) => {
+      let sharingNode = ''
+      sc[this.blockchain]
+        .getStoringNodes(this.blockchainAPI, { uuid })
+        .then(ips => {
+          emit('sc-connected')
+          requestAny('POST', `http://{host}:${REST_PORT}:/casper/v0/share/${uuid}`, ips)
+            .on('new-champion', ip => sharingNode = ip)
+            .then(path => resolve(
+              `http://${sharingNode}:${REST_PORT}/${path}`
+            ))
+            .catch(reject)
+        })
+        .catch(reject)
     })
   }
 

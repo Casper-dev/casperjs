@@ -2,7 +2,7 @@ const hexToString = require('../utils').hexToString
 
 
 const SC_INTERFACE = require('./sc.abi.json')
-const SC_ADDR = 'F837c5CdE708c05E39169E3aE0343B9f0dBB4DF2'
+const SC_ADDR = 'Cb4d87043e63EB3F7B605f79906911C498A31B33'
 let sc
 const ensureSC = eth => { if( ! sc) sc = new eth.Contract(SC_INTERFACE, SC_ADDR) }
 
@@ -49,8 +49,8 @@ const getStoringNodes = (eth, { uuid }) => new Promise((resolve, reject) => {
 
   sc.methods.showStoringPeers(uuid).call()
     .then(data => {
-      console.log('peers for', uuid, data)
-      const nodeHashes = data.map(s => s.substring(0, s.length - 2))
+      const nodeHashes = data.filter(hash => !/^0x0*$/.test(hash))
+                             .map(s => s.substring(0, s.length - 2))
                              .map(hexToString)
       
       return Promise.all(

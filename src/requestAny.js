@@ -1,80 +1,81 @@
-const axios = require('axios')
+let request
+
+if(CASPER_BUNDLE_TARGET === 'node') {
+  request = require('./requestAdapters/node')
+} else {
+  request = require('./requestAdapters/browser')
+}
+
 const CasperPromise = require('./promise')
 
 
-const requestAny = (method, url, hosts, data) => new CasperPromise((resolve, reject, emit) => {
-  if(hosts.length === 0) reject(new Error('No hosts to handle request'))
-  
-  
-  const controllers = hosts.map(host => ({
-    host,
-    
+const requestAny = (
+  method, url, 
+  ips, 
+  config = {}
+) => new CasperPromise((resolve, reject, emit) => {
+  if(ips.length === 0) reject(new Error('No hosts to handle request'))
+
+  // preparation
+  const hosts = ips.map(ip => ({
+    ip,
     rejected: false,
     canceled: false,
-    
-    canceller: axios.CancelToken.source(),
-    cancel() {
-      if(this.canceled) return 
-      
-      this.canceled = true
-      this.canceller.cancel()
-    },
+    abortRequest: null
   }))
   
   let championHost = ''
+  
   const setChampion = host => {
     championHost = host
-    emit('new-champion', host)
+    emit('new-champion', host.ip)
   }
+
   const handleProgress = progressHost => event => {
     if( ! championHost) setChampion(progressHost)
     
-    controllers
-    .filter(controller.host !== championHost)
-    .map(controller => controller.cancel())
+    hosts
+      .filter(host => host !== championHost)
+      .map(host => host.abortRequest())
     
-    emit('progress', { progressHost, event })
-  }
-  if(CASPER_BUNDLE_TARGET === 'node') {
-    // we want headers to hoist
-    if(data) var headers = data.getHeaders()
+    if(progressHost === championHost) {
+      emit('progress', event)
+    }
   }
 
 
-  controllers.forEach(controller => {
-    axios({
+  // dispatching requests
+  hosts.forEach(host => {
+    // would introcduce babel later
+    const req = request(Object.assign({}, config, {
       method,
-      url: url.replace('{host}', controller.host),
+      url: url.replace('{host}', host.ip),
+    }))
+    host.abortRequest = req.abort
 
-      headers,
-      data,
-
-      cancelToken: controller.canceller.token,
-      
-      // only one will trigger anyway
-      onUploadProgress: handleProgress(controller.host),
-      onDownloadProgress: handleProgress(controller.host)
-    })
-      .then(data => {
+    req
+      .on('progress', handleProgress(host))
+      .then(response => {
         // avoiding multiple resolves
-        if( ! championHost) setChampion(controller.host)
-        if(controller.host === championHost) resolve(data)
+        if( ! championHost) setChampion(host)
+        if(host === championHost) resolve(response)
       })
       .catch(err => {
-        controller.rejected = true
+        console.log('Host err', err.message)
+        host.rejected = true
 
-        if(controller.host === championHost) {
+        if(host === championHost) {
           // trying other requests that didn't fail
-          const possibleHosts = controllers
-                                  .filter(controller => controller.canceled)
-                                  .map(controller => controller.host)
+          const possibleIps = hosts
+                                .filter(host => host.canceled)
+                                .map(host => host.ip)
 
-          requestAny(method, url, possibleHosts, data)
+          requestAny(method, url, possibleIps, config)
             .then(resolve)
             .catch(err => {
               reject(new Error('All hosts are unreachable'))
             })
-        } else if(controllers.filter(x => !x.rejected || x.canceled).length === 0) {
+        } else if(hosts.filter(host => !host.rejected || host.canceled).length === 0) {
           reject(new Error('All hosts are unreachable'))
         }
       })

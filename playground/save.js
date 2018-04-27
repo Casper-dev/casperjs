@@ -8,12 +8,14 @@ const casper = new Casper(web3)
 
 const main = async () => {
   try {
-    const file = fs.readFileSync(__dirname + '/file.txt')
-    const uuid = await casper.save(file)
+    const file = fs.readFileSync(__dirname + '/files/med.mp4')
+    const hash = await casper.save(file)
                              .on('sc-connected', () => console.log('sc'))
                              .on('progress', event => console.log('progress', event))
                              .on('node-found', ip => console.log('got node', ip))
-    console.log('RESULT', uuid)
+                             
+    console.log('RESULT', hash)
+    fs.writeFileSync(__dirname + '/files/hash.txt', hash)
   } catch(err) {
     console.error('IT FAILED', err)
   }
