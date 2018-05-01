@@ -68,31 +68,8 @@ const makeRequest = ({
       })
     }
 
-    
-    // req.on('drain', () => {
-    //   const nativeHttpReq = req.req
-    //   const dispatched = nativeHttpReq.connection._bytesDispatched 
-    //   const total = nativeHttpReq._headers['content-length']
 
-    //   // console.log(nativeHttpReq, dispatched, total)
-
-    //   if(dispatched) {
-    //     emit('progress', dispatched / total)
-    //   }
-    // })
-
-    // setInterval(() => {
-    //   const nativeHttpReq = req.req
-    //   const dispatched = nativeHttpReq.connection._bytesDispatched 
-    //   const total = nativeHttpReq._headers['content-length']
-
-    //   console.log('in interval', nativeHttpReq, dispatched, total)
-
-    //   if(dispatched) {
-    //     // emit('progress', dispatched / total)
-    //   }
-    // }, 1000)
-
+    // providing abort feature
     triggerAbort = req.abort.bind(req)
   })
 

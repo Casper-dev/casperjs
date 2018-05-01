@@ -8,7 +8,7 @@ const casper = new Casper(web3)
 
 const main = async () => {
   try {
-    const file = fs.readFileSync(__dirname + '/files/med.mp4')
+    const file = fs.createReadStream(__dirname + '/files/file.txt')
     const hash = await casper.save(file)
                              .on('sc-connected', () => console.log('sc'))
                              .on('progress', event => console.log('progress', event))

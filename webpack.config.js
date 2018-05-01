@@ -5,16 +5,21 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const nodeExternals = require('webpack-node-externals')
 
 
+const makeBabelRule = envConfig => ({
+  test: /\.js$/,
+  exclude: [/node_modules/, /promise/],
+  use: {
+    loader: 'babel-loader',
+    options: {
+      presets: [['env', envConfig]]
+    }
+  }
+})
+
+
 module.exports = (env, options) => {
   const baseConfig = {
-    entry: './src/index.js',
-  
-    module: {
-      rules: [{
-        test: /\.js$/,
-        use: 'babel-loader',
-      }],
-    },
+    entry: path.resolve(__dirname, 'src/index.js'),
   
     output: {
       path: path.resolve(__dirname, 'dist')
@@ -24,19 +29,6 @@ module.exports = (env, options) => {
     externals: [nodeExternals()],
 
     plugins: []
-  }
-
-  if(options.mode === 'development') {
-    baseConfig.plugins.push(new UglifyJsPlugin({
-      parallel: 4,
-      uglifyOptions: {
-        mangle: false,
-        compress: {
-          dead_code: true,
-          conditionals: true
-        }
-      }
-    }))
   }
 
   if(options.mode === 'development') {
@@ -50,6 +42,12 @@ module.exports = (env, options) => {
     node: {
       __dirname: true,
       __filename: false,
+    },
+
+    module: {
+      rules: [
+        makeBabelRule({ targets: { node: '6.10' } })
+      ]
     },
   
     output: {
@@ -67,23 +65,25 @@ module.exports = (env, options) => {
   
   
   const browserBundleConfig = merge(baseConfig, {
-    node: {
-      buffer: false
-    },
-
     output: {
       filename: 'casper.js',
       library: '',
       libraryTarget: 'commonjs2',
+    },
+
+    module: {
+      rules: [
+        makeBabelRule({ targets: { browsers: ['last 2 versions'] } })
+      ]
     },
   
     plugins: [
       new webpack.DefinePlugin({
         CASPER_BUNDLE_TARGET: "'browser'"
       })
-    ]
+    ],
   })
 
-
+  
   return [nodeConfig, browserBundleConfig]
 }

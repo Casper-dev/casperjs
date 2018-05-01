@@ -36,9 +36,10 @@ class Casper {
         throw new TypeError('Casper: file type must be File | Blob | ArrayBuffer | Buffer')
       }
 
-  
-      sc[this.blockchain]
-        .getUploadNodes(this.blockchainAPI, { fileSize: utils.getFileSize(file) })
+      utils.getFileSize(file)
+        .then(fileSize => {
+          return sc[this.blockchain].getUploadNodes(this.blockchainAPI, { fileSize })
+        })
         .then(ips => {
           emit('sc-connected')         
           let method, url
