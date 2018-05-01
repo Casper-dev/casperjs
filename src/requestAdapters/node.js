@@ -28,9 +28,8 @@ const makeRequest = ({
       url,
       headers,
       encoding: null,
-      formData: Object.assign({}, data, file ? { attachments: [file] } : {})
+      formData: data
     }
-
 
     // dispatching request
     const req = request(requestConfig, (err, response, data) => {
@@ -46,6 +45,7 @@ const makeRequest = ({
       let total = 0
   
       const form = req.form()
+      form.maxDataSize = Infinity
       form.append('file', file)
       
       form.getLength((err, length) => { total = length })
