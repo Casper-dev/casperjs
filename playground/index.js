@@ -16,7 +16,7 @@ window.addEventListener('load', () => {
 
 
   const log = (message, payload) => {
-    $log.value += `${message}: '${payload}\n`
+    $log.value += `${message}: ${payload}\n`
   }
 
   const web3js = new Web3(web3.currentProvider)
@@ -24,6 +24,7 @@ window.addEventListener('load', () => {
 
   $save.addEventListener('click', () => {
     const file = $file.files[0]
+
     casper.save(file, $uuid.value || undefined)
           .on('sc-connected', () => log('SC reached', 'while saving'))
           .on('node-found', ip => log('Node found', `${ip} (while saving ${uuid})`))
@@ -58,7 +59,7 @@ window.addEventListener('load', () => {
             console.log(file)
           })
           .catch(err => {
-            log('DELETE ERROR', err)
+            log('DOWNLOAD ERROR', err)
             console.error(err)
           })
   })
@@ -70,7 +71,7 @@ window.addEventListener('load', () => {
           .on('node-found', ip => log('Node found', `${ip} (while getting link for ${uuid})`))
           .then(link => log('Got link', link))
           .catch(err => {
-            log('DELETE ERROR', err)
+            log('GET ERROR', err)
             console.error(err)
           })
   })

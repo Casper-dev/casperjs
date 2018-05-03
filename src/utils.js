@@ -1,4 +1,5 @@
-import { resolve } from 'url';
+const bs58 = require('bs58')
+const sha256 = require('js-sha256')
 
 let stream, getStreamLength
 
@@ -48,8 +49,23 @@ const getFileSize = file => new Promise(resolve => {
 })
 
 
+const uuidToHash = uuid => {
+  const bytes = bs58.decode(uuid)
+  const sha = new Buffer(sha256.array(bytes))
+  const encoded = Buffer.concat([
+    new Buffer([18]), 
+    new Buffer([sha.length]), 
+    sha
+  ])
+  const hash = bs58.encode(encoded)
+
+  return hash
+}
+
+
 module.exports = {
   hexToString,
   isFile,
-  getFileSize
+  getFileSize,
+  uuidToHash
 }

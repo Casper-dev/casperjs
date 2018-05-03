@@ -1,18 +1,64 @@
+<style>
+  body {
+    display: flex;
+    flex-direction: column
+  }
+
+  body, button, input {
+    font-family: 'Roboto';
+  }
+
+  button {
+    border: 0;
+    /* color: white; */
+    background: #eee;
+    padding: 10px 20px 7px;
+    border-bottom: 3px solid transparent;
+    margin-right: 20px;
+  }
+
+  input, textarea {
+    padding: 10px 20px;
+    background: #eee;
+    border: 0;
+    border-left: 3px solid black;
+  }
+
+  input:focus, textarea:focus, button:hover, button:focus {
+    border-color: #008cff;
+    outline: none;
+  }
+
+  #log {
+    flex: 1;
+  }
+
+</style>
+
 <h1> Casper test ENV 0.0.0 </h1>
 
+<h3>
+  Actions:
+</h3>
+
 <input type="file" id="file">
+
+<br>
+
 <input type="text" id="uuid" placeholder="uuid">
 
-<br> <br>
+<br>
 
-<button id="save"> Save </button>
-<button id="delete"> Delete </button>
+<div>
+  <button id="save"> Save </button>
+  <button id="delete"> Delete </button>
+  <button id="download"> Download </button>
+  <button id="get-link"> Get Link </button>
+</div>
 
-<br> <br>
+<br>
 
-<button id="download"> Download </button>
-<button id="get-link"> Get Link </button>
-
-<br> <br>
-
+<h3>
+  Log:
+</h3>
 <textarea id="log" placeholder="log" style="width: 100%"></textarea>

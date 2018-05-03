@@ -1,4 +1,4 @@
-const hexToString = require('../utils').hexToString
+const { hexToString, uuidToHash } = require('../utils')
 
 
 const SC_INTERFACE = require('./sc.abi.json')
@@ -47,7 +47,9 @@ const getUploadNodes = (eth, { fileSize }) => new Promise((resolve, reject) => {
 const getStoringNodes = (eth, { uuid }) => new Promise((resolve, reject) => {
   ensureSC(eth)
 
-  sc.methods.showStoringPeers(uuid).call()
+
+  const fileHash = uuidToHash(uuid)
+  sc.methods.showStoringPeers(fileHash).call()
     .then(data => {
       const nodeHashes = data.filter(hash => !/^0x0*$/.test(hash))
                              .map(s => s.substring(0, s.length - 2))

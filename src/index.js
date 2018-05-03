@@ -57,7 +57,7 @@ class Casper {
             .on('progress', event => emit('progress', event))
             .on('new-champion', ip => emit('node-found', ip))
             .then(data => {
-              resolve(JSON.parse(data).Hash)
+              resolve(JSON.parse(data).UUID)
             })
             .catch(reject)
         })
@@ -121,7 +121,7 @@ class Casper {
         .getStoringNodes(this.blockchainAPI, { uuid })
         .then(ips => {
           emit('sc-connected')
-          requestAny('POST', `http://{host}:${REST_PORT}:/casper/v0/share/${uuid}`, ips)
+          requestAny('POST', `http://{host}:${REST_PORT}/casper/v0/share/${uuid}`, ips)
             .on('new-champion', ip => sharingNode = ip)
             .then(path => resolve(
               `http://${sharingNode}:${REST_PORT}/${path}`
