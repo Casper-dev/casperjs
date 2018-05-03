@@ -8,6 +8,8 @@ if(CASPER_BUNDLE_TARGET === 'node') {
 
 const CasperPromise = require('./promise')
 
+const hostWorthTrying = host => !host.rejected || host.canceled
+
 
 const requestAny = (
   method, url, 
@@ -67,7 +69,7 @@ const requestAny = (
         if(host === championHost) {
           // trying other requests that didn't fail
           const possibleIps = hosts
-                                .filter(host => host.canceled)
+                                .filter(host => hostWorthTrying)
                                 .map(host => host.ip)
 
           requestAny(method, url, possibleIps, config)
@@ -75,7 +77,7 @@ const requestAny = (
             .catch(err => {
               reject(new Error('All hosts are unreachable'))
             })
-        } else if(hosts.filter(host => !host.rejected || host.canceled).length === 0) {
+        } else if(hosts.filter(host => hostWorthTrying).length === 0) {
           reject(new Error('All hosts are unreachable'))
         }
       })

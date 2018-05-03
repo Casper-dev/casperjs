@@ -124,7 +124,7 @@ class Casper {
           requestAny('POST', `http://{host}:${REST_PORT}/casper/v0/share/${uuid}`, ips)
             .on('new-champion', ip => sharingNode = ip)
             .then(path => resolve(
-              `http://${sharingNode}:${REST_PORT}/${path}`
+              `http://${sharingNode}:${REST_PORT}${path}`
             ))
             .catch(reject)
         })
