@@ -24,9 +24,9 @@ class CasperPromise extends Promise {
   }
 
   emit(event, message) {
-    if( ! this.subscribers[event]) this.subscribers.forEach(cb => cb(message))
+    if(this.subscribers[event]) this.subscribers[event].forEach(cb => cb(message))
   }
 }
 
 
-export default CasperPromise
+module.exports = CasperPromise

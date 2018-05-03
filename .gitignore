@@ -58,3 +58,7 @@ typings/
 .env
 
 dist/
+
+\.vscode/
+
+playground/files/
