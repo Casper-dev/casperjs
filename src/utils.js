@@ -8,7 +8,7 @@ if(CASPER_BUNDLE_TARGET === 'node') {
   getStreamLength = require('stream-length')
 }
 
-const hexToString = hash => {
+const parseSCString = hash => {
   const val = hash.substring(2)
   const codes = []
 
@@ -16,13 +16,11 @@ const hexToString = hash => {
     codes.push(parseInt(val.substr(i, 2), 16))
   }
 
-  return String.fromCharCode(...codes)
+  return String.fromCharCode.apply(0, codes.filter(code => code !== 0))
 }
 
 
 const isFile = file => {
-  if(file instanceof ArrayBuffer) return true
-  
   if(CASPER_BUNDLE_TARGET === 'browser') {
     if(file instanceof Blob) return true
   }
@@ -36,15 +34,13 @@ const isFile = file => {
 
 
 const getFileSize = file => new Promise(resolve => {
-  if (file instanceof ArrayBuffer) resolve(file.byteLength / 8)
-  
   if(CASPER_BUNDLE_TARGET === 'browser') {
-    if (file instanceof Blob) resolve(file.size / 8)
+    if (file instanceof Blob) resolve(file.size)
   }
   
   if (CASPER_BUNDLE_TARGET === 'node') {
     if(file instanceof stream.Readable) getStreamLength(file).then(resolve)
-    if(file instanceof Buffer) resolve(file.byteLength / 8)
+    if(file instanceof Buffer) resolve(file.byteLength)
   }
 })
 
@@ -64,7 +60,7 @@ const uuidToHash = uuid => {
 
 
 module.exports = {
-  hexToString,
+  parseSCString,
   isFile,
   getFileSize,
   uuidToHash

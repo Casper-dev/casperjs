@@ -1,4 +1,4 @@
-const { hexToString, uuidToHash } = require('../utils')
+const { parseSCString, uuidToHash } = require('../utils')
 
 
 const SC_INTERFACE = require('./sc.abi.json')
@@ -14,7 +14,7 @@ const getAllNodes = eth => new Promise((resolve, reject) => {
     .then(data => {
       const hex = data[0]
       const nodeHashes = hex.map(s => s.substring(0, s.length - 2))
-                            .map(hexToString)
+                            .map(parseSCString)
 
       return Promise.all(
         nodeHashes.map(node => sc.methods.getIpPort(node).call())
@@ -32,7 +32,6 @@ const getUploadNodes = (eth, { fileSize }) => new Promise((resolve, reject) => {
       const ids = Object.keys(data)
                     .filter(key => key.startsWith('id'))
                     .map(key => data[key])
-
 
       return Promise.all(
         ids.map(node => sc.methods.getIpPort(node).call())
@@ -53,8 +52,9 @@ const getStoringNodes = (eth, { uuid }) => new Promise((resolve, reject) => {
     .then(data => {
       const nodeHashes = data.filter(hash => !/^0x0*$/.test(hash))
                              .map(s => s.substring(0, s.length - 2))
-                             .map(hexToString)
-      
+                             .map(parseSCString)
+      console.log(nodeHashes, data)
+
       return Promise.all(
         nodeHashes.map(node => sc.methods.getIpPort(node).call())
       )
