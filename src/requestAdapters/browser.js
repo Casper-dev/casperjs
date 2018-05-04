@@ -12,6 +12,12 @@ const makeRequest = ({
   let triggerAbort
 
   const promise = new CasperPromise((resolve, reject, emit) => {
+    // helpers
+    const handleProgress = event => {
+      const done = event.loaded / event.total
+      if(done && 0 < done && done <= 1) emit('progress', done)
+    }
+    
     // preparation
     const form = new FormData()
     for(let key in data) {
@@ -25,13 +31,13 @@ const makeRequest = ({
     if(encoding === null) req.responseType = 'blob'
     
     if(file) {
-      req.upload.onprogress = event => emit('progress', event.loaded / event.total)
+      req.upload.onprogress = handleProgress
     } else {
-      req.onprogress = event => emit('progress', event.loaded / event.total)
+      req.onprogress = handleProgress
     }
   
     req.onload = event => resolve(req.response)
-    req.onerror = error => reject(error)
+    req.onerror = err => reject(err)
 
     req.open(method, url)
     req.send(form)
