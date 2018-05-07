@@ -74,6 +74,8 @@ const requestAny = (
           
 
           requestAny(method, url, possibleIps, config)
+            .on('progress', done => emit('progress', done))
+            .on('new-champion', ip => emit('new-champion', ip))
             .then(resolve)
             .catch(err => {
               reject(new Error('All hosts are unreachable'))
