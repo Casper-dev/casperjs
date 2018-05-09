@@ -1,5 +1,5 @@
 const Web3 = require('web3')
-const Casper = require('../dist/casper')
+const Casper = require('../')
 
 
 window.addEventListener('load', () => {
