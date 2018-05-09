@@ -1,0 +1,20 @@
+const CasperPromise = require('../src/promise')
+
+
+const testRequestAdapterApi = requestAdapter => {
+  const request = requestAdapter({
+    method: 'GET',
+    url: 'http://127.0.0.1'
+  })
+
+  request.catch(() => {})
+
+  expect(request instanceof CasperPromise).toBe(true)
+  expect(request.abort instanceof Function).toBe(true)
+  expect(request.on instanceof Function).toBe(true)
+
+  request.abort()
+}
+
+
+module.exports = testRequestAdapterApi

@@ -1,10 +1,20 @@
 class CasperPromise extends Promise {
   constructor(cb) {
-    super((resolve, reject) => cb(resolve, reject, this.emit))
+    let realResolve
+    let realReject
+
+    const hijackControls = (resolve, reject) => {
+      realResolve = resolve
+      realReject = reject
+    }
+    
+    super(hijackControls)
     this.subscribers = {}
 
     this.on = this.on.bind(this)
     this.emit = this.emit.bind(this)
+
+    cb(realResolve, realReject, this.emit)
   }
 
   on(event, cb) {
@@ -14,9 +24,9 @@ class CasperPromise extends Promise {
   }
 
   emit(event, message) {
-    if( ! this.subscribers[event]) this.subscribers.forEach(cb => cb(message))
+    if(this.subscribers[event]) this.subscribers[event].forEach(cb => cb(message))
   }
 }
 
 
-export default CasperPromise
+module.exports = CasperPromise
