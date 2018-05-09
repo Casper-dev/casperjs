@@ -47,10 +47,10 @@ const getFileSize = file => new Promise(resolve => {
 
 const uuidToHash = uuid => {
   const bytes = bs58.decode(uuid)
-  const sha = new Buffer(sha256.array(bytes))
+  const sha = Buffer.from(sha256.array(bytes))
   const encoded = Buffer.concat([
-    new Buffer([18]), 
-    new Buffer([sha.length]), 
+    Buffer.from([18]), 
+    Buffer.from([sha.length]), 
     sha
   ])
   const hash = bs58.encode(encoded)

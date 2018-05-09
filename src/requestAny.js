@@ -63,7 +63,7 @@ const requestAny = (
         if(host === championHost) resolve(response)
       })
       .catch(err => {
-        console.log('Host err', err)
+        // console.log('Host err', err)
         host.rejected = true
 
         if(host === championHost) {
