@@ -19,7 +19,7 @@ class Casper {
   constructor(api, mode) {
     // Later we will add more blockchains and use autodetection, etherium is default mode 
     this.blockchain = mode || 'eth'
-    if(this.blockchain === 'eth') this.blockchainAPI = api.eth
+    if(this.blockchain === 'eth') this.blockchainAPI = api.eth || api
   }
 
   /**

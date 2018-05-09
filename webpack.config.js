@@ -66,7 +66,7 @@ module.exports = (env, options) => {
   
   const browserBundleConfig = merge(baseConfig, {
     output: {
-      filename: 'casper.js',
+      filename: options.mode === 'development' ? 'casper.js' : 'casper.min.js',
       library: '',
       libraryTarget: 'commonjs2',
     },
@@ -84,6 +84,8 @@ module.exports = (env, options) => {
     ],
   })
 
-  
-  return [nodeConfig, browserBundleConfig]
+  const configs = [browserBundleConfig]
+  if(options.mode === 'development') configs.push(nodeConfig)
+
+  return configs
 }
