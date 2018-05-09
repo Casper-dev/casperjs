@@ -27,8 +27,6 @@ describe('node', () => {
         url: 'http://127.0.0.1:9001'
       })
 
-      console.log('resp')
-
       expect(logger).toHaveBeenCalled()
       done()
     })

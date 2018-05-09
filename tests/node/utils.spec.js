@@ -7,7 +7,7 @@ describe('utils', () => {
   const testFilePath = __dirname + '/../testFile.txt'
   const sampleBuffer = fs.readFileSync(testFilePath)
   const sampleFile = fs.createReadStream(testFilePath)
-  const sampleFileSize = 170237
+  const sampleFileSize = sampleBuffer.byteLength
 
   it('has isFile that matches ArrayBuffer, Buffer, stream.Readable', () => {
     expect(utils.isFile(sampleBuffer)).toBe(true)

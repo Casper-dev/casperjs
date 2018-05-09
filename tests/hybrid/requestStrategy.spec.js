@@ -167,7 +167,7 @@ describe('requestStrategy', () => {
     done()
   })
 
-  it('switches request if chamion rejects', async done => {
+  it('switches request if chamion rejects and propagates events', async done => {
     const ips = ['1.1.1.1', '2.2.2.2']
     const progressExpected1 = [0.2, 0.4]
     const progressExpected2 = [0.3, 0.6, 1]
@@ -209,6 +209,32 @@ describe('requestStrategy', () => {
     expect(progressLog).toEqual(progressExpected1.concat(progressExpected2))
     expect(champLog).toEqual(ips.reverse())
 
+    done()
+  })
+
+  it('throws when no hosts are present', async done => {
+    await expect(requestStrategy('GET', 'http://{host}/bla', [])).rejects.toBeTruthy()
+    done()
+  })
+
+  it('throws when all hosts reject', async done => {
+    failOnce()
+    failOnce()
+    failOnce()
+    await expect(requestStrategy('GET', 'http://{host}/bla', ['1.1.1.1', '2.2.2.2', '3.3.3.3'])).rejects.toBeTruthy()
+    done()
+  })
+
+  it('propagates errors', async done => {
+    failOnce()
+    mockRequest.mockReturnValueOnce(wrapAsReq(new CasperPromise((resolve, reject, emit) => {
+      // fast, but it fails
+      setTimeout(() => emit('progress', 0.5), 0)
+      setTimeout(reject, 10)
+    })))
+    failOnce()
+
+    await expect(requestStrategy('GET', 'http://{host}/bla', ['1.1.1.1', '2.2.2.2', '3.3.3.3'])).rejects.toBeTruthy()
     done()
   })
 })
