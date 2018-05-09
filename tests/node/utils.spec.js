@@ -4,7 +4,7 @@ const fs = require('fs')
 
 
 describe('utils', () => {
-  const testFilePath = __dirname + '/testFile.txt'
+  const testFilePath = __dirname + '/../testFile.txt'
   const sampleBuffer = fs.readFileSync(testFilePath)
   const sampleFile = fs.createReadStream(testFilePath)
   const sampleFileSize = 170237

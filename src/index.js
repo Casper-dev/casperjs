@@ -5,7 +5,6 @@ const requestAny = require('./requestAny')
 const utils = require('./utils')
 
 
-const DEFAULT_LINK_LIFETIME = 1000 * 60 * 60 * 5
 const REST_PORT = 5001
 const sc = {
   eth: scEth
@@ -26,7 +25,7 @@ class Casper {
   /**
    * Writes file into casper storage.
    * If uuid is present file is overwritten
-   * @param {(Blob | Buffer | ArrayBuffer)} file 
+   * @param {(Blob | Buffer | stream.Readable)} file 
    * @param {String} uuid file's unique id (from previous upload)
    * @return {CasperPromise} resolves with uuid
    */
@@ -67,7 +66,7 @@ class Casper {
 
   /**
    * Deletes file from casper storage.  
-   * @param {String} uuid file's unique id (from upload)
+   * @param {String} uuid file's unique id (returned from upload)
    * @return {CasperPromise} resolves with void
    */
   delete(uuid) {
@@ -88,7 +87,7 @@ class Casper {
   /**
    * Gets file from casper storage.
    * @param {String} uuid file's unique id (from upload)
-   * @return {CasperPromise} resolves with Blob, after the whole file is downloaded
+   * @return {CasperPromise} resolves with Blob | Buffer, after the whole file is downloaded
    */
   getFile(uuid) {
     return new CasperPromise((resolve, reject, emit) => {
@@ -110,11 +109,10 @@ class Casper {
   }
 
   /**
-   * 
+   * Generates http link that allows to work with file the usual web way
    * @param {String} uuid file's unique id (from upload)
-   * @param {Number} time how long magic link should be active (ms)
    */
-  getLink(uuid, time = DEFAULT_LINK_LIFETIME) {
+  getLink(uuid) {
     return new CasperPromise((resolve, reject, emit) => {
       let sharingNode = ''
       sc[this.blockchain]
@@ -130,13 +128,6 @@ class Casper {
         })
         .catch(reject)
     })
-  }
-
-  /**
-   * Mostly useful for debugging
-   */
-  getNodes() {
-    return sc[this.blockchain].getAllNodes(this.blockchainAPI)
   }
 }
 

@@ -3,13 +3,6 @@ const Duplex = require('stream').Duplex
 const CasperPromise = require('../promise')
 const fs = require('fs')
 
-const bufferToStream = buffer => {  
-  const stream = new Duplex()
-  stream.push(buffer)
-  stream.push(null)
-  return stream
-}
-
 
 const makeRequest = ({
   method = 'GET',
