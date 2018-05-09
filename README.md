@@ -203,7 +203,7 @@ casper.getFile(uuid)
 [casper-home]: casperproject.io
 
 <!-- Badges --> 
-[codecov-img]:  https://codecov.io/gh/Casper-dev/casperjs/branch/0.0.1-dev/graph/badge.svg
+[codecov-img]:  https://codecov.io/gh/Casper-dev/casperjs/branch/master/graph/badge.svg
 [codecov-link]: https://codecov.io/gh/Casper-dev/casperjs
 [travis-link]:  https://travis-ci.org/Casper-dev/casperjs
-[travis-img]:   https://travis-ci.org/Casper-dev/casperjs.svg?branch=0.0.1-dev
+[travis-img]:   https://travis-ci.org/Casper-dev/casperjs.svg?branch=master
