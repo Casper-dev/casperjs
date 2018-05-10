@@ -1,13 +1,12 @@
 // Mocking request
 let mockRequest = jest.fn()
 
-jest.mock('../../src/requestAdapters/node', () => function() {
+jest.mock('../../src/requestAdapter', () => function() {
   return mockRequest.apply(this, arguments)
 })
 
 
 // Module to test
-global.CASPER_BUNDLE_TARGET = 'node'
 const requestStrategy = require('../../src/requestAny')
 
 

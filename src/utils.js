@@ -1,12 +1,7 @@
 const bs58 = require('bs58')
 const sha256 = require('js-sha256')
+const { isFile, getFileSize } = require('./fileUitls')
 
-let stream, getStreamLength
-
-if(CASPER_BUNDLE_TARGET === 'node') {
-  stream = require('stream')
-  getStreamLength = require('stream-length')
-}
 
 const parseSCString = hash => {
   const val = hash.substring(2)
@@ -18,31 +13,6 @@ const parseSCString = hash => {
 
   return String.fromCharCode.apply(0, codes.filter(code => code !== 0))
 }
-
-
-const isFile = file => {
-  if(CASPER_BUNDLE_TARGET === 'browser') {
-    if(file instanceof Blob) return true
-  }
-
-  if(CASPER_BUNDLE_TARGET === 'node') {
-    if(file instanceof Buffer) return true
-    if(file instanceof stream.Readable) return true
-  }
-  return false
-}
-
-
-const getFileSize = file => new Promise(resolve => {
-  if(CASPER_BUNDLE_TARGET === 'browser') {
-    if (file instanceof Blob) resolve(file.size)
-  }
-  
-  if (CASPER_BUNDLE_TARGET === 'node') {
-    if(file instanceof stream.Readable) getStreamLength(file).then(resolve)
-    if(file instanceof Buffer) resolve(file.byteLength)
-  }
-})
 
 
 const uuidToHash = uuid => {

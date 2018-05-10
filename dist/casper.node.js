@@ -136,6 +136,35 @@ module.exports = {
 
 /***/ }),
 
+/***/ "./src/fileUitls/node.js":
+/*!*******************************!*\
+  !*** ./src/fileUitls/node.js ***!
+  \*******************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+stream = __webpack_require__(/*! stream */ "stream");
+getStreamLength = __webpack_require__(/*! stream-length */ "stream-length");
+
+const isFile = file => file instanceof Buffer || file instanceof stream.Readable;
+
+const getFileSize = file => new Promise((resolve, reject) => {
+  if (file instanceof stream.Readable) return getStreamLength(file).then(resolve);
+  if (file instanceof Buffer) return resolve(file.byteLength);
+
+  reject(new Error('casperapi: Cannot compute file size'));
+});
+
+module.exports = {
+  isFile,
+  getFileSize
+};
+
+/***/ }),
+
 /***/ "./src/index.js":
 /*!**********************!*\
   !*** ./src/index.js ***!
@@ -156,10 +185,6 @@ const REST_PORT = 5001;
 const sc = {
   eth: scEth
 };
-if (true) {
-  // var is here because we want hoisting
-  var FormData = __webpack_require__(/*! form-data */ "form-data");
-}
 
 class Casper {
   constructor(api, mode) {
@@ -178,7 +203,7 @@ class Casper {
   save(file, uuid = false) {
     return new CasperPromise((resolve, reject, emit) => {
       if (!utils.isFile(file)) {
-        throw new TypeError('Casper: file type must be File | Blob | ArrayBuffer | Buffer');
+        throw new TypeError('casperapi: file type must be File | Blob | ArrayBuffer | Buffer');
       }
 
       utils.getFileSize(file).then(fileSize => {
@@ -294,10 +319,10 @@ module.exports = CasperPromise
 
 /***/ }),
 
-/***/ "./src/requestAdapters/node.js":
-/*!*************************************!*\
-  !*** ./src/requestAdapters/node.js ***!
-  \*************************************/
+/***/ "./src/requestAdapter/node.js":
+/*!************************************!*\
+  !*** ./src/requestAdapter/node.js ***!
+  \************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -389,18 +414,13 @@ module.exports = makeRequest;
 "use strict";
 
 
-let request;
-
-if (true) {
-  request = __webpack_require__(/*! ./requestAdapters/node */ "./src/requestAdapters/node.js");
-} else {}
-
+const request = __webpack_require__(/*! ./requestAdapter */ "./src/requestAdapter/node.js");
 const CasperPromise = __webpack_require__(/*! ./promise */ "./src/promise.js");
 
 const hostWorthTrying = host => !host.rejected || host.canceled;
 
 const requestAny = (method, url, ips, config = {}) => new CasperPromise((resolve, reject, emit) => {
-  if (ips.length === 0) reject(new Error('No hosts to handle request'));
+  if (ips.length === 0) reject(new Error('casperapi: No hosts to handle request'));
 
   ips = ips.filter(ip => ip !== '0.0.0.0');
 
@@ -451,10 +471,10 @@ const requestAny = (method, url, ips, config = {}) => new CasperPromise((resolve
         const possibleIps = hosts.filter(hostWorthTrying).map(host => host.ip);
 
         requestAny(method, url, possibleIps, config).on('progress', done => emit('progress', done)).on('new-champion', ip => emit('new-champion', ip)).then(resolve).catch(err => {
-          reject(new Error('All hosts are unreachable'));
+          reject(new Error('casperapi: All hosts are unreachable'));
         });
       } else if (hosts.filter(hostWorthTrying).length === 0) {
-        reject(new Error('All hosts are unreachable'));
+        reject(new Error('casperapi: All hosts are unreachable'));
       }
     });
   });
@@ -476,13 +496,7 @@ module.exports = requestAny;
 
 const bs58 = __webpack_require__(/*! bs58 */ "bs58");
 const sha256 = __webpack_require__(/*! js-sha256 */ "js-sha256");
-
-let stream, getStreamLength;
-
-if (true) {
-  stream = __webpack_require__(/*! stream */ "stream");
-  getStreamLength = __webpack_require__(/*! stream-length */ "stream-length");
-}
+const { isFile, getFileSize } = __webpack_require__(/*! ./fileUitls */ "./src/fileUitls/node.js");
 
 const parseSCString = hash => {
   const val = hash.substring(2);
@@ -494,25 +508,6 @@ const parseSCString = hash => {
 
   return String.fromCharCode.apply(0, codes.filter(code => code !== 0));
 };
-
-const isFile = file => {
-  if (false) {}
-
-  if (true) {
-    if (file instanceof Buffer) return true;
-    if (file instanceof stream.Readable) return true;
-  }
-  return false;
-};
-
-const getFileSize = file => new Promise(resolve => {
-  if (false) {}
-
-  if (true) {
-    if (file instanceof stream.Readable) getStreamLength(file).then(resolve);
-    if (file instanceof Buffer) resolve(file.byteLength);
-  }
-});
 
 const uuidToHash = uuid => {
   const bytes = bs58.decode(uuid);
@@ -540,17 +535,6 @@ module.exports = {
 /***/ (function(module, exports) {
 
 module.exports = require("bs58");
-
-/***/ }),
-
-/***/ "form-data":
-/*!****************************!*\
-  !*** external "form-data" ***!
-  \****************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = require("form-data");
 
 /***/ }),
 

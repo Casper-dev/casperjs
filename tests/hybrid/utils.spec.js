@@ -1,4 +1,3 @@
-global.CASPER_BUNDLE_TARGET = 'node'
 const utils = require('../../src/utils')
 
 

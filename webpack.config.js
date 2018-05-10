@@ -54,13 +54,7 @@ module.exports = (env, options) => {
       filename: 'casper.node.js',
       library: '',
       libraryTarget: 'commonjs2',
-    },
-  
-    plugins: [
-      new webpack.DefinePlugin({
-        CASPER_BUNDLE_TARGET: "'node'"
-      })
-    ]
+    }
   })
   
   
@@ -76,12 +70,6 @@ module.exports = (env, options) => {
         makeBabelRule({ targets: { browsers: ['last 2 versions'] } })
       ]
     },
-  
-    plugins: [
-      new webpack.DefinePlugin({
-        CASPER_BUNDLE_TARGET: "'browser'"
-      })
-    ],
   })
 
   const configs = [browserBundleConfig]

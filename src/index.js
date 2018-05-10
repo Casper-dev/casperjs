@@ -9,10 +9,6 @@ const REST_PORT = 5001
 const sc = {
   eth: scEth
 }
-if(CASPER_BUNDLE_TARGET === 'node') {
-  // var is here because we want hoisting
-  var FormData = require('form-data')
-}
 
 
 class Casper {
@@ -32,7 +28,7 @@ class Casper {
   save(file, uuid = false) {
     return new CasperPromise((resolve, reject, emit) => {
       if( ! utils.isFile(file)) {
-        throw new TypeError('Casper: file type must be File | Blob | ArrayBuffer | Buffer')
+        throw new TypeError('casperapi: file type must be File | Blob | ArrayBuffer | Buffer')
       }
 
       utils.getFileSize(file)

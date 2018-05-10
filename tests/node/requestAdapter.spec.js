@@ -1,5 +1,4 @@
-global.CASPER_BUNDLE_TARGET = 'node'
-const request = require('../../src/requestAdapters/node')
+const request = require('../../src/requestAdapter')
 const testRequestAdapterApi = require('../testRequestAdapterApi')
 const makeCbServer = require('../requestAdapterTestNode')
 

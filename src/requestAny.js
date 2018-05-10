@@ -1,12 +1,6 @@
-let request
-
-if(CASPER_BUNDLE_TARGET === 'node') {
-  request = require('./requestAdapters/node')
-} else {
-  request = require('./requestAdapters/browser')
-}
-
+const request = require('./requestAdapter')
 const CasperPromise = require('./promise')
+
 
 const hostWorthTrying = host => ( ! host.rejected) || host.canceled
 
@@ -16,7 +10,9 @@ const requestAny = (
   ips, 
   config = {}
 ) => new CasperPromise((resolve, reject, emit) => {
-  if(ips.length === 0) reject(new Error('No hosts to handle request'))
+  if(ips.length === 0) reject(new Error('casperapi: No hosts to handle request'))
+
+  ips = ips.filter(ip => ip !== '0.0.0.0')
 
   // preparation
   const hosts = ips.map(ip => ({
@@ -78,10 +74,10 @@ const requestAny = (
             .on('new-champion', ip => emit('new-champion', ip))
             .then(resolve)
             .catch(err => {
-              reject(new Error('All hosts are unreachable'))
+              reject(new Error('casperapi: All hosts are unreachable'))
             })
         } else if(hosts.filter(hostWorthTrying).length === 0) {
-          reject(new Error('All hosts are unreachable'))
+          reject(new Error('casperapi: All hosts are unreachable'))
         }
       })
   })

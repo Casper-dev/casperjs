@@ -1995,6 +1995,35 @@ module.exports = {
 
 /***/ }),
 
+/***/ "./src/fileUitls/browser.js":
+/*!**********************************!*\
+  !*** ./src/fileUitls/browser.js ***!
+  \**********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var isFile = function isFile(file) {
+  if (file instanceof Blob) return true;
+  return false;
+};
+
+var getFileSize = function getFileSize(file) {
+  return new Promise(function (resolve) {
+    if (file instanceof Blob) return resolve(file.size);
+    reject(new Error('casperapi: Cannot compute file size'));
+  });
+};
+
+module.exports = {
+  isFile: isFile,
+  getFileSize: getFileSize
+};
+
+/***/ }),
+
 /***/ "./src/index.js":
 /*!**********************!*\
   !*** ./src/index.js ***!
@@ -2019,7 +2048,6 @@ var REST_PORT = 5001;
 var sc = {
   eth: scEth
 };
-if (false) { var FormData; }
 
 var Casper = function () {
   function Casper(api, mode) {
@@ -2048,7 +2076,7 @@ var Casper = function () {
 
       return new CasperPromise(function (resolve, reject, emit) {
         if (!utils.isFile(file)) {
-          throw new TypeError('Casper: file type must be File | Blob | ArrayBuffer | Buffer');
+          throw new TypeError('casperapi: file type must be File | Blob | ArrayBuffer | Buffer');
         }
 
         utils.getFileSize(file).then(function (fileSize) {
@@ -2197,10 +2225,10 @@ module.exports = CasperPromise
 
 /***/ }),
 
-/***/ "./src/requestAdapters/browser.js":
-/*!****************************************!*\
-  !*** ./src/requestAdapters/browser.js ***!
-  \****************************************/
+/***/ "./src/requestAdapter/browser.js":
+/*!***************************************!*\
+  !*** ./src/requestAdapter/browser.js ***!
+  \***************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2277,12 +2305,7 @@ module.exports = makeRequest;
 "use strict";
 
 
-var request = void 0;
-
-if (false) {} else {
-  request = __webpack_require__(/*! ./requestAdapters/browser */ "./src/requestAdapters/browser.js");
-}
-
+var request = __webpack_require__(/*! ./requestAdapter */ "./src/requestAdapter/browser.js");
 var CasperPromise = __webpack_require__(/*! ./promise */ "./src/promise.js");
 
 var hostWorthTrying = function hostWorthTrying(host) {
@@ -2292,7 +2315,7 @@ var hostWorthTrying = function hostWorthTrying(host) {
 var requestAny = function requestAny(method, url, ips) {
   var config = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
   return new CasperPromise(function (resolve, reject, emit) {
-    if (ips.length === 0) reject(new Error('No hosts to handle request'));
+    if (ips.length === 0) reject(new Error('casperapi: No hosts to handle request'));
 
     ips = ips.filter(function (ip) {
       return ip !== '0.0.0.0';
@@ -2359,10 +2382,10 @@ var requestAny = function requestAny(method, url, ips) {
           }).on('new-champion', function (ip) {
             return emit('new-champion', ip);
           }).then(resolve).catch(function (err) {
-            reject(new Error('All hosts are unreachable'));
+            reject(new Error('casperapi: All hosts are unreachable'));
           });
         } else if (hosts.filter(hostWorthTrying).length === 0) {
-          reject(new Error('All hosts are unreachable'));
+          reject(new Error('casperapi: All hosts are unreachable'));
         }
       });
     });
@@ -2386,10 +2409,9 @@ module.exports = requestAny;
 var bs58 = __webpack_require__(/*! bs58 */ "bs58");
 var sha256 = __webpack_require__(/*! js-sha256 */ "js-sha256");
 
-var stream = void 0,
-    getStreamLength = void 0;
-
-if (false) {}
+var _require = __webpack_require__(/*! ./fileUitls */ "./src/fileUitls/browser.js"),
+    isFile = _require.isFile,
+    getFileSize = _require.getFileSize;
 
 var parseSCString = function parseSCString(hash) {
   var val = hash.substring(2);
@@ -2402,25 +2424,6 @@ var parseSCString = function parseSCString(hash) {
   return String.fromCharCode.apply(0, codes.filter(function (code) {
     return code !== 0;
   }));
-};
-
-var isFile = function isFile(file) {
-  if (true) {
-    if (file instanceof Blob) return true;
-  }
-
-  if (false) {}
-  return false;
-};
-
-var getFileSize = function getFileSize(file) {
-  return new Promise(function (resolve) {
-    if (true) {
-      if (file instanceof Blob) resolve(file.size);
-    }
-
-    if (false) {}
-  });
 };
 
 var uuidToHash = function uuidToHash(uuid) {
