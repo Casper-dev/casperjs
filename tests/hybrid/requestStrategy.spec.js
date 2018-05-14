@@ -18,7 +18,7 @@ const wrapAsReq = promise => {
 }
 const failOnce = () => {
   mockRequest.mockReturnValueOnce(wrapAsReq(
-    new CasperPromise((_, reject) => reject(
+     CasperPromise((_, reject) => reject(
       new Error('This should fail')
     ))
   ))
@@ -33,7 +33,7 @@ describe('requestStrategy', () => {
   
   it('calls request at least once with url and host provided', () => {
     mockRequest.mockReturnValueOnce(wrapAsReq(
-      new CasperPromise(resolve => resolve())
+      CasperPromise(resolve => resolve())
     ))
     requestStrategy('GET', 'http://{host}/bla', ['localhost'])
 
@@ -53,7 +53,7 @@ describe('requestStrategy', () => {
 
       for(let i = 0; i < currentOk; ++i) failOnce()
       mockRequest.mockReturnValueOnce(
-        new CasperPromise((resolve, reject, emit) => {
+        CasperPromise((resolve, reject, emit) => {
           emit('progress', 1)
           resolve(ips[currentOk])
         })
@@ -77,7 +77,7 @@ describe('requestStrategy', () => {
     const targetResult = {}
 
     mockRequest.mockReturnValueOnce(
-      new CasperPromise((resolve, reject, emit) => {
+      CasperPromise((resolve, reject, emit) => {
         for(let i = 1; i < progressChunks; ++i) {
           setTimeout(() => emit('progress', i * 1/progressChunks), i * threshold)
         }
@@ -109,7 +109,7 @@ describe('requestStrategy', () => {
 
     failOnce()
     mockRequest.mockReturnValueOnce(wrapAsReq(
-      new CasperPromise((resolve, reject, emit) => {
+      CasperPromise((resolve, reject, emit) => {
         for(let i = 1; i < progressChunks; ++i) {
           setTimeout(() => emit('progress', i * 1/progressChunks), i * threshold)
         }
@@ -121,7 +121,7 @@ describe('requestStrategy', () => {
       })
     ))
     mockRequest.mockReturnValueOnce(wrapAsReq(
-      new CasperPromise((resolve, reject, emit) => {
+      CasperPromise((resolve, reject, emit) => {
         setTimeout(() => {
           emit('progress', 0.53)
           resolve(targetResult)
@@ -150,7 +150,7 @@ describe('requestStrategy', () => {
     let targetChamp = '123.1.1.1'
 
     mockRequest.mockReturnValueOnce(wrapAsReq(
-      new CasperPromise((resolve, reject, emit) => {
+      CasperPromise((resolve, reject, emit) => {
         emit('progress', 1)
         resolve()
       })
@@ -181,7 +181,7 @@ describe('requestStrategy', () => {
 
     mockRequest.mockImplementation(({ url }) => {
       if(url === 'http://1.1.1.1/bla') {
-        return wrapAsReq(new CasperPromise((resolve, reject, emit) => {
+        return wrapAsReq(CasperPromise((resolve, reject, emit) => {
           // slow, but it resolves
           setTimeout(() => {
             progressExpected2.forEach(x => emit('progress', x))
@@ -190,7 +190,7 @@ describe('requestStrategy', () => {
         }))
       }
       else {
-        return wrapAsReq(new CasperPromise((resolve, reject, emit) => {
+        return wrapAsReq(CasperPromise((resolve, reject, emit) => {
           // fast, but it fails
           setTimeout(() => {
             progressExpected1.forEach(x => emit('progress', x))
@@ -226,7 +226,7 @@ describe('requestStrategy', () => {
 
   it('propagates errors', async done => {
     failOnce()
-    mockRequest.mockReturnValueOnce(wrapAsReq(new CasperPromise((resolve, reject, emit) => {
+    mockRequest.mockReturnValueOnce(wrapAsReq(CasperPromise((resolve, reject, emit) => {
       // fast, but it fails
       setTimeout(() => emit('progress', 0.5), 0)
       setTimeout(reject, 10)

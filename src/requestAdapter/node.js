@@ -14,7 +14,7 @@ const makeRequest = ({
 }) => {
   let triggerAbort
 
-  const promise = new CasperPromise((resolve, reject, emit) => {
+  const promise = CasperPromise((resolve, reject, emit) => {
     // preparation
     const requestConfig = {
       method,

@@ -10,7 +10,7 @@ Most of the time this is device-specific issue, due to web3 using c++ and python
 ### Windows
 Install https://www.npmjs.com/package/windows-build-tools and try again
 
-> It will need admin rights and take a while to install
+> It will need admin rights and might take a while to install
 
 
 ### MacOS \ Linux

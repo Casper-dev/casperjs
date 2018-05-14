@@ -9,7 +9,7 @@ const requestAny = (
   method, url, 
   ips, 
   config = {}
-) => new CasperPromise((resolve, reject, emit) => {
+) => CasperPromise((resolve, reject, emit) => {
   if(ips.length === 0) reject(new Error('casperapi: No hosts to handle request'))
 
   ips = ips.filter(ip => ip !== '0.0.0.0')

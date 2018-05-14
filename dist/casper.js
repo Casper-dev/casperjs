@@ -2074,7 +2074,7 @@ var Casper = function () {
 
       var uuid = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
-      return new CasperPromise(function (resolve, reject, emit) {
+      return CasperPromise(function (resolve, reject, emit) {
         if (!utils.isFile(file)) {
           throw new TypeError('casperapi: file type must be File | Blob | ArrayBuffer | Buffer');
         }
@@ -2117,7 +2117,7 @@ var Casper = function () {
     value: function _delete(uuid) {
       var _this2 = this;
 
-      return new CasperPromise(function (resolve, reject, emit) {
+      return CasperPromise(function (resolve, reject, emit) {
         sc[_this2.blockchain].getStoringNodes(_this2.blockchainAPI, { uuid: uuid }).then(function (ips) {
           emit('sc-connected');
           requestAny('DELETE', 'http://{host}:' + REST_PORT + '/casper/v0/file/' + uuid, ips).on('new-champion', function (ip) {
@@ -2138,7 +2138,7 @@ var Casper = function () {
     value: function getFile(uuid) {
       var _this3 = this;
 
-      return new CasperPromise(function (resolve, reject, emit) {
+      return CasperPromise(function (resolve, reject, emit) {
         sc[_this3.blockchain].getStoringNodes(_this3.blockchainAPI, { uuid: uuid }).then(function (ips) {
           emit('sc-connected');
           return ips;
@@ -2162,7 +2162,7 @@ var Casper = function () {
     value: function getLink(uuid) {
       var _this4 = this;
 
-      return new CasperPromise(function (resolve, reject, emit) {
+      return CasperPromise(function (resolve, reject, emit) {
         var sharingNode = '';
         sc[_this4.blockchain].getStoringNodes(_this4.blockchainAPI, { uuid: uuid }).then(function (ips) {
           emit('sc-connected');
@@ -2188,40 +2188,43 @@ module.exports = Casper;
   !*** ./src/promise.js ***!
   \************************/
 /*! no static exports found */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-class CasperPromise extends Promise {
-  constructor(cb) {
-    let realResolve
-    let realReject
+"use strict";
 
-    const hijackControls = (resolve, reject) => {
-      realResolve = resolve
-      realReject = reject
-    }
-    
-    super(hijackControls)
-    this.subscribers = {}
 
-    this.on = this.on.bind(this)
-    this.emit = this.emit.bind(this)
-
-    cb(realResolve, realReject, this.emit)
-  }
-
-  on(event, cb) {
-    if(!this.subscribers[event]) this.subscribers[event] = []
-    this.subscribers[event].push(cb)
-    return this
-  }
-
-  emit(event, message) {
-    if(this.subscribers[event]) this.subscribers[event].forEach(cb => cb(message))
-  }
+function on(event, cb) {
+  if (!this.subscribers[event]) this.subscribers[event] = [];
+  this.subscribers[event].push(cb);
+  return this;
 }
 
+function emit(event, message) {
+  if (this.subscribers[event]) this.subscribers[event].forEach(function (cb) {
+    return cb(message);
+  });
+}
 
-module.exports = CasperPromise
+function CasperPromise(cb) {
+  var realResolve = void 0;
+  var realReject = void 0;
+
+  var hijackControls = function hijackControls(resolve, reject) {
+    realResolve = resolve;
+    realReject = reject;
+  };
+
+  var p = new Promise(hijackControls);
+
+  p.subscribers = {};
+  p.emit = emit.bind(p);
+  p.on = on.bind(p);
+
+  cb(realResolve, realReject, p.emit);
+  return p;
+}
+
+module.exports = CasperPromise;
 
 /***/ }),
 
@@ -2249,7 +2252,7 @@ var makeRequest = function makeRequest(_ref) {
 
   var triggerAbort = void 0;
 
-  var promise = new CasperPromise(function (resolve, reject, emit) {
+  var promise = CasperPromise(function (resolve, reject, emit) {
     // helpers
     var handleProgress = function handleProgress(event) {
       var done = event.loaded / event.total;
@@ -2314,7 +2317,7 @@ var hostWorthTrying = function hostWorthTrying(host) {
 
 var requestAny = function requestAny(method, url, ips) {
   var config = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
-  return new CasperPromise(function (resolve, reject, emit) {
+  return CasperPromise(function (resolve, reject, emit) {
     if (ips.length === 0) reject(new Error('casperapi: No hosts to handle request'));
 
     ips = ips.filter(function (ip) {

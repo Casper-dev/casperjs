@@ -11,7 +11,7 @@ const makeRequest = ({
 }) => {
   let triggerAbort
 
-  const promise = new CasperPromise((resolve, reject, emit) => {
+  const promise = CasperPromise((resolve, reject, emit) => {
     // helpers
     const handleProgress = event => {
       const done = event.loaded / event.total

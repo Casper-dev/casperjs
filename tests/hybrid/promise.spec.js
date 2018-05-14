@@ -3,12 +3,12 @@ const CasperPromise = require('../../src/promise')
 
 describe('CasperPromise', () => {
   it('Is a promise', () => {
-    expect(new CasperPromise(() => {}) instanceof Promise).toBe(true)
+    expect(CasperPromise(() => {}) instanceof Promise).toBe(true)
   })
 
   it('Can resovle', done => {
     const targetValue = {}
-    new CasperPromise((resolve, reject) => resolve(targetValue))
+    CasperPromise((resolve, reject) => resolve(targetValue))
       .then(recived => {
         expect(recived).toBe(targetValue)
         done()
@@ -17,7 +17,7 @@ describe('CasperPromise', () => {
 
   it('Can reject', done => {
     const targetValue = {}
-    new CasperPromise((resolve, reject) => reject(targetValue))
+    CasperPromise((resolve, reject) => reject(targetValue))
       .catch(recived => {
         expect(recived).toBe(targetValue)
         done()
@@ -26,7 +26,7 @@ describe('CasperPromise', () => {
 
   it('Has event system', done => {
     const targetValue = {}
-    const promise = new CasperPromise((resolve, reject, emit) => {
+    const promise = CasperPromise((resolve, reject, emit) => {
       setTimeout(() => {
         emit('event', targetValue)
         emit('progress', 0.1)

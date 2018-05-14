@@ -201,7 +201,7 @@ class Casper {
    * @return {CasperPromise} resolves with uuid
    */
   save(file, uuid = false) {
-    return new CasperPromise((resolve, reject, emit) => {
+    return CasperPromise((resolve, reject, emit) => {
       if (!utils.isFile(file)) {
         throw new TypeError('casperapi: file type must be File | Blob | ArrayBuffer | Buffer');
       }
@@ -234,7 +234,7 @@ class Casper {
    * @return {CasperPromise} resolves with void
    */
   delete(uuid) {
-    return new CasperPromise((resolve, reject, emit) => {
+    return CasperPromise((resolve, reject, emit) => {
       sc[this.blockchain].getStoringNodes(this.blockchainAPI, { uuid }).then(ips => {
         emit('sc-connected');
         requestAny('DELETE', `http://{host}:${REST_PORT}/casper/v0/file/${uuid}`, ips).on('new-champion', ip => emit('node-found', ip)).then(resolve).catch(reject);
@@ -248,7 +248,7 @@ class Casper {
    * @return {CasperPromise} resolves with Blob | Buffer, after the whole file is downloaded
    */
   getFile(uuid) {
-    return new CasperPromise((resolve, reject, emit) => {
+    return CasperPromise((resolve, reject, emit) => {
       sc[this.blockchain].getStoringNodes(this.blockchainAPI, { uuid }).then(ips => {
         emit('sc-connected');
         return ips;
@@ -263,7 +263,7 @@ class Casper {
    * @param {String} uuid file's unique id (from upload)
    */
   getLink(uuid) {
-    return new CasperPromise((resolve, reject, emit) => {
+    return CasperPromise((resolve, reject, emit) => {
       let sharingNode = '';
       sc[this.blockchain].getStoringNodes(this.blockchainAPI, { uuid }).then(ips => {
         emit('sc-connected');
@@ -282,40 +282,41 @@ module.exports = Casper;
   !*** ./src/promise.js ***!
   \************************/
 /*! no static exports found */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-class CasperPromise extends Promise {
-  constructor(cb) {
-    let realResolve
-    let realReject
+"use strict";
 
-    const hijackControls = (resolve, reject) => {
-      realResolve = resolve
-      realReject = reject
-    }
-    
-    super(hijackControls)
-    this.subscribers = {}
 
-    this.on = this.on.bind(this)
-    this.emit = this.emit.bind(this)
-
-    cb(realResolve, realReject, this.emit)
-  }
-
-  on(event, cb) {
-    if(!this.subscribers[event]) this.subscribers[event] = []
-    this.subscribers[event].push(cb)
-    return this
-  }
-
-  emit(event, message) {
-    if(this.subscribers[event]) this.subscribers[event].forEach(cb => cb(message))
-  }
+function on(event, cb) {
+  if (!this.subscribers[event]) this.subscribers[event] = [];
+  this.subscribers[event].push(cb);
+  return this;
 }
 
+function emit(event, message) {
+  if (this.subscribers[event]) this.subscribers[event].forEach(cb => cb(message));
+}
 
-module.exports = CasperPromise
+function CasperPromise(cb) {
+  let realResolve;
+  let realReject;
+
+  const hijackControls = (resolve, reject) => {
+    realResolve = resolve;
+    realReject = reject;
+  };
+
+  let p = new Promise(hijackControls);
+
+  p.subscribers = {};
+  p.emit = emit.bind(p);
+  p.on = on.bind(p);
+
+  cb(realResolve, realReject, p.emit);
+  return p;
+}
+
+module.exports = CasperPromise;
 
 /***/ }),
 
@@ -344,7 +345,7 @@ const makeRequest = ({
 }) => {
   let triggerAbort;
 
-  const promise = new CasperPromise((resolve, reject, emit) => {
+  const promise = CasperPromise((resolve, reject, emit) => {
     // preparation
     const requestConfig = {
       method,
@@ -419,7 +420,7 @@ const CasperPromise = __webpack_require__(/*! ./promise */ "./src/promise.js");
 
 const hostWorthTrying = host => !host.rejected || host.canceled;
 
-const requestAny = (method, url, ips, config = {}) => new CasperPromise((resolve, reject, emit) => {
+const requestAny = (method, url, ips, config = {}) => CasperPromise((resolve, reject, emit) => {
   if (ips.length === 0) reject(new Error('casperapi: No hosts to handle request'));
 
   ips = ips.filter(ip => ip !== '0.0.0.0');

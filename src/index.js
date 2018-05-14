@@ -26,7 +26,7 @@ class Casper {
    * @return {CasperPromise} resolves with uuid
    */
   save(file, uuid = false) {
-    return new CasperPromise((resolve, reject, emit) => {
+    return CasperPromise((resolve, reject, emit) => {
       if( ! utils.isFile(file)) {
         throw new TypeError('casperapi: file type must be File | Blob | ArrayBuffer | Buffer')
       }
@@ -66,7 +66,7 @@ class Casper {
    * @return {CasperPromise} resolves with void
    */
   delete(uuid) {
-    return new CasperPromise((resolve, reject, emit) => {
+    return CasperPromise((resolve, reject, emit) => {
       sc[this.blockchain]
         .getStoringNodes(this.blockchainAPI, { uuid })
         .then(ips => {
@@ -86,7 +86,7 @@ class Casper {
    * @return {CasperPromise} resolves with Blob | Buffer, after the whole file is downloaded
    */
   getFile(uuid) {
-    return new CasperPromise((resolve, reject, emit) => {
+    return CasperPromise((resolve, reject, emit) => {
       sc[this.blockchain]
         .getStoringNodes(this.blockchainAPI, { uuid })
         .then(ips => {
@@ -109,7 +109,7 @@ class Casper {
    * @param {String} uuid file's unique id (from upload)
    */
   getLink(uuid) {
-    return new CasperPromise((resolve, reject, emit) => {
+    return CasperPromise((resolve, reject, emit) => {
       let sharingNode = ''
       sc[this.blockchain]
         .getStoringNodes(this.blockchainAPI, { uuid })
