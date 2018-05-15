@@ -187,8 +187,6 @@ casper.getFile(uuid)
 ## Coming soon
 :hammer: `casper.getLink` support on testnet
 
-:hammer: ES5 browsers support
-
 :hammer: Production mode
 
 :hammer: Better test coverage
