@@ -1,6 +1,6 @@
-const bs58 = require('bs58')
 const sha256 = require('js-sha256')
-const { isFile, getFileSize } = require('./fileUitls')
+const bs58 = require('./crypto/bs58')
+const { isFile, getFileSize } = require('./file')
 
 
 const parseSCString = hash => {
@@ -17,12 +17,9 @@ const parseSCString = hash => {
 
 const uuidToHash = uuid => {
   const bytes = bs58.decode(uuid)
-  const sha = Buffer.from(sha256.array(bytes))
-  const encoded = Buffer.concat([
-    Buffer.from([18]), 
-    Buffer.from([sha.length]), 
-    sha
-  ])
+  const sha = sha256.array(bytes)
+  
+  const encoded = new Uint8Array([18, sha.length].concat(sha)) 
   const hash = bs58.encode(encoded)
 
   return hash

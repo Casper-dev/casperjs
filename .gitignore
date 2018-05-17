@@ -60,3 +60,5 @@ typings/
 \.vscode/
 
 playground/files/
+
+playground/dist/

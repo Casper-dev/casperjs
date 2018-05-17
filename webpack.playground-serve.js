@@ -2,7 +2,7 @@ const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 
-module.exports = {
+module.exports = (env, options) => ({
   entry: path.resolve(__dirname, 'playground/index.js'),
 
   module: {
@@ -14,17 +14,17 @@ module.exports = {
   },
 
   output: {
-    path: path.resolve(__dirname, 'dist')
+    path: path.resolve(__dirname, 'playground/dist')
   },
 
   // web3's fancy pointless dependency
   externals: [{'trim': 'undefined'}],
 
-  devtool: 'source-map',
+  devtool: options.mode === 'development' ? 'source-map' : 'none',
   
   plugins: [
     new HtmlWebpackPlugin({
       template: 'playground/index.html'
     })
   ]
-}
+})
