@@ -6,12 +6,10 @@ const isFile = file => ( file instanceof Buffer
                       || file instanceof stream.Readable
 )
 
-const getFileSize = file => new Promise((resolve, reject) => {
-  if(file instanceof stream.Readable) return getStreamLength(file).then(resolve)
-  if(file instanceof Buffer) return resolve(file.byteLength)
-
-  reject(new Error('casperapi: Cannot compute file size'))
-})
+const getFileSize = file => {
+  if(file instanceof stream.Readable) return getStreamLength(file)
+  if(file instanceof Buffer) return new Promise((resolve => resolve(file.byteLength)))
+}
 
 
 module.exports = {

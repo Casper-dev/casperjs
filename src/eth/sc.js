@@ -2,13 +2,30 @@ const { parseSCString, uuidToHash } = require('../utils')
 
 
 const SC_INTERFACE = require('./sc.abi.json')
-const SC_ADDR = 'Cb4d87043e63EB3F7B605f79906911C498A31B33'
-let sc
-const ensureSC = eth => { if( ! sc) sc = new eth.Contract(SC_INTERFACE, SC_ADDR) }
+const SC_ADDR = {
+  dev: 'Cb4d87043e63EB3F7B605f79906911C498A31B33',
+  prod: ''
+}
+const sc = {
+  'dev': [],
+  'prod': []
+}
+const getSC = (eth, mode) => {
+  // initiing casper-sc is somewhat pricy, so we try to get it from cache
+  for(let pair of sc[mode]) {
+    if(pair.eth === eth) return pair.sc
+  }
+
+  // conneced to another web3 instance or created for the first time
+  const pair = { eth, sc: new eth.Contract(SC_INTERFACE, SC_ADDR[mode]) }
+  sc[mode].push(pair)
+
+  return pair.sc
+}
 
 
-const getUploadNodes = (eth, { fileSize }) => new Promise((resolve, reject) => {
-  ensureSC(eth)
+const getUploadNodes = (eth, { fileSize, mode }) => new Promise((resolve, reject) => {
+  const sc = getSC(eth, mode)
 
   sc.methods.getPeers(fileSize).call()
     .then(data => {
@@ -22,12 +39,11 @@ const getUploadNodes = (eth, { fileSize }) => new Promise((resolve, reject) => {
     })
     .then(ipPorts => ipPorts.map(ipPort => ipPort.replace(/:.*/, '')))
     .then(resolve)
-    .catch(err => console.error(err))
 })
 
 
-const getStoringNodes = (eth, { uuid }) => new Promise((resolve, reject) => {
-  ensureSC(eth)
+const getStoringNodes = (eth, { uuid, mode }) => new Promise((resolve, reject) => {
+  const sc = getSC(eth, mode)
 
 
   const fileHash = uuidToHash(uuid)
@@ -43,7 +59,6 @@ const getStoringNodes = (eth, { uuid }) => new Promise((resolve, reject) => {
     })
     .then(ipPorts => ipPorts.map(ipPort => ipPort.replace(/:.*/, '')))
     .then(resolve)
-    .catch(err => console.error(err))
 })
 
 
