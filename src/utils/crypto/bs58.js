@@ -36,8 +36,6 @@ bs58.decode = S => {
   for(i in S) { //loop through each base58 character in the input string
       j = 0,                             //reset the byte iterator
       c = A.indexOf( S[i] );             //set the initial carry amount equal to the current base58 digit
-      if(c < 0)                          //see if the base58 digit lookup is invalid (-1)
-          return undefined;              //if invalid base58 digit, bail out and return undefined
       c || b.length ^ i ? i : b.push(0); //prepend the result array with a zero if the base58 digit is zero and non-zero characters haven't been seen yet (to ensure correct decode length)
       while(j in d || c) {               //start looping through the bytes until there are no more bytes and no carry amount
           n = d[j];                      //set the placeholder for the current byte

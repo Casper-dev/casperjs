@@ -12,7 +12,8 @@ module.exports = {
   collectCoverage: true,
   collectCoverageFrom: [
     'src/**/*.js',
-    '!**/browser.js'
+    '!**/browser.js',
+    '!src/**/requestAdapter/*.js'
   ],
   coverageReporters: ['lcov', 'json']
 }

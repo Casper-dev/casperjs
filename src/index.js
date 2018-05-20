@@ -12,9 +12,10 @@ const sc = {
 
 
 class Casper {
-  constructor(api, mode) {
-    // Later we will add more blockchains and use autodetection, etherium is default mode 
-    this.blockchain = mode || 'eth'
+  constructor(api, { blockchain='eth', mode='dev' } = {}) {
+    // Later we will add more blockchains and use autodetection, etherium is the default mode 
+    this.blockchain = blockchain
+    this.mode = mode
     if(this.blockchain === 'eth') this.blockchainAPI = api.eth || api
   }
 
@@ -28,12 +29,12 @@ class Casper {
   save(file, uuid = false) {
     return CasperPromise((resolve, reject, emit) => {
       if( ! utils.isFile(file)) {
-        throw new TypeError('casperapi: file type must be File | Blob | ArrayBuffer | Buffer')
+        throw new TypeError('casperapi: file type must be File | Blob | Buffer | stream.Readable')
       }
 
       utils.getFileSize(file)
         .then(fileSize => {
-          return sc[this.blockchain].getUploadNodes(this.blockchainAPI, { fileSize })
+          return sc[this.blockchain].getUploadNodes(this.blockchainAPI, { fileSize, mode: this.mode })
         })
         .then(ips => {
           emit('sc-connected')         
@@ -68,7 +69,7 @@ class Casper {
   delete(uuid) {
     return CasperPromise((resolve, reject, emit) => {
       sc[this.blockchain]
-        .getStoringNodes(this.blockchainAPI, { uuid })
+        .getStoringNodes(this.blockchainAPI, { uuid, mode: this.mode })
         .then(ips => {
           emit('sc-connected')
           requestAny('DELETE', `http://{host}:${REST_PORT}/casper/v0/file/${uuid}`, ips)
@@ -88,7 +89,7 @@ class Casper {
   getFile(uuid) {
     return CasperPromise((resolve, reject, emit) => {
       sc[this.blockchain]
-        .getStoringNodes(this.blockchainAPI, { uuid })
+        .getStoringNodes(this.blockchainAPI, { uuid, mode: this.mode })
         .then(ips => {
           emit('sc-connected')
           return ips
@@ -112,7 +113,7 @@ class Casper {
     return CasperPromise((resolve, reject, emit) => {
       let sharingNode = ''
       sc[this.blockchain]
-        .getStoringNodes(this.blockchainAPI, { uuid })
+        .getStoringNodes(this.blockchainAPI, { uuid, mode: this.mode })
         .then(ips => {
           emit('sc-connected')
           requestAny('POST', `http://{host}:${REST_PORT}/casper/v0/share/${uuid}`, ips)

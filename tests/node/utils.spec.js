@@ -17,7 +17,7 @@ describe('utils', () => {
     expect(utils.isFile('a string, not file at all')).toBe(false)
   })
 
-  it('has getFileSize that mesures ArrayBuffer, Buffer, stream.Readable', 
+  it('has getFileSize that mesures Buffer, stream.Readable', 
       done => {
     Promise.all([
       utils.getFileSize(sampleBuffer),
