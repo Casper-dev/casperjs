@@ -3,7 +3,7 @@ const { parseSCString, uuidToHash } = require('../utils')
 
 const SC_INTERFACE = require('./sc.abi.json')
 const SC_ADDR = {
-  dev: 'Cb4d87043e63EB3F7B605f79906911C498A31B33',
+  dev: '9e322Ca6D818ec8a6BFb4352242c5615CDfD3aa7',
   prod: ''
 }
 const sc = {
@@ -34,10 +34,10 @@ const getUploadNodes = (eth, { fileSize, mode }) => new Promise((resolve, reject
                     .map(key => data[key])
 
       return Promise.all(
-        ids.map(node => sc.methods.getIpPort(node).call())
+        ids.map(node => sc.methods.getNodeAddress(node).call())
       )
     })
-    .then(ipPorts => ipPorts.map(ipPort => ipPort.replace(/:.*/, '')))
+    .then(ipPorts => ipPorts.map(ipPort => ipPort[0].replace(/:.*/, '')))
     .then(resolve)
 })
 
@@ -49,15 +49,17 @@ const getStoringNodes = (eth, { uuid, mode }) => new Promise((resolve, reject) =
   const fileHash = uuidToHash(uuid)
   sc.methods.showStoringPeers(fileHash).call()
     .then(data => {
-      const nodeHashes = data.filter(hash => !/^0x0*$/.test(hash))
-                             .map(s => s.substring(0, s.length - 2))
-                             .map(parseSCString)
+      const nodeHashes = []
+      for(let key in data) {
+        const hash = data[key]
+        if(hash.length) nodeHashes.push(hash)
+      }
 
       return Promise.all(
-        nodeHashes.map(node => sc.methods.getIpPort(node).call())
+        nodeHashes.map(node => sc.methods.getNodeAddress(node).call())
       )
     })
-    .then(ipPorts => ipPorts.map(ipPort => ipPort.replace(/:.*/, '')))
+    .then(ipPorts => ipPorts.map(ipPort => ipPort[0].replace(/:.*/, '')))
     .then(resolve)
 })
 

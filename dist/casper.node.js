@@ -85,7 +85,7 @@ module.exports =
 /*! exports provided: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, default */
 /***/ (function(module) {
 
-module.exports = [{"constant":false,"inputs":[{"name":"id","type":"string"},{"name":"hash","type":"string"},{"name":"size","type":"uint256"}],"name":"confirmUpload","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"amount","type":"uint256"}],"name":"addToken","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"srcID","type":"string"}],"name":"getPingTarget","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"hash","type":"string"}],"name":"showStoringPeers","outputs":[{"name":"","type":"bytes32[4]"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"ipfsAddr","type":"string"}],"name":"getIpPort","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"confirmDownload","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"getSystemState","outputs":[{"name":"","type":"uint256"},{"name":"","type":"uint256"},{"name":"","type":"uint256"},{"name":"","type":"uint256"},{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getAllPeers","outputs":[{"name":"","type":"bytes32[]"},{"name":"","type":"uint256[]"},{"name":"","type":"bytes32[]"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"nodeHash","type":"string"},{"name":"telegram","type":"bytes32"},{"name":"udpIpPort","type":"string"},{"name":"ipPort","type":"string"},{"name":"id","type":"string"},{"name":"size","type":"uint256"}],"name":"registerProvider","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"ipfsAddr","type":"string"},{"name":"newIpPort","type":"string"}],"name":"updateIpPort","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"id","type":"string"}],"name":"removeProviderMachine","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"id","type":"string"},{"name":"hash","type":"string"},{"name":"size","type":"uint256"}],"name":"confirmUpdate","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"ipfsAddr","type":"string"}],"name":"getUDPIpPort","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"hash","type":"string"}],"name":"getStoringPeers","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"id","type":"string"},{"name":"n","type":"uint256"}],"name":"getFile","outputs":[{"name":"","type":"string"},{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"clearPrepay","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"client","type":"address"}],"name":"isPrepaid","outputs":[{"name":"prepaid","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"size","type":"uint256"}],"name":"getPeers","outputs":[{"name":"id1","type":"string"},{"name":"id2","type":"string"},{"name":"id3","type":"string"},{"name":"id4","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"UUID","type":"string"},{"name":"consensus","type":"bool[16]"},{"name":"nodeIds","type":"bytes32[4]"}],"name":"checkVerification","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"id","type":"string"}],"name":"setBootstrap","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"pay","type":"uint256"}],"name":"prePay","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"id","type":"string"}],"name":"getNumberOfFiles","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"confirmTransfer","outputs":[],"payable":false,"stateMutability":"pure","type":"function"},{"constant":true,"inputs":[{"name":"ipfsAddr","type":"string"}],"name":"getNodeHash","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getBannedPeers","outputs":[{"name":"","type":"bytes32[]"},{"name":"","type":"uint256[]"},{"name":"","type":"bytes32[]"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"removeAllPeers","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"id","type":"string"}],"name":"verifyReplication","outputs":[{"name":"isBanned","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"nodeHash","type":"string"},{"name":"telegram","type":"bytes32"},{"name":"udpIpPort","type":"string"},{"name":"ipPort","type":"string"},{"name":"id","type":"string"},{"name":"size","type":"uint256"}],"name":"addProviderMachine","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"uuid","type":"uint128"}],"name":"notifyDelete","outputs":[],"payable":false,"stateMutability":"pure","type":"function"},{"constant":false,"inputs":[{"name":"uuid","type":"string"},{"name":"id","type":"string"}],"name":"notifyVerificationTarget","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"getBootstrap","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"id","type":"string"},{"name":"success","type":"bool"}],"name":"sendPingResult","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"ipfsAddr","type":"string"},{"name":"newUDPIpPort","type":"string"}],"name":"updateUDPIpPort","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"id","type":"string"},{"name":"hash","type":"string"},{"name":"size","type":"uint256"}],"name":"notifySpaceFreed","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"id","type":"string"}],"name":"machineInformation","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"name":"info","type":"string"}],"name":"Log","type":"event"},{"anonymous":false,"inputs":[],"name":"ProviderCheckEvent","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"banned","type":"string"}],"name":"ProviderOffline","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"val","type":"string"}],"name":"ReturnString","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"UUID","type":"string"},{"indexed":false,"name":"id","type":"string"}],"name":"verificationTarget","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"UUID","type":"string"},{"indexed":false,"name":"consensus","type":"bytes32[4]"}],"name":"ConsensusResult","type":"event"}];
+module.exports = [{"constant":false,"inputs":[{"name":"id","type":"string"},{"name":"hash","type":"string"},{"name":"size","type":"uint256"}],"name":"confirmUpload","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"amount","type":"uint256"}],"name":"addToken","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"srcID","type":"string"}],"name":"getPingTarget","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"hash","type":"string"}],"name":"showStoringPeers","outputs":[{"name":"","type":"string"},{"name":"","type":"string"},{"name":"","type":"string"},{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"confirmDownload","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"getSystemState","outputs":[{"name":"","type":"uint256"},{"name":"","type":"uint256"},{"name":"","type":"uint256"},{"name":"","type":"uint256"},{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getAllPeers","outputs":[{"name":"","type":"bytes32[]"},{"name":"","type":"uint256[]"},{"name":"","type":"bytes32[]"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"nodeID","type":"string"},{"name":"addr","type":"string"}],"name":"updateIpPort","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"nodeID","type":"string"},{"name":"telegram","type":"bytes32"},{"name":"apiIpPort","type":"string"},{"name":"ipPort","type":"string"},{"name":"size","type":"uint256"}],"name":"registerProvider","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"id","type":"string"}],"name":"removeProviderMachine","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"id","type":"string"},{"name":"hash","type":"string"},{"name":"size","type":"uint256"}],"name":"confirmUpdate","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"hash","type":"string"}],"name":"getStoringPeers","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"id","type":"string"},{"name":"n","type":"uint256"}],"name":"getFile","outputs":[{"name":"","type":"string"},{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"clearPrepay","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"client","type":"address"}],"name":"isPrepaid","outputs":[{"name":"prepaid","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getBlockTime","outputs":[{"name":"timestamp","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"nodeID","type":"string"},{"name":"addr","type":"string"}],"name":"updateAPIIpPort","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"size","type":"uint256"}],"name":"getPeers","outputs":[{"name":"id1","type":"string"},{"name":"id2","type":"string"},{"name":"id3","type":"string"},{"name":"id4","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"UUID","type":"string"},{"name":"consensus","type":"bool[16]"},{"name":"nodeIds","type":"bytes32[4]"}],"name":"checkVerification","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"id","type":"string"}],"name":"setBootstrap","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"pay","type":"uint256"}],"name":"prePay","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"id","type":"string"}],"name":"getNumberOfFiles","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"confirmTransfer","outputs":[],"payable":false,"stateMutability":"pure","type":"function"},{"constant":true,"inputs":[],"name":"getBannedPeers","outputs":[{"name":"","type":"bytes32[]"},{"name":"","type":"uint256[]"},{"name":"","type":"bytes32[]"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"removeAllPeers","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"id","type":"string"}],"name":"verifyReplication","outputs":[{"name":"isBanned","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"uuid","type":"uint128"}],"name":"notifyDelete","outputs":[],"payable":false,"stateMutability":"pure","type":"function"},{"constant":false,"inputs":[{"name":"nodeID","type":"string"},{"name":"telegram","type":"bytes32"},{"name":"apiIpPort","type":"string"},{"name":"ipPort","type":"string"},{"name":"size","type":"uint256"}],"name":"addProviderMachine","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"uuid","type":"string"},{"name":"id","type":"string"}],"name":"notifyVerificationTarget","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"getBootstrap","outputs":[{"name":"id","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"id","type":"string"},{"name":"success","type":"bool"}],"name":"sendPingResult","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"id","type":"string"}],"name":"getBanStats","outputs":[{"name":"","type":"uint256"},{"name":"","type":"uint256"},{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"nodeID","type":"string"}],"name":"getNodeAddress","outputs":[{"name":"","type":"string"},{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"id","type":"string"},{"name":"hash","type":"string"},{"name":"size","type":"uint256"}],"name":"notifySpaceFreed","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"id","type":"string"}],"name":"machineInformation","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"name":"info","type":"string"}],"name":"Log","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"id","type":"string"}],"name":"ProviderCheckEvent","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"banned","type":"string"}],"name":"ProviderOffline","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"val","type":"string"}],"name":"ReturnString","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"UUID","type":"string"},{"indexed":false,"name":"id","type":"string"}],"name":"verificationTarget","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"UUID","type":"string"},{"indexed":false,"name":"consensus","type":"bytes32[4]"}],"name":"ConsensusResult","type":"event"}];
 
 /***/ }),
 
@@ -102,31 +102,50 @@ module.exports = [{"constant":false,"inputs":[{"name":"id","type":"string"},{"na
 const { parseSCString, uuidToHash } = __webpack_require__(/*! ../utils */ "./src/utils/utils.js");
 
 const SC_INTERFACE = __webpack_require__(/*! ./sc.abi.json */ "./src/eth/sc.abi.json");
-const SC_ADDR = 'Cb4d87043e63EB3F7B605f79906911C498A31B33';
-let sc;
-const ensureSC = eth => {
-  if (!sc) sc = new eth.Contract(SC_INTERFACE, SC_ADDR);
+const SC_ADDR = {
+  dev: '9e322Ca6D818ec8a6BFb4352242c5615CDfD3aa7',
+  prod: ''
+};
+const sc = {
+  'dev': [],
+  'prod': []
+};
+const getSC = (eth, mode) => {
+  // initiing casper-sc is somewhat pricy, so we try to get it from cache
+  for (let pair of sc[mode]) {
+    if (pair.eth === eth) return pair.sc;
+  }
+
+  // conneced to another web3 instance or created for the first time
+  const pair = { eth, sc: new eth.Contract(SC_INTERFACE, SC_ADDR[mode]) };
+  sc[mode].push(pair);
+
+  return pair.sc;
 };
 
-const getUploadNodes = (eth, { fileSize }) => new Promise((resolve, reject) => {
-  ensureSC(eth);
+const getUploadNodes = (eth, { fileSize, mode }) => new Promise((resolve, reject) => {
+  const sc = getSC(eth, mode);
 
   sc.methods.getPeers(fileSize).call().then(data => {
     const ids = Object.keys(data).filter(key => key.startsWith('id')).map(key => data[key]);
 
-    return Promise.all(ids.map(node => sc.methods.getIpPort(node).call()));
-  }).then(ipPorts => ipPorts.map(ipPort => ipPort.replace(/:.*/, ''))).then(resolve).catch(err => console.error(err));
+    return Promise.all(ids.map(node => sc.methods.getNodeAddress(node).call()));
+  }).then(ipPorts => ipPorts.map(ipPort => ipPort[0].replace(/:.*/, ''))).then(resolve);
 });
 
-const getStoringNodes = (eth, { uuid }) => new Promise((resolve, reject) => {
-  ensureSC(eth);
+const getStoringNodes = (eth, { uuid, mode }) => new Promise((resolve, reject) => {
+  const sc = getSC(eth, mode);
 
   const fileHash = uuidToHash(uuid);
   sc.methods.showStoringPeers(fileHash).call().then(data => {
-    const nodeHashes = data.filter(hash => !/^0x0*$/.test(hash)).map(s => s.substring(0, s.length - 2)).map(parseSCString);
+    const nodeHashes = [];
+    for (let key in data) {
+      const hash = data[key];
+      if (hash.length) nodeHashes.push(hash);
+    }
 
-    return Promise.all(nodeHashes.map(node => sc.methods.getIpPort(node).call()));
-  }).then(ipPorts => ipPorts.map(ipPort => ipPort.replace(/:.*/, ''))).then(resolve).catch(err => console.error(err));
+    return Promise.all(nodeHashes.map(node => sc.methods.getNodeAddress(node).call()));
+  }).then(ipPorts => ipPorts.map(ipPort => ipPort[0].replace(/:.*/, ''))).then(resolve);
 });
 
 module.exports = {
@@ -158,27 +177,28 @@ const sc = {
 };
 
 class Casper {
-  constructor(api, mode) {
-    // Later we will add more blockchains and use autodetection, etherium is default mode 
-    this.blockchain = mode || 'eth';
+  constructor(api, { blockchain = 'eth', mode = 'dev' } = {}) {
+    // Later we will add more blockchains and use autodetection, etherium is the default mode
+    this.blockchain = blockchain;
+    this.mode = mode;
     if (this.blockchain === 'eth') this.blockchainAPI = api.eth || api;
   }
 
   /**
    * Writes file into casper storage.
    * If uuid is present file is overwritten
-   * @param {(Blob | Buffer | stream.Readable)} file 
+   * @param {(Blob | Buffer | stream.Readable)} file
    * @param {String} uuid file's unique id (from previous upload)
    * @return {CasperPromise} resolves with uuid
    */
   save(file, uuid = false) {
     return CasperPromise((resolve, reject, emit) => {
       if (!utils.isFile(file)) {
-        throw new TypeError('casperapi: file type must be File | Blob | ArrayBuffer | Buffer');
+        throw new TypeError('casperapi: file type must be File | Blob | Buffer | stream.Readable');
       }
 
       utils.getFileSize(file).then(fileSize => {
-        return sc[this.blockchain].getUploadNodes(this.blockchainAPI, { fileSize });
+        return sc[this.blockchain].getUploadNodes(this.blockchainAPI, { fileSize, mode: this.mode });
       }).then(ips => {
         emit('sc-connected');
         let method, url;
@@ -200,13 +220,13 @@ class Casper {
   }
 
   /**
-   * Deletes file from casper storage.  
+   * Deletes file from casper storage.
    * @param {String} uuid file's unique id (returned from upload)
    * @return {CasperPromise} resolves with void
    */
   delete(uuid) {
     return CasperPromise((resolve, reject, emit) => {
-      sc[this.blockchain].getStoringNodes(this.blockchainAPI, { uuid }).then(ips => {
+      sc[this.blockchain].getStoringNodes(this.blockchainAPI, { uuid, mode: this.mode }).then(ips => {
         emit('sc-connected');
         requestAny('DELETE', `http://{host}:${REST_PORT}/casper/v0/file/${uuid}`, ips).on('new-champion', ip => emit('node-found', ip)).then(resolve).catch(reject);
       }).catch(reject);
@@ -220,7 +240,7 @@ class Casper {
    */
   getFile(uuid) {
     return CasperPromise((resolve, reject, emit) => {
-      sc[this.blockchain].getStoringNodes(this.blockchainAPI, { uuid }).then(ips => {
+      sc[this.blockchain].getStoringNodes(this.blockchainAPI, { uuid, mode: this.mode }).then(ips => {
         emit('sc-connected');
         return ips;
       }).then(ips => {
@@ -236,7 +256,7 @@ class Casper {
   getLink(uuid) {
     return CasperPromise((resolve, reject, emit) => {
       let sharingNode = '';
-      sc[this.blockchain].getStoringNodes(this.blockchainAPI, { uuid }).then(ips => {
+      sc[this.blockchain].getStoringNodes(this.blockchainAPI, { uuid, mode: this.mode }).then(ips => {
         emit('sc-connected');
         requestAny('POST', `http://{host}:${REST_PORT}/casper/v0/share/${uuid}`, ips).on('new-champion', ip => sharingNode = ip).then(path => resolve(`http://${sharingNode}:${REST_PORT}${path}`)).catch(reject);
       }).catch(reject);
@@ -515,8 +535,6 @@ bs58.decode = S => {
         //loop through each base58 character in the input string
         j = 0, //reset the byte iterator
         c = A.indexOf(S[i]); //set the initial carry amount equal to the current base58 digit
-        if (c < 0) //see if the base58 digit lookup is invalid (-1)
-            return undefined; //if invalid base58 digit, bail out and return undefined
         c || b.length ^ i ? i : b.push(0); //prepend the result array with a zero if the base58 digit is zero and non-zero characters haven't been seen yet (to ensure correct decode length)
         while (j in d || c) {
             //start looping through the bytes until there are no more bytes and no carry amount
@@ -551,12 +569,10 @@ getStreamLength = __webpack_require__(/*! stream-length */ "stream-length");
 
 const isFile = file => file instanceof Buffer || file instanceof stream.Readable;
 
-const getFileSize = file => new Promise((resolve, reject) => {
-  if (file instanceof stream.Readable) return getStreamLength(file).then(resolve);
-  if (file instanceof Buffer) return resolve(file.byteLength);
-
-  reject(new Error('casperapi: Cannot compute file size'));
-});
+const getFileSize = file => {
+  if (file instanceof stream.Readable) return getStreamLength(file);
+  if (file instanceof Buffer) return new Promise(resolve => resolve(file.byteLength));
+};
 
 module.exports = {
   isFile,

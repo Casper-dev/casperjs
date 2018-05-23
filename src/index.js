@@ -13,7 +13,7 @@ const sc = {
 
 class Casper {
   constructor(api, { blockchain='eth', mode='dev' } = {}) {
-    // Later we will add more blockchains and use autodetection, etherium is the default mode 
+    // Later we will add more blockchains and use autodetection, etherium is the default mode
     this.blockchain = blockchain
     this.mode = mode
     if(this.blockchain === 'eth') this.blockchainAPI = api.eth || api
@@ -22,7 +22,7 @@ class Casper {
   /**
    * Writes file into casper storage.
    * If uuid is present file is overwritten
-   * @param {(Blob | Buffer | stream.Readable)} file 
+   * @param {(Blob | Buffer | stream.Readable)} file
    * @param {String} uuid file's unique id (from previous upload)
    * @return {CasperPromise} resolves with uuid
    */
@@ -37,7 +37,7 @@ class Casper {
           return sc[this.blockchain].getUploadNodes(this.blockchainAPI, { fileSize, mode: this.mode })
         })
         .then(ips => {
-          emit('sc-connected')         
+          emit('sc-connected')
           let method, url
           if(uuid) {
             // Update
@@ -62,7 +62,7 @@ class Casper {
   }
 
   /**
-   * Deletes file from casper storage.  
+   * Deletes file from casper storage.
    * @param {String} uuid file's unique id (returned from upload)
    * @return {CasperPromise} resolves with void
    */

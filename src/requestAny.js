@@ -6,8 +6,8 @@ const hostWorthTrying = host => ( ! host.rejected) || host.canceled
 
 
 const requestAny = (
-  method, url, 
-  ips, 
+  method, url,
+  ips,
   config = {}
 ) => CasperPromise((resolve, reject, emit) => {
   ips = ips.filter(ip => ip !== '0.0.0.0')
@@ -20,9 +20,9 @@ const requestAny = (
     canceled: false,
     abortRequest: null
   }))
-  
+
   let championHost = ''
-  
+
   const setChampion = host => {
     championHost = host
     emit('new-champion', host.ip)
@@ -30,11 +30,11 @@ const requestAny = (
 
   const handleProgress = progressHost => event => {
     if( ! championHost) setChampion(progressHost)
-    
+
     hosts
       .filter(host => host !== championHost)
       .map(host => host.abortRequest())
-    
+
     if(progressHost === championHost) {
       emit('progress', event)
     }
@@ -66,7 +66,7 @@ const requestAny = (
           const possibleIps = hosts
                                 .filter(hostWorthTrying)
                                 .map(host => host.ip)
-          
+
 
           requestAny(method, url, possibleIps, config)
             .on('progress', done => emit('progress', done))
