@@ -1,5 +1,5 @@
-stream = require('stream')
-getStreamLength = require('stream-length')
+const stream = require('stream')
+const getStreamLength = require('stream-length')
 
 
 const isFile = file => ( file instanceof Buffer
