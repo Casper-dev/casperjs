@@ -99,12 +99,12 @@ var _require = __webpack_require__(/*! ../utils */ "./src/utils/utils.js"),
 
 var SC_INTERFACE = __webpack_require__(/*! ./sc.abi.json */ "./src/eth/sc.abi.json");
 var SC_ADDR = {
-  dev: '9e322Ca6D818ec8a6BFb4352242c5615CDfD3aa7',
-  prod: ''
+  development: '7ccf0E113e84593f0977Cd05Ff4bebd985a73963',
+  production: 'ff89Eb252F1E9C6638823C819DC0b2Ce3bFae7F5'
 };
 var sc = {
-  'dev': [],
-  'prod': []
+  development: [],
+  production: []
 };
 var getSC = function getSC(eth, mode) {
   // initiing casper-sc is somewhat pricy, so we try to get it from cache
@@ -148,19 +148,23 @@ var getUploadNodes = function getUploadNodes(eth, _ref) {
     var sc = getSC(eth, mode);
 
     sc.methods.getPeers(fileSize).call().then(function (data) {
-      var ids = Object.keys(data).filter(function (key) {
+      var hashes = Object.keys(data).filter(function (key) {
         return key.startsWith('id');
       }).map(function (key) {
         return data[key];
       });
 
-      return Promise.all(ids.map(function (node) {
-        return sc.methods.getNodeAddress(node).call();
+      return Promise.all(hashes.map(function (hash) {
+        return new Promise(function (resolve, reject) {
+          return sc.methods.getNodeAddress(hash).call().then(function (ipPort) {
+            return resolve({
+              ip: ipPort[0].replace(/:.*/, ''), // removing thrift port
+              ipfs: ipPort[1],
+              hash: hash
+            });
+          }).catch(reject);
+        });
       }));
-    }).then(function (ipPorts) {
-      return ipPorts.map(function (ipPort) {
-        return ipPort[0].replace(/:.*/, '');
-      });
     }).then(resolve);
   });
 };
@@ -228,7 +232,7 @@ var Casper = function () {
         _ref$blockchain = _ref.blockchain,
         blockchain = _ref$blockchain === undefined ? 'eth' : _ref$blockchain,
         _ref$mode = _ref.mode,
-        mode = _ref$mode === undefined ? 'dev' : _ref$mode;
+        mode = _ref$mode === undefined ? 'development' : _ref$mode;
 
     _classCallCheck(this, Casper);
 
@@ -261,8 +265,19 @@ var Casper = function () {
 
         utils.getFileSize(file).then(function (fileSize) {
           return sc[_this.blockchain].getUploadNodes(_this.blockchainAPI, { fileSize: fileSize, mode: _this.mode });
-        }).then(function (ips) {
+        }).then(function (nodes) {
           emit('sc-connected');
+
+          var ips = nodes.map(function (x) {
+            return x.ip;
+          });
+          var peers = nodes.map(function (x) {
+            return x.ipfs + '/ipfs/' + x.hash;
+          });
+          var headers = {
+            'X-Peers': JSON.stringify(peers)
+          };
+
           var method = void 0,
               url = void 0;
           if (uuid) {
@@ -275,7 +290,7 @@ var Casper = function () {
             url = 'http://{host}:' + REST_PORT + '/casper/v0/file';
           }
 
-          requestAny(method, url, ips, { file: file }).on('progress', function (event) {
+          requestAny(method, url, ips, { file: file, headers: headers }).on('progress', function (event) {
             return emit('progress', event);
           }).on('new-champion', function (ip) {
             return emit('node-found', ip);
@@ -321,6 +336,7 @@ var Casper = function () {
       return CasperPromise(function (resolve, reject, emit) {
         sc[_this3.blockchain].getStoringNodes(_this3.blockchainAPI, { uuid: uuid, mode: _this3.mode }).then(function (ips) {
           emit('sc-connected');
+          console.log(ips);
           return ips;
         }).then(function (ips) {
           requestAny('GET', 'http://{host}:' + REST_PORT + '/casper/v0/file/' + uuid, ips, { encoding: null }).on('progress', function (event) {
@@ -427,7 +443,8 @@ var makeRequest = function makeRequest(_ref) {
       _ref$data = _ref.data,
       data = _ref$data === undefined ? {} : _ref$data,
       file = _ref.file,
-      headers = _ref.headers,
+      _ref$headers = _ref.headers,
+      headers = _ref$headers === undefined ? {} : _ref$headers,
       encoding = _ref.encoding;
 
   var triggerAbort = void 0;
@@ -464,6 +481,9 @@ var makeRequest = function makeRequest(_ref) {
     };
 
     req.open(method, url);
+    for (var header in headers) {
+      req.setRequestHeader(header, headers[header]);
+    }
     req.send(form);
 
     // providing abort feature
@@ -502,6 +522,8 @@ var requestAny = function requestAny(method, url, ips) {
       return ip !== '0.0.0.0';
     });
     if (ips.length === 0) reject(new Error('casperapi: No hosts to handle request'));
+
+    console.log(ips, url);
 
     // preparation
     var hosts = ips.map(function (ip) {
@@ -550,7 +572,7 @@ var requestAny = function requestAny(method, url, ips) {
         if (!championHost) setChampion(host);
         if (host === championHost) resolve(response);
       }).catch(function (err) {
-        // console.log('Host err', err)
+        // console.log('Host err', err, host)
         host.rejected = true;
 
         if (host === championHost) {

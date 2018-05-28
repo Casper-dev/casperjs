@@ -6,7 +6,7 @@ const makeRequest = ({
   url,
   data = {},
   file,
-  headers,
+  headers = {},
   encoding
 }) => {
   let triggerAbort
@@ -40,6 +40,9 @@ const makeRequest = ({
     req.onerror = err => reject(err)
 
     req.open(method, url)
+    for(let header in headers) {
+      req.setRequestHeader(header, headers[header])
+    }
     req.send(form)
 
     // providing abort feature

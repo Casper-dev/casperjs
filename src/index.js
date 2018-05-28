@@ -12,7 +12,7 @@ const sc = {
 
 
 class Casper {
-  constructor(api, { blockchain='eth', mode='dev' } = {}) {
+  constructor(api, { blockchain='eth', mode='development' } = {}) {
     // Later we will add more blockchains and use autodetection, etherium is the default mode
     this.blockchain = blockchain
     this.mode = mode
@@ -36,8 +36,15 @@ class Casper {
         .then(fileSize => {
           return sc[this.blockchain].getUploadNodes(this.blockchainAPI, { fileSize, mode: this.mode })
         })
-        .then(ips => {
+        .then(nodes => {
           emit('sc-connected')
+
+          const ips = nodes.map(x => x.ip)
+          const peers = nodes.map(x => `${x.ipfs}/ipfs/${x.hash}`)
+          const headers = {
+            'X-Peers': JSON.stringify(peers)
+          }
+
           let method, url
           if(uuid) {
             // Update
@@ -49,7 +56,7 @@ class Casper {
             url = `http://{host}:${REST_PORT}/casper/v0/file`
           }
 
-          requestAny(method, url, ips, { file })
+          requestAny(method, url, ips, { file, headers })
             .on('progress', event => emit('progress', event))
             .on('new-champion', ip => emit('node-found', ip))
             .then(data => {
@@ -92,6 +99,7 @@ class Casper {
         .getStoringNodes(this.blockchainAPI, { uuid, mode: this.mode })
         .then(ips => {
           emit('sc-connected')
+          console.log(ips)
           return ips
         })
         .then(ips => {

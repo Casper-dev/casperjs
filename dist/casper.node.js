@@ -103,12 +103,12 @@ const { parseSCString, uuidToHash } = __webpack_require__(/*! ../utils */ "./src
 
 const SC_INTERFACE = __webpack_require__(/*! ./sc.abi.json */ "./src/eth/sc.abi.json");
 const SC_ADDR = {
-  dev: '9e322Ca6D818ec8a6BFb4352242c5615CDfD3aa7',
-  prod: ''
+  development: '7ccf0E113e84593f0977Cd05Ff4bebd985a73963',
+  production: 'ff89Eb252F1E9C6638823C819DC0b2Ce3bFae7F5'
 };
 const sc = {
-  'dev': [],
-  'prod': []
+  development: [],
+  production: []
 };
 const getSC = (eth, mode) => {
   // initiing casper-sc is somewhat pricy, so we try to get it from cache
@@ -127,10 +127,14 @@ const getUploadNodes = (eth, { fileSize, mode }) => new Promise((resolve, reject
   const sc = getSC(eth, mode);
 
   sc.methods.getPeers(fileSize).call().then(data => {
-    const ids = Object.keys(data).filter(key => key.startsWith('id')).map(key => data[key]);
+    const hashes = Object.keys(data).filter(key => key.startsWith('id')).map(key => data[key]);
 
-    return Promise.all(ids.map(node => sc.methods.getNodeAddress(node).call()));
-  }).then(ipPorts => ipPorts.map(ipPort => ipPort[0].replace(/:.*/, ''))).then(resolve);
+    return Promise.all(hashes.map(hash => new Promise((resolve, reject) => sc.methods.getNodeAddress(hash).call().then(ipPort => resolve({
+      ip: ipPort[0].replace(/:.*/, ''), // removing thrift port
+      ipfs: ipPort[1],
+      hash
+    })).catch(reject))));
+  }).then(resolve);
 });
 
 const getStoringNodes = (eth, { uuid, mode }) => new Promise((resolve, reject) => {
@@ -177,7 +181,7 @@ const sc = {
 };
 
 class Casper {
-  constructor(api, { blockchain = 'eth', mode = 'dev' } = {}) {
+  constructor(api, { blockchain = 'eth', mode = 'development' } = {}) {
     // Later we will add more blockchains and use autodetection, etherium is the default mode
     this.blockchain = blockchain;
     this.mode = mode;
@@ -199,8 +203,15 @@ class Casper {
 
       utils.getFileSize(file).then(fileSize => {
         return sc[this.blockchain].getUploadNodes(this.blockchainAPI, { fileSize, mode: this.mode });
-      }).then(ips => {
+      }).then(nodes => {
         emit('sc-connected');
+
+        const ips = nodes.map(x => x.ip);
+        const peers = nodes.map(x => `${x.ipfs}/ipfs/${x.hash}`);
+        const headers = {
+          'X-Peers': JSON.stringify(peers)
+        };
+
         let method, url;
         if (uuid) {
           // Update
@@ -212,7 +223,7 @@ class Casper {
           url = `http://{host}:${REST_PORT}/casper/v0/file`;
         }
 
-        requestAny(method, url, ips, { file }).on('progress', event => emit('progress', event)).on('new-champion', ip => emit('node-found', ip)).then(data => {
+        requestAny(method, url, ips, { file, headers }).on('progress', event => emit('progress', event)).on('new-champion', ip => emit('node-found', ip)).then(data => {
           resolve(JSON.parse(data).UUID);
         }).catch(reject);
       }).catch(reject);
@@ -242,6 +253,7 @@ class Casper {
     return CasperPromise((resolve, reject, emit) => {
       sc[this.blockchain].getStoringNodes(this.blockchainAPI, { uuid, mode: this.mode }).then(ips => {
         emit('sc-connected');
+        console.log(ips);
         return ips;
       }).then(ips => {
         requestAny('GET', `http://{host}:${REST_PORT}/casper/v0/file/${uuid}`, ips, { encoding: null }).on('progress', event => emit('progress', event)).on('new-champion', ip => emit('node-found', ip)).then(resolve).catch(reject);
@@ -415,6 +427,8 @@ const requestAny = (method, url, ips, config = {}) => CasperPromise((resolve, re
   ips = ips.filter(ip => ip !== '0.0.0.0');
   if (ips.length === 0) reject(new Error('casperapi: No hosts to handle request'));
 
+  console.log(ips, url);
+
   // preparation
   const hosts = ips.map(ip => ({
     ip,
@@ -454,7 +468,7 @@ const requestAny = (method, url, ips, config = {}) => CasperPromise((resolve, re
       if (!championHost) setChampion(host);
       if (host === championHost) resolve(response);
     }).catch(err => {
-      // console.log('Host err', err)
+      // console.log('Host err', err, host)
       host.rejected = true;
 
       if (host === championHost) {
@@ -564,8 +578,8 @@ module.exports = bs58;
 "use strict";
 
 
-stream = __webpack_require__(/*! stream */ "stream");
-getStreamLength = __webpack_require__(/*! stream-length */ "stream-length");
+const stream = __webpack_require__(/*! stream */ "stream");
+const getStreamLength = __webpack_require__(/*! stream-length */ "stream-length");
 
 const isFile = file => file instanceof Buffer || file instanceof stream.Readable;
 
