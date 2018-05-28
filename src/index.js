@@ -12,8 +12,8 @@ const sc = {
 
 
 class Casper {
-  constructor(api, { blockchain='eth', mode='dev' } = {}) {
-    // Later we will add more blockchains and use autodetection, etherium is the default mode 
+  constructor(api, { blockchain='eth', mode='development' } = {}) {
+    // Later we will add more blockchains and use autodetection, etherium is the default mode
     this.blockchain = blockchain
     this.mode = mode
     if(this.blockchain === 'eth') this.blockchainAPI = api.eth || api
@@ -22,7 +22,7 @@ class Casper {
   /**
    * Writes file into casper storage.
    * If uuid is present file is overwritten
-   * @param {(Blob | Buffer | stream.Readable)} file 
+   * @param {(Blob | Buffer | stream.Readable)} file
    * @param {String} uuid file's unique id (from previous upload)
    * @return {CasperPromise} resolves with uuid
    */
@@ -36,8 +36,15 @@ class Casper {
         .then(fileSize => {
           return sc[this.blockchain].getUploadNodes(this.blockchainAPI, { fileSize, mode: this.mode })
         })
-        .then(ips => {
-          emit('sc-connected')         
+        .then(nodes => {
+          emit('sc-connected')
+
+          const ips = nodes.map(x => x.ip)
+          const peers = nodes.map(x => `${x.ipfs}/ipfs/${x.hash}`)
+          const headers = {
+            'X-Peers': JSON.stringify(peers)
+          }
+
           let method, url
           if(uuid) {
             // Update
@@ -49,7 +56,7 @@ class Casper {
             url = `http://{host}:${REST_PORT}/casper/v0/file`
           }
 
-          requestAny(method, url, ips, { file })
+          requestAny(method, url, ips, { file, headers })
             .on('progress', event => emit('progress', event))
             .on('new-champion', ip => emit('node-found', ip))
             .then(data => {
@@ -62,7 +69,7 @@ class Casper {
   }
 
   /**
-   * Deletes file from casper storage.  
+   * Deletes file from casper storage.
    * @param {String} uuid file's unique id (returned from upload)
    * @return {CasperPromise} resolves with void
    */
@@ -92,6 +99,7 @@ class Casper {
         .getStoringNodes(this.blockchainAPI, { uuid, mode: this.mode })
         .then(ips => {
           emit('sc-connected')
+          console.log(ips)
           return ips
         })
         .then(ips => {

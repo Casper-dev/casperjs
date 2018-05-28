@@ -59,6 +59,7 @@ typings/
 
 \.vscode/
 
+# ambigous playground files
 playground/files/
-
+playground/node_modules/
 playground/dist/

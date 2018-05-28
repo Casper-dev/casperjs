@@ -8,13 +8,13 @@ const makeMockMethod = handler => function() {
 
 const mockEth = ({
   getPeers = () => {},
-  getIpPort = () => {},
+  getNodeAddress = () => {},
   showStoringPeers = () => {},
 }) => {
   const mockSC = {
     methods: {
       getPeers: makeMockMethod(getPeers),
-      getIpPort: makeMockMethod(getIpPort),
+      getNodeAddress: makeMockMethod(getNodeAddress),
       showStoringPeers: makeMockMethod(showStoringPeers),
     }
   }

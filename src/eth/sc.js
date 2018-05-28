@@ -3,12 +3,12 @@ const { parseSCString, uuidToHash } = require('../utils')
 
 const SC_INTERFACE = require('./sc.abi.json')
 const SC_ADDR = {
-  dev: 'Cb4d87043e63EB3F7B605f79906911C498A31B33',
-  prod: ''
+  development: '7ccf0E113e84593f0977Cd05Ff4bebd985a73963',
+  production: 'ff89Eb252F1E9C6638823C819DC0b2Ce3bFae7F5'
 }
 const sc = {
-  'dev': [],
-  'prod': []
+  development: [],
+  production: []
 }
 const getSC = (eth, mode) => {
   // initiing casper-sc is somewhat pricy, so we try to get it from cache
@@ -29,15 +29,23 @@ const getUploadNodes = (eth, { fileSize, mode }) => new Promise((resolve, reject
 
   sc.methods.getPeers(fileSize).call()
     .then(data => {
-      const ids = Object.keys(data)
+      const hashes = Object.keys(data)
                     .filter(key => key.startsWith('id'))
                     .map(key => data[key])
 
       return Promise.all(
-        ids.map(node => sc.methods.getIpPort(node).call())
+        hashes.map(hash => new Promise((resolve, reject) =>
+          sc.methods.getNodeAddress(hash)
+            .call()
+            .then(ipPort => resolve({
+              ip: ipPort[0].replace(/:.*/, ''), // removing thrift port
+              ipfs: ipPort[1],
+              hash
+            }))
+            .catch(reject)
+        ))
       )
     })
-    .then(ipPorts => ipPorts.map(ipPort => ipPort.replace(/:.*/, '')))
     .then(resolve)
 })
 
@@ -49,15 +57,17 @@ const getStoringNodes = (eth, { uuid, mode }) => new Promise((resolve, reject) =
   const fileHash = uuidToHash(uuid)
   sc.methods.showStoringPeers(fileHash).call()
     .then(data => {
-      const nodeHashes = data.filter(hash => !/^0x0*$/.test(hash))
-                             .map(s => s.substring(0, s.length - 2))
-                             .map(parseSCString)
+      const nodeHashes = []
+      for(let key in data) {
+        const hash = data[key]
+        if(hash.length) nodeHashes.push(hash)
+      }
 
       return Promise.all(
-        nodeHashes.map(node => sc.methods.getIpPort(node).call())
+        nodeHashes.map(node => sc.methods.getNodeAddress(node).call())
       )
     })
-    .then(ipPorts => ipPorts.map(ipPort => ipPort.replace(/:.*/, '')))
+    .then(ipPorts => ipPorts.map(ipPort => ipPort[0].replace(/:.*/, '')))
     .then(resolve)
 })
 

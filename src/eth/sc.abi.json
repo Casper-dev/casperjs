@@ -46,19 +46,14 @@
   "name": "showStoringPeers",
   "outputs": [{
     "name": "",
-    "type": "bytes32[4]"
-  }],
-  "payable": false,
-  "stateMutability": "view",
-  "type": "function"
-}, {
-  "constant": true,
-  "inputs": [{
-    "name": "ipfsAddr",
     "type": "string"
-  }],
-  "name": "getIpPort",
-  "outputs": [{
+  }, {
+    "name": "",
+    "type": "string"
+  }, {
+    "name": "",
+    "type": "string"
+  }, {
     "name": "",
     "type": "string"
   }],
@@ -116,25 +111,13 @@
 }, {
   "constant": false,
   "inputs": [{
-    "name": "nodeHash",
+    "name": "nodeID",
     "type": "string"
   }, {
-    "name": "telegram",
-    "type": "bytes32"
-  }, {
-    "name": "udpIpPort",
+    "name": "addr",
     "type": "string"
-  }, {
-    "name": "ipPort",
-    "type": "string"
-  }, {
-    "name": "id",
-    "type": "string"
-  }, {
-    "name": "size",
-    "type": "uint256"
   }],
-  "name": "registerProvider",
+  "name": "updateIpPort",
   "outputs": [],
   "payable": false,
   "stateMutability": "nonpayable",
@@ -142,13 +125,22 @@
 }, {
   "constant": false,
   "inputs": [{
-    "name": "ipfsAddr",
+    "name": "nodeID",
     "type": "string"
   }, {
-    "name": "newIpPort",
+    "name": "telegram",
+    "type": "bytes32"
+  }, {
+    "name": "apiIpPort",
     "type": "string"
+  }, {
+    "name": "ipPort",
+    "type": "string"
+  }, {
+    "name": "size",
+    "type": "uint256"
   }],
-  "name": "updateIpPort",
+  "name": "registerProvider",
   "outputs": [],
   "payable": false,
   "stateMutability": "nonpayable",
@@ -180,20 +172,6 @@
   "outputs": [],
   "payable": false,
   "stateMutability": "nonpayable",
-  "type": "function"
-}, {
-  "constant": true,
-  "inputs": [{
-    "name": "ipfsAddr",
-    "type": "string"
-  }],
-  "name": "getUDPIpPort",
-  "outputs": [{
-    "name": "",
-    "type": "string"
-  }],
-  "payable": false,
-  "stateMutability": "view",
   "type": "function"
 }, {
   "constant": true,
@@ -250,6 +228,31 @@
   }],
   "payable": false,
   "stateMutability": "view",
+  "type": "function"
+}, {
+  "constant": true,
+  "inputs": [],
+  "name": "getBlockTime",
+  "outputs": [{
+    "name": "timestamp",
+    "type": "uint256"
+  }],
+  "payable": false,
+  "stateMutability": "view",
+  "type": "function"
+}, {
+  "constant": false,
+  "inputs": [{
+    "name": "nodeID",
+    "type": "string"
+  }, {
+    "name": "addr",
+    "type": "string"
+  }],
+  "name": "updateAPIIpPort",
+  "outputs": [],
+  "payable": false,
+  "stateMutability": "nonpayable",
   "type": "function"
 }, {
   "constant": true,
@@ -337,20 +340,6 @@
   "type": "function"
 }, {
   "constant": true,
-  "inputs": [{
-    "name": "ipfsAddr",
-    "type": "string"
-  }],
-  "name": "getNodeHash",
-  "outputs": [{
-    "name": "",
-    "type": "string"
-  }],
-  "payable": false,
-  "stateMutability": "view",
-  "type": "function"
-}, {
-  "constant": true,
   "inputs": [],
   "name": "getBannedPeers",
   "outputs": [{
@@ -389,32 +378,6 @@
   "stateMutability": "view",
   "type": "function"
 }, {
-  "constant": false,
-  "inputs": [{
-    "name": "nodeHash",
-    "type": "string"
-  }, {
-    "name": "telegram",
-    "type": "bytes32"
-  }, {
-    "name": "udpIpPort",
-    "type": "string"
-  }, {
-    "name": "ipPort",
-    "type": "string"
-  }, {
-    "name": "id",
-    "type": "string"
-  }, {
-    "name": "size",
-    "type": "uint256"
-  }],
-  "name": "addProviderMachine",
-  "outputs": [],
-  "payable": false,
-  "stateMutability": "nonpayable",
-  "type": "function"
-}, {
   "constant": true,
   "inputs": [{
     "name": "uuid",
@@ -424,6 +387,29 @@
   "outputs": [],
   "payable": false,
   "stateMutability": "pure",
+  "type": "function"
+}, {
+  "constant": false,
+  "inputs": [{
+    "name": "nodeID",
+    "type": "string"
+  }, {
+    "name": "telegram",
+    "type": "bytes32"
+  }, {
+    "name": "apiIpPort",
+    "type": "string"
+  }, {
+    "name": "ipPort",
+    "type": "string"
+  }, {
+    "name": "size",
+    "type": "uint256"
+  }],
+  "name": "addProviderMachine",
+  "outputs": [],
+  "payable": false,
+  "stateMutability": "nonpayable",
   "type": "function"
 }, {
   "constant": false,
@@ -444,7 +430,7 @@
   "inputs": [],
   "name": "getBootstrap",
   "outputs": [{
-    "name": "",
+    "name": "id",
     "type": "string"
   }],
   "payable": false,
@@ -465,18 +451,41 @@
   "stateMutability": "nonpayable",
   "type": "function"
 }, {
-  "constant": false,
+  "constant": true,
   "inputs": [{
-    "name": "ipfsAddr",
-    "type": "string"
-  }, {
-    "name": "newUDPIpPort",
+    "name": "id",
     "type": "string"
   }],
-  "name": "updateUDPIpPort",
-  "outputs": [],
+  "name": "getBanStats",
+  "outputs": [{
+    "name": "",
+    "type": "uint256"
+  }, {
+    "name": "",
+    "type": "uint256"
+  }, {
+    "name": "",
+    "type": "uint256"
+  }],
   "payable": false,
-  "stateMutability": "nonpayable",
+  "stateMutability": "view",
+  "type": "function"
+}, {
+  "constant": true,
+  "inputs": [{
+    "name": "nodeID",
+    "type": "string"
+  }],
+  "name": "getNodeAddress",
+  "outputs": [{
+    "name": "",
+    "type": "string"
+  }, {
+    "name": "",
+    "type": "string"
+  }],
+  "payable": false,
+  "stateMutability": "view",
   "type": "function"
 }, {
   "constant": false,
@@ -525,7 +534,11 @@
   "type": "event"
 }, {
   "anonymous": false,
-  "inputs": [],
+  "inputs": [{
+    "indexed": false,
+    "name": "id",
+    "type": "string"
+  }],
   "name": "ProviderCheckEvent",
   "type": "event"
 }, {
