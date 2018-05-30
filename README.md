@@ -9,7 +9,7 @@ Isomorphic javascript version of [Casper API][casper-home].
 ### Prerequisites
 :heavy_check_mark: Node `v6-v9` stable or a Promise supporting browser (or a polyfill)
 
-:heavy_check_mark: Web3 `v1.*.*` (If you have trouble installing [web3][web3], please follow [this guide][web3-1-guide])
+:heavy_check_mark: Web3 `v1.*.*` (or web3-eth) (If you have trouble installing [web3][web3], please follow [this guide][web3-1-guide])
 
 ### via npm
 ```bash

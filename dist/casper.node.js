@@ -427,8 +427,6 @@ const requestAny = (method, url, ips, config = {}) => CasperPromise((resolve, re
   ips = ips.filter(ip => ip !== '0.0.0.0');
   if (ips.length === 0) reject(new Error('casperapi: No hosts to handle request'));
 
-  console.log(ips, url);
-
   // preparation
   const hosts = ips.map(ip => ({
     ip,

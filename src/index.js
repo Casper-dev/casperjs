@@ -99,7 +99,6 @@ class Casper {
         .getStoringNodes(this.blockchainAPI, { uuid, mode: this.mode })
         .then(ips => {
           emit('sc-connected')
-          console.log(ips)
           return ips
         })
         .then(ips => {

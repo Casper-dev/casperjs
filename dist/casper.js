@@ -523,8 +523,6 @@ var requestAny = function requestAny(method, url, ips) {
     });
     if (ips.length === 0) reject(new Error('casperapi: No hosts to handle request'));
 
-    console.log(ips, url);
-
     // preparation
     var hosts = ips.map(function (ip) {
       return {
