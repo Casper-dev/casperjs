@@ -336,7 +336,6 @@ var Casper = function () {
       return CasperPromise(function (resolve, reject, emit) {
         sc[_this3.blockchain].getStoringNodes(_this3.blockchainAPI, { uuid: uuid, mode: _this3.mode }).then(function (ips) {
           emit('sc-connected');
-          console.log(ips);
           return ips;
         }).then(function (ips) {
           requestAny('GET', 'http://{host}:' + REST_PORT + '/casper/v0/file/' + uuid, ips, { encoding: null }).on('progress', function (event) {

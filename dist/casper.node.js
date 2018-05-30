@@ -253,7 +253,6 @@ class Casper {
     return CasperPromise((resolve, reject, emit) => {
       sc[this.blockchain].getStoringNodes(this.blockchainAPI, { uuid, mode: this.mode }).then(ips => {
         emit('sc-connected');
-        console.log(ips);
         return ips;
       }).then(ips => {
         requestAny('GET', `http://{host}:${REST_PORT}/casper/v0/file/${uuid}`, ips, { encoding: null }).on('progress', event => emit('progress', event)).on('new-champion', ip => emit('node-found', ip)).then(resolve).catch(reject);
