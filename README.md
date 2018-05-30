@@ -32,9 +32,9 @@ yarn add casperapi
 const Web3 = require('web3') // or web3-eth
 const CasperApi = require('casperapi')
 
-// http://94.130.182.144:8545 is casper test ethereum http provider
+// http://94.130.182.144:8775 is casper test ethereum http provider
 // use it for development, as it is faster than public testnets
-const web3 = new Web3('http://94.130.182.144:8545')
+const web3 = new Web3('http://94.130.182.144:8775')
 const casper = new CasperApi(web3)
 
 casper.save(Buffer.from('Casper api works'))
