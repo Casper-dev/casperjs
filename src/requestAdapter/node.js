@@ -52,7 +52,7 @@ const makeRequest = ({
       let total = 0
       let downloaded = 0
       req.on('response', res => {
-        total = res.headers['x-content-length']
+        total = res.headers['content-length']
       })
   
       req.on('data', chunk => {
