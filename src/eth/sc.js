@@ -3,7 +3,7 @@ const { parseSCString, uuidToHash } = require('../utils')
 
 const SC_INTERFACE = require('./sc.abi.json')
 const SC_ADDR = {
-  development: '7ccf0E113e84593f0977Cd05Ff4bebd985a73963',
+  development: '63477527FBb78D1044426b879eB875883c5600FF',
   production: 'ff89Eb252F1E9C6638823C819DC0b2Ce3bFae7F5'
 }
 const sc = {
@@ -26,12 +26,11 @@ const getSC = (eth, mode) => {
 
 const getUploadNodes = (eth, { fileSize, mode }) => new Promise((resolve, reject) => {
   const sc = getSC(eth, mode)
+  const entropy = Math.round(Math.random() * 100000)
 
-  sc.methods.getPeers(fileSize).call()
+  sc.methods.getPeers(fileSize, entropy).call()
     .then(data => {
-      const hashes = Object.keys(data)
-                    .filter(key => key.startsWith('id'))
-                    .map(key => data[key])
+      const hashes = Object.values(data)
 
       return Promise.all(
         hashes.map(hash => new Promise((resolve, reject) =>

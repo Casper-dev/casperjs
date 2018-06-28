@@ -1,10 +1,10 @@
 [{
   "constant": false,
   "inputs": [{
-    "name": "id",
+    "name": "nodeID",
     "type": "string"
   }, {
-    "name": "hash",
+    "name": "fileID",
     "type": "string"
   }, {
     "name": "size",
@@ -27,20 +27,9 @@
   "stateMutability": "nonpayable",
   "type": "function"
 }, {
-  "constant": false,
-  "inputs": [{
-    "name": "srcID",
-    "type": "string"
-  }],
-  "name": "getPingTarget",
-  "outputs": [],
-  "payable": false,
-  "stateMutability": "nonpayable",
-  "type": "function"
-}, {
   "constant": true,
   "inputs": [{
-    "name": "hash",
+    "name": "fileID",
     "type": "string"
   }],
   "name": "showStoringPeers",
@@ -148,7 +137,7 @@
 }, {
   "constant": false,
   "inputs": [{
-    "name": "id",
+    "name": "nodeID",
     "type": "string"
   }],
   "name": "removeProviderMachine",
@@ -159,10 +148,10 @@
 }, {
   "constant": false,
   "inputs": [{
-    "name": "id",
+    "name": "nodeID",
     "type": "string"
   }, {
-    "name": "hash",
+    "name": "fileID",
     "type": "string"
   }, {
     "name": "size",
@@ -176,7 +165,7 @@
 }, {
   "constant": true,
   "inputs": [{
-    "name": "hash",
+    "name": "fileID",
     "type": "string"
   }],
   "name": "getStoringPeers",
@@ -190,7 +179,7 @@
 }, {
   "constant": true,
   "inputs": [{
-    "name": "id",
+    "name": "nodeID",
     "type": "string"
   }, {
     "name": "n",
@@ -223,8 +212,34 @@
   }],
   "name": "isPrepaid",
   "outputs": [{
-    "name": "prepaid",
+    "name": "",
     "type": "bool"
+  }],
+  "payable": false,
+  "stateMutability": "view",
+  "type": "function"
+}, {
+  "constant": true,
+  "inputs": [{
+    "name": "size",
+    "type": "uint256"
+  }, {
+    "name": "seed",
+    "type": "uint256"
+  }],
+  "name": "getPeers",
+  "outputs": [{
+    "name": "",
+    "type": "string"
+  }, {
+    "name": "",
+    "type": "string"
+  }, {
+    "name": "",
+    "type": "string"
+  }, {
+    "name": "",
+    "type": "string"
   }],
   "payable": false,
   "stateMutability": "view",
@@ -255,32 +270,9 @@
   "stateMutability": "nonpayable",
   "type": "function"
 }, {
-  "constant": true,
-  "inputs": [{
-    "name": "size",
-    "type": "uint256"
-  }],
-  "name": "getPeers",
-  "outputs": [{
-    "name": "id1",
-    "type": "string"
-  }, {
-    "name": "id2",
-    "type": "string"
-  }, {
-    "name": "id3",
-    "type": "string"
-  }, {
-    "name": "id4",
-    "type": "string"
-  }],
-  "payable": false,
-  "stateMutability": "view",
-  "type": "function"
-}, {
   "constant": false,
   "inputs": [{
-    "name": "UUID",
+    "name": "fileID",
     "type": "string"
   }, {
     "name": "consensus",
@@ -318,8 +310,19 @@
   "type": "function"
 }, {
   "constant": true,
+  "inputs": [],
+  "name": "getPingTarget",
+  "outputs": [{
+    "name": "",
+    "type": "string"
+  }],
+  "payable": false,
+  "stateMutability": "view",
+  "type": "function"
+}, {
+  "constant": true,
   "inputs": [{
-    "name": "id",
+    "name": "nodeID",
     "type": "string"
   }],
   "name": "getNumberOfFiles",
@@ -366,7 +369,7 @@
 }, {
   "constant": true,
   "inputs": [{
-    "name": "id",
+    "name": "nodeID",
     "type": "string"
   }],
   "name": "verifyReplication",
@@ -380,7 +383,7 @@
 }, {
   "constant": true,
   "inputs": [{
-    "name": "uuid",
+    "name": "",
     "type": "uint128"
   }],
   "name": "notifyDelete",
@@ -391,33 +394,10 @@
 }, {
   "constant": false,
   "inputs": [{
+    "name": "fileID",
+    "type": "string"
+  }, {
     "name": "nodeID",
-    "type": "string"
-  }, {
-    "name": "telegram",
-    "type": "bytes32"
-  }, {
-    "name": "apiIpPort",
-    "type": "string"
-  }, {
-    "name": "ipPort",
-    "type": "string"
-  }, {
-    "name": "size",
-    "type": "uint256"
-  }],
-  "name": "addProviderMachine",
-  "outputs": [],
-  "payable": false,
-  "stateMutability": "nonpayable",
-  "type": "function"
-}, {
-  "constant": false,
-  "inputs": [{
-    "name": "uuid",
-    "type": "string"
-  }, {
-    "name": "id",
     "type": "string"
   }],
   "name": "notifyVerificationTarget",
@@ -439,7 +419,7 @@
 }, {
   "constant": false,
   "inputs": [{
-    "name": "id",
+    "name": "nodeID",
     "type": "string"
   }, {
     "name": "success",
@@ -453,7 +433,7 @@
 }, {
   "constant": true,
   "inputs": [{
-    "name": "id",
+    "name": "nodeID",
     "type": "string"
   }],
   "name": "getBanStats",
@@ -490,10 +470,10 @@
 }, {
   "constant": false,
   "inputs": [{
-    "name": "id",
+    "name": "nodeID",
     "type": "string"
   }, {
-    "name": "hash",
+    "name": "fileID",
     "type": "string"
   }, {
     "name": "size",
@@ -507,7 +487,7 @@
 }, {
   "constant": true,
   "inputs": [{
-    "name": "id",
+    "name": "nodeID",
     "type": "string"
   }],
   "name": "machineInformation",
