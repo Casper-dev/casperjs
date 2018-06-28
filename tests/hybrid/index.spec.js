@@ -67,7 +67,7 @@ describe('casperapi', () => {
       
       await casperapi.save(file)
   
-      expect(getPeers).toHaveBeenCalledWith(size)
+      expect(getPeers).toHaveBeenCalledWith(size, expect.any(Number))
       done()  
     })
 
