@@ -8,7 +8,7 @@
 
 Casper API is a decentralized storage infrastructure.
 
-This is a javascript SDK, a facade, that would make requests to smart contracts and provider nodes for you.
+This is it's javascript SDK, a facade, that would make requests to smart contracts and provider nodes for you.
 
 This SDK allows you to store, modify, fetch and delete files on any casper network.
 SDK is isomorphic. It means that it works in browser and nodejs environments almost identically.
