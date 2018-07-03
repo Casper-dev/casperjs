@@ -1,207 +1,29 @@
-# Casper JS
+# Casper JS · [![Build Status][travis-img]][travis-link]  [![codecov][codecov-img]][codecov-link]
 
-[![Build Status][travis-img]][travis-link] [![codecov][codecov-img]][codecov-link]
+<p align="center">
+  <a href="https://vuejs.org" target="_blank" rel="noopener noreferrer">
+    <img width="400" src="https://demo.casperproject.io/img/casper-logo.svg" alt="Casper logo">
+  </a>
+</p>
 
-Isomorphic javascript version of [Casper API][casper-home].
+Casper API is a decentralized storage infrastructure.
 
+This is a javascript SDK, a facade, that would make requests to smart contracts and provider nodes for you.
 
-## Installation
-### Prerequisites
-:heavy_check_mark: Node `v6-v9` stable or a Promise supporting browser (or a polyfill)
+This SDK allows you to store, modify, fetch and delete files on any casper network.
+SDK is isomorphic. It means that it works in browser and nodejs environments almost identically.
 
-:heavy_check_mark: Web3 `v1.*.*` (or web3-eth) (If you have trouble installing [web3][web3], please follow [this guide][web3-1-guide])
-
-### via npm
-```bash
-npm install casperapi
-```
-
-### via yarn
-
-```bash
-yarn add casperapi
-```
-
-
-## Usage
-
-> Casper JS is still early in development, right now it only supports ethereum and dev mode.
-
-### Basic usage
-```js
-const Web3 = require('web3') // or web3-eth
-const CasperApi = require('casperapi')
-
-// http://94.130.182.144:8775 is casper test ethereum http provider
-// use it for development, as it is faster than public testnets
-const web3 = new Web3('http://94.130.182.144:8775')
-const casper = new CasperApi(web3)
-
-casper.save(Buffer.from('Casper api works'))
-      .then(uuid => console.log(`My file's uuid: ${uuid}`))
-```
-
-### API
-#### casper.getFile
-Gets file and stores it in memory
-
-##### Example
-```js
-const file = await casper.getFile(uuid)
-
-const sameFile = await casper.getFile(uuid)
-                             .on('sc-connected', () => console.log('sc'))
-                             .on('node-found', ip => console.log('got node', ip))
-                             .on('progress', done => console.log('progress', done))
-```
-
-##### Arguments
-`uuid` `{String}` file's uuid (returned form save) 
-
-##### Returns
-`{CasperPromise}` that resolves with the file as a `{Buffer}`(node) or a `{Blob}`(browser)
-
-##### Events
-| Event        | Callback args                     | Firing condition                    |
-|--------------|-----------------------------------|-------------------------------------|
-| sc-connected | -                                 | Recived data from smart contract    |
-| node-found   | `ip` `{String}` node's ip address | Download has started                |
-| progress     | `done` `{Number}` from 0 to 1     | Each time data is recived from node |
-
----
-
-#### casper.getLink
-Generates unique static link to the file (useful for streaming \ downloading \ showing images \ ... )
-
-##### Example
-```js
-const url = await casper.getLink(uuid)
-
-const anotherUrl = await casper.getLink(uuid)
-                               .on('sc-connected', () => console.log('sc'))
-```
-
-##### Arguments
-`uuid` `{String}` file's uuid (returned form save) 
-
-##### Returns
-`{CasperPromise}` that resolves with the link to the file as a `{String}`
-
-##### Events
-| Event        | Callback args                     | Firing condition                    |
-|--------------|-----------------------------------|-------------------------------------|
-| sc-connected | -                                 | Recived data from smart contract    |
-
----
-
-#### casper.save
-Uploads \ Upldates file on casper network
-
-##### Example
-```js
-const uuid = await casper.save(file)
-
-// updates the file
-const sameUuid = await casper.save(anotherFile, uuid)
-
-const anotherUuid = await casper.save(file)
-                                .on('sc-connected', () => console.log('sc'))
-                                .on('node-found', ip => console.log('got node', ip))
-                                .on('progress', done => console.log('progress', done))
-```
-
-##### Arguments
-`file` `{Buffer | stream.Readable}`(node) `{Blob}`(browser) file to save
-
-`uuid` `{String}` optional file's uuid (returned form save) if present file will be updated
-
-```js
-// Tip
-console.log(File instanceof Blob) // true in browser
-```
-
-##### Returns
-`{CasperPromise}` that resolves with the saved file's uuid as a `{String}`
-
-##### Events
-| Event        | Callback args                     | Firing condition                       |
-|--------------|-----------------------------------|----------------------------------------|
-| sc-connected | -                                 | Recived data from smart contract       |
-| node-found   | `ip` `{String}` node's ip address | Upload has started                     |
-| progress     | `done` `{Number}` from 0 to 1     | Each time data is uploaded to the node |
-
----
-
-#### casper.delete
-Deletes file form casper network
-
-##### Example
-```js
-await casper.delete(uuid)
-
-await casper.delete(uuid)
-            .on('sc-connected', () => console.log('sc'))
-```
-
-##### Arguments
-`uuid {String}` file's uuid (returned form save) 
-
-##### Returns
-`{CasperPromise}` that resolves when the file is deleted
-
-##### Events
-| Event        | Callback args                     | Firing condition                    |
-|--------------|-----------------------------------|-------------------------------------|
-| sc-connected | -                                 | Recived data from smart contract    |
-
-
-#### CasperPromise
-Extends `Promise` and adds simple event system to it.
-
-There is caveat though:
-```js
-// This works
-casper.getFile(uuid)
-      .on('sc-connected', console.log)
-      .on('progress', console.log)
-      .then(cb)
-      .catch(handleErr)
-
-const download = casper.getFile(uuid)
-
-download.on('progress', console.log)
-downlaod.then(cb)
-
-const file = await casper.getFile(uuid)
-                         .on('sc-connected', console.log)
-                         .on('progress', console.log)
-
-// This doesn't, because then always returns a new Promise instance
-casper.getFile(uuid)
-      .then(cb)
-      .on('progress', console.log)
-```
-
----
-
-## Coming soon
-:hammer: `casper.getLink` support on testnet
-
-:hammer: Production mode
-
-:hammer: Better test coverage
-
-:hammer: Support for Buffer upload progress in nodejs
-
-
-<!-- Links -->
-[web3]: http://web3js.readthedocs.io/en/1.0/index.html
-[web3-1-guide]: docs/installingWeb3.md
-
-[casper-home]: casperproject.io
+[Setup][wiki-setup] <br />
+[Getting started][wiki-gs] <br />
+[API Docs][wiki-docs]
 
 <!-- Badges --> 
 [codecov-img]:  https://codecov.io/gh/Casper-dev/casperjs/branch/master/graph/badge.svg
 [codecov-link]: https://codecov.io/gh/Casper-dev/casperjs
 [travis-link]:  https://travis-ci.org/Casper-dev/casperjs
 [travis-img]:   https://travis-ci.org/Casper-dev/casperjs.svg?branch=master
+
+<!-- Links -->
+[wiki-setup]: https://github.com/Casper-dev/casperjs/wiki/installing-for-nodejs
+[wiki-gs]: https://github.com/Casper-dev/casperjs/wiki/basic-usage
+[wiki-docs]: https://github.com/Casper-dev/casperjs/wiki/CasperApi-Constructor

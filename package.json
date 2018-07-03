@@ -1,6 +1,6 @@
 {
   "name": "casperapi",
-  "version": "0.0.8",
+  "version": "0.0.8b-1",
   "description": "js api for casper distributed fs infrastructure",
   "main": "dist/casper.node.js",
   "scripts": {

@@ -174,6 +174,7 @@ var getStoringNodes = function getStoringNodes(eth, _ref2) {
 
     var fileHash = uuidToHash(uuid);
     sc.methods.showStoringPeers(fileHash).call().then(function (data) {
+      console.log('data', data, uuid, fileHash);
       var nodeHashes = [];
       for (var key in data) {
         var hash = data[key];

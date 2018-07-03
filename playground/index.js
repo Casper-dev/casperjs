@@ -19,7 +19,7 @@ window.addEventListener('load', () => {
     $log.value += `${message}: ${payload}\n`
   }
 
-  const web3js = new Web3(web3.currentProvider)
+  const web3js = new Web3('http://94.130.182.144:8775')
   const casper = new Casper(web3js)
 
   $save.addEventListener('click', () => {
