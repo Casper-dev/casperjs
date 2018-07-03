@@ -143,7 +143,6 @@ const getStoringNodes = (eth, { uuid, mode }) => new Promise((resolve, reject) =
 
   const fileHash = uuidToHash(uuid);
   sc.methods.showStoringPeers(fileHash).call().then(data => {
-    console.log('data', data, uuid, fileHash);
     const nodeHashes = [];
     for (let key in data) {
       const hash = data[key];
