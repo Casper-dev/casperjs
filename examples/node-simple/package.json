@@ -1,0 +1,15 @@
+{
+  "name": "casper-example-node-simple",
+  "version": "1.0.0",
+  "description": "",
+  "main": "getFile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "casperapi": "^0.0.8-b-2",
+    "web3-eth": "^1.0.0-beta.34"
+  }
+}

@@ -63,3 +63,7 @@ typings/
 playground/files/
 playground/node_modules/
 playground/dist/
+
+examples/node-simple/yarn\.lock
+
+examples/browser-playground/yarn\.lock
