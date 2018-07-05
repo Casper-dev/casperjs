@@ -1,10 +1,9 @@
 const { parseSCString, uuidToHash } = require('../utils')
 
-
 const SC_INTERFACE = require('./sc.abi.json')
 const SC_ADDR = {
-  development: '0x60d075FC965544dD55a7349e417F0E20fc49D3Ae',
-  production: 'ff89Eb252F1E9C6638823C819DC0b2Ce3bFae7F5'
+  development: 'D5b080d8D0d028279E125d2AAbe3e0889DD64BB8',
+  production:  'ff89Eb252F1E9C6638823C819DC0b2Ce3bFae7F5'
 }
 const sc = {
   development: [],
@@ -34,7 +33,7 @@ const getUploadNodes = (eth, { fileSize, mode }) => new Promise((resolve, reject
 
       return Promise.all(
         hashes.map(hash => new Promise((resolve, reject) =>
-          sc.methods.getNodeAddress(hash)
+          sc.methods.getNodeAddr(hash)
             .call()
             .then(ipPort => resolve({
               ip: ipPort[0].replace(/:.*/, ''), // removing thrift port
@@ -63,7 +62,7 @@ const getStoringNodes = (eth, { uuid, mode }) => new Promise((resolve, reject) =
       }
 
       return Promise.all(
-        nodeHashes.map(node => sc.methods.getNodeAddress(node).call())
+        nodeHashes.map(node => sc.methods.getNodeAddr(node).call())
       )
     })
     .then(ipPorts => ipPorts.map(ipPort => ipPort[0].replace(/:.*/, '')))

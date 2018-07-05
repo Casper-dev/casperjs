@@ -76,10 +76,10 @@ module.exports =
 /*!*****************************!*\
   !*** ./src/eth/sc.abi.json ***!
   \*****************************/
-/*! exports provided: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, default */
+/*! exports provided: 0, 1, 2, 3, default */
 /***/ (function(module) {
 
-module.exports = [{"constant":false,"inputs":[{"name":"nodeID","type":"string"},{"name":"fileID","type":"string"},{"name":"size","type":"uint256"}],"name":"confirmUpload","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"amount","type":"uint256"}],"name":"addToken","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"fileID","type":"string"}],"name":"showStoringPeers","outputs":[{"name":"","type":"string"},{"name":"","type":"string"},{"name":"","type":"string"},{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"confirmDownload","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"getSystemState","outputs":[{"name":"","type":"uint256"},{"name":"","type":"uint256"},{"name":"","type":"uint256"},{"name":"","type":"uint256"},{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getAllPeers","outputs":[{"name":"","type":"bytes32[]"},{"name":"","type":"uint256[]"},{"name":"","type":"bytes32[]"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"nodeID","type":"string"},{"name":"addr","type":"string"}],"name":"updateIpPort","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"nodeID","type":"string"},{"name":"telegram","type":"bytes32"},{"name":"apiIpPort","type":"string"},{"name":"ipPort","type":"string"},{"name":"size","type":"uint256"}],"name":"registerProvider","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"nodeID","type":"string"}],"name":"removeProviderMachine","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"nodeID","type":"string"},{"name":"fileID","type":"string"},{"name":"size","type":"uint256"}],"name":"confirmUpdate","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"fileID","type":"string"}],"name":"getStoringPeers","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"nodeID","type":"string"},{"name":"n","type":"uint256"}],"name":"getFile","outputs":[{"name":"","type":"string"},{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"clearPrepay","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"client","type":"address"}],"name":"isPrepaid","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"size","type":"uint256"},{"name":"seed","type":"uint256"}],"name":"getPeers","outputs":[{"name":"","type":"string"},{"name":"","type":"string"},{"name":"","type":"string"},{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getBlockTime","outputs":[{"name":"timestamp","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"nodeID","type":"string"},{"name":"addr","type":"string"}],"name":"updateAPIIpPort","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"fileID","type":"string"},{"name":"consensus","type":"bool[16]"},{"name":"nodeIds","type":"bytes32[4]"}],"name":"checkVerification","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"id","type":"string"}],"name":"setBootstrap","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"pay","type":"uint256"}],"name":"prePay","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"getPingTarget","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"nodeID","type":"string"}],"name":"getNumberOfFiles","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"confirmTransfer","outputs":[],"payable":false,"stateMutability":"pure","type":"function"},{"constant":true,"inputs":[],"name":"getBannedPeers","outputs":[{"name":"","type":"bytes32[]"},{"name":"","type":"uint256[]"},{"name":"","type":"bytes32[]"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"removeAllPeers","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"nodeID","type":"string"}],"name":"verifyReplication","outputs":[{"name":"isBanned","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint128"}],"name":"notifyDelete","outputs":[],"payable":false,"stateMutability":"pure","type":"function"},{"constant":false,"inputs":[{"name":"fileID","type":"string"},{"name":"nodeID","type":"string"}],"name":"notifyVerificationTarget","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"getBootstrap","outputs":[{"name":"id","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"nodeID","type":"string"},{"name":"success","type":"bool"}],"name":"sendPingResult","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"nodeID","type":"string"}],"name":"getBanStats","outputs":[{"name":"","type":"uint256"},{"name":"","type":"uint256"},{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"nodeID","type":"string"}],"name":"getNodeAddress","outputs":[{"name":"","type":"string"},{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"nodeID","type":"string"},{"name":"fileID","type":"string"},{"name":"size","type":"uint256"}],"name":"notifySpaceFreed","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"nodeID","type":"string"}],"name":"machineInformation","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"name":"info","type":"string"}],"name":"Log","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"id","type":"string"}],"name":"ProviderCheckEvent","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"banned","type":"string"}],"name":"ProviderOffline","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"val","type":"string"}],"name":"ReturnString","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"UUID","type":"string"},{"indexed":false,"name":"id","type":"string"}],"name":"verificationTarget","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"UUID","type":"string"},{"indexed":false,"name":"consensus","type":"bytes32[4]"}],"name":"ConsensusResult","type":"event"}];
+module.exports = [{"constant":true,"inputs":[{"name":"nodeID","type":"bytes32"}],"name":"getNodeAddr","outputs":[{"name":"","type":"string"},{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"fileID","type":"bytes32"}],"name":"getStoringPeers","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"fileID","type":"bytes32"}],"name":"showStoringPeers","outputs":[{"name":"","type":"bytes32[]"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"size","type":"uint256"},{"name":"seed","type":"uint256"}],"name":"getPeers","outputs":[{"name":"","type":"bytes32[]"}],"payable":false,"stateMutability":"view","type":"function"}];
 
 /***/ }),
 
@@ -99,7 +99,7 @@ var _require = __webpack_require__(/*! ../utils */ "./src/utils/utils.js"),
 
 var SC_INTERFACE = __webpack_require__(/*! ./sc.abi.json */ "./src/eth/sc.abi.json");
 var SC_ADDR = {
-  development: 'd3a9e2d2b34F87302569f5Bf2aBed5969A2A5925',
+  development: 'D5b080d8D0d028279E125d2AAbe3e0889DD64BB8',
   production: 'ff89Eb252F1E9C6638823C819DC0b2Ce3bFae7F5'
 };
 var sc = {
@@ -153,7 +153,7 @@ var getUploadNodes = function getUploadNodes(eth, _ref) {
 
       return Promise.all(hashes.map(function (hash) {
         return new Promise(function (resolve, reject) {
-          return sc.methods.getNodeAddress(hash).call().then(function (ipPort) {
+          return sc.methods.getNodeAddr(hash).call().then(function (ipPort) {
             return resolve({
               ip: ipPort[0].replace(/:.*/, ''), // removing thrift port
               ipfs: ipPort[1],
@@ -181,7 +181,7 @@ var getStoringNodes = function getStoringNodes(eth, _ref2) {
       }
 
       return Promise.all(nodeHashes.map(function (node) {
-        return sc.methods.getNodeAddress(node).call();
+        return sc.methods.getNodeAddr(node).call();
       }));
     }).then(function (ipPorts) {
       return ipPorts.map(function (ipPort) {
@@ -738,12 +738,8 @@ var parseSCString = function parseSCString(hash) {
 
 var uuidToHash = function uuidToHash(uuid) {
   var bytes = bs58.decode(uuid);
-  var sha = sha256.array(bytes);
-
-  var encoded = new Uint8Array([18, sha.length].concat(sha));
-  var hash = bs58.encode(encoded);
-
-  return hash;
+  var sha = sha256(bytes);
+  return '0x' + sha;
 };
 
 module.exports = {

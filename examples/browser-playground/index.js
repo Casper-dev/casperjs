@@ -38,7 +38,7 @@ window.addEventListener('load', () => {
 
     // saving it (if uuid is present file will be updated)
     casper.save(file, $uuid.value || undefined)
-          .on('sc-connected', () => log('SC reached', 'while saving'))
+          .on('sc-connected', () => log('Connected to SC', 'while saving'))
           .on('node-found', ip => log('Node found', `${ip} (while saving ${uuid})`))
           .on('progress', done => log('Upload progress', done))
           .then(uuid => log('Upload done', 'file uuid -- ' + uuid))
@@ -52,7 +52,7 @@ window.addEventListener('load', () => {
     const uuid = $uuid.value
 
     casper.delete(uuid)
-          .on('sc-connected', () => log('SC reached', 'while deleting ' + uuid))
+          .on('sc-connected', () => log('Connected to SC', 'while deleting ' + uuid))
           .on('node-found', ip => log('Node found', `${ip} (while deleting ${uuid})`))
           .then(() => log('Deleted', uuid))
           .catch(err => {
@@ -66,7 +66,7 @@ window.addEventListener('load', () => {
 
     casper.getFile($uuid.value)
           .on('progress', done => log('Download progress', done))
-          .on('sc-connected', () => log('SC reached', 'while downloading ' + uuid))
+          .on('sc-connected', () => log('Connected to SC', 'while downloading ' + uuid))
           .on('node-found', ip => log('Node found', `${ip} (while downloading ${uuid})`))
           .then(file => {
             // note that file is a Blobs
@@ -99,7 +99,7 @@ window.addEventListener('load', () => {
   $getLink.addEventListener('click', () => {
     const uuid = $uuid.value
     casper.getLink(uuid)
-          .on('sc-connected', () => log('SC reached', 'while getting link for ' + uuid))
+          .on('sc-connected', () => log('Connected to SC', 'while getting link for ' + uuid))
           .on('node-found', ip => log('Node found', `${ip} (while getting link for ${uuid})`))
           .then(link => log('Got link', link))
           .catch(err => {
@@ -109,7 +109,8 @@ window.addEventListener('load', () => {
   })
 
   // Media handling
-  ['image', 'video', 'audio'].forEach(type => {
+  const mediaTypes = ['image', 'video', 'audio']
+  mediaTypes.forEach(type => {
     const $btn = document.createElement('button')
     $btn.textContent = 'Get as ' + type
 

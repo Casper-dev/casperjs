@@ -18,6 +18,8 @@ casper.getFile(uuid)
   .on('progress', event => console.log('progress', event))
   .on('node-found', ip => console.log('got node', ip))
   .then(file => {
-    fs.writeFileSync(__dirname + '/fetched.' + ext, file)
+    const filename = 'fetched-from-casper-network.' + ext
+    fs.writeFileSync(__dirname + '/' + filename, file)
+    console.log('Done, saved as ' + filename)
   })
   .catch(console.error)

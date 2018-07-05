@@ -12,13 +12,7 @@ const handleMedia = type => async event => {
 
   try {
     const url = await casper.getLink(uuid)
-                          .on(
-                            'sc-connected', 
-                            () => log(
-                              'SC reached', 
-                              'while getting link for', uuid,
-                              'as', type 
-                          ))
+                            .on('sc-connected', () => log('Connected to SC'))
 
     const $container = document.getElementById('media-container')
     const $content = document.createElement(type2tag[type])

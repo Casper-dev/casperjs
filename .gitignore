@@ -67,3 +67,5 @@ playground/dist/
 examples/node-simple/yarn\.lock
 
 examples/browser-playground/yarn\.lock
+
+playground/

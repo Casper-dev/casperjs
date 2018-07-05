@@ -2,7 +2,7 @@ const request = require('request')
 const Duplex = require('stream').Duplex
 const CasperPromise = require('../promise')
 const fs = require('fs')
-
+const toStream = require('buffer-to-stream')
 
 const makeRequest = ({
   method = 'GET',
@@ -36,10 +36,17 @@ const makeRequest = ({
       // upload progress
       let uploaded = 0
       let total = 0
+      let filesize = undefined
+      if(file instanceof Buffer) {
+        filesize = file.byteLength
+        file = toStream(file)
+      }
   
       const form = req.form()
       form.maxDataSize = Infinity
-      form.append('file', file)
+      form.append('file', file, {
+        knownLength: filesize
+      })
       
       form.getLength((err, length) => { total = length })
       form.on('data', chunk => {
