@@ -34,6 +34,15 @@ const mockEth = ({
   return eth
 }
 
+const testScWrapperApi = wrapper => {
+  expect(wrapper.getUploadNodes instanceof Function).toBe(true)
+  expect(wrapper.getStoringNodes instanceof Function).toBe(true)
+
+  expect(wrapper.getUploadNodes.length).toBe(2)
+  expect(wrapper.getStoringNodes.length).toBe(2)
+}
+
 module.exports = {
-  mockEth
+  mockEth,
+  testScWrapperApi
 }
