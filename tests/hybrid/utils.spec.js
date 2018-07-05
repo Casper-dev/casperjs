@@ -17,8 +17,8 @@ describe('utils', () => {
     const uuid1 = '8yPGeBthKytEMZQSmF3XT'
     const uuid2 = 'EARYTshcSfDgope8et3uiv'
 
-    const hash1 = 'QmbuWtZKJHh9BnRRwNe6WSMDRyDnBkDwpuifh14otRLKf7'
-    const hash2 = 'QmSkyM2TAcmsdF5FFiRq7Cby9yMLoKY5LmPp8Jn9WnLoJW'
+    const hash1 = '0xc993413e90eabdf7d68affb706315a0618cc850183227ae822b8584baccf3d82'
+    const hash2 = '0x41a9c27025eab34fb66b74ff8a9f9d724a79dc8429672af2168fb39142844dd7'
 
     expect(utils.uuidToHash('8yPGeBthKytEMZQSmF3XT')).toBe(hash1)
     expect(utils.uuidToHash('EARYTshcSfDgope8et3uiv')).toBe(hash2)

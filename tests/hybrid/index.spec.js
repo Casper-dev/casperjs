@@ -84,10 +84,10 @@ describe('casperapi', () => {
         id1: 0,
         id2: 1
       })
-      const getNodeAddress = id => [ips[id], 0]
+      const getNodeAddr = id => [ips[id], 0]
       const localWeb3 = {eth: mockEth({
         getPeers,
-        getNodeAddress
+        getNodeAddr
       })}
       const casperapi = new Casper(localWeb3)
 
@@ -112,10 +112,10 @@ describe('casperapi', () => {
         id1: 0,
         id2: 1
       })
-      const getNodeAddress = id => [ips[id], '']
+      const getNodeAddr = id => [ips[id], '']
       const localWeb3 = {eth: mockEth({
         getPeers,
-        getNodeAddress
+        getNodeAddr
       })}
       const casperapi = new Casper(localWeb3)
 
