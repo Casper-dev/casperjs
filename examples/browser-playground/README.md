@@ -18,5 +18,3 @@ Save a file to get a uuid to be used in other examples
 
 All methods will try to use uuid (second field in info section),
 So make sure to copy one there from the logs
-
-> If you are here for media handling it's in the 

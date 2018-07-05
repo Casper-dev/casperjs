@@ -44,6 +44,7 @@ const getUploadNodes = (eth, { fileSize, mode }) => new Promise((resolve, reject
         ))
       )
     })
+    .then(nodes => nodes.filter(node => node.ip))
     .then(resolve)
 })
 
@@ -65,6 +66,7 @@ const getStoringNodes = (eth, { uuid, mode }) => new Promise((resolve, reject) =
         nodeHashes.map(node => sc.methods.getNodeAddr(node).call())
       )
     })
+    .then(ipPorts => ipPorts.filter(ipPort => ipPort[0]))
     .then(ipPorts => ipPorts.map(ipPort => ipPort[0].replace(/:.*/, '')))
     .then(resolve)
 })

@@ -2,7 +2,6 @@ import Web3 from 'web3-eth'
 import Casper from 'casperapi'
 
 import log from './log'
-import handleMedia from './handleMedia'
 
 
 // waiting for the whole thing to load
@@ -78,7 +77,7 @@ window.addEventListener('load', () => {
             const filename = prompt('Filename for downloaded file')
 
             // Creating a from-memory-download link
-            const url = window.URL.encodeURIComponent(blob)
+            const url = window.encodeURIComponent(file)
             const $link = document.createElement('a')
             $link.setAttribute('href', url)
             $link.setAttribute('download', filename)
@@ -110,11 +109,37 @@ window.addEventListener('load', () => {
 
   // Media handling
   const mediaTypes = ['image', 'video', 'audio']
+  const type2tag = {
+    image: 'img',
+    video: 'video',
+    audio: 'audio'
+  }
+  
   mediaTypes.forEach(type => {
     const $btn = document.createElement('button')
     $btn.textContent = 'Get as ' + type
 
     $actions.appendChild($btn)
-    $btn.addEventListener('click', handleMedia(type))
+    $btn.addEventListener('click', async event => {
+      // no need to overcomplicate this
+      const uuid = document.getElementById('uuid').value
+      const $container = document.getElementById('media-container')
+      console.log('handling media')
+    
+      try {
+        const url = await casper.getLink(uuid)
+                                .on('sc-connected', () => log('Connected to SC'))
+    
+        const $content = document.createElement(type2tag[type])
+        $content.setAttribute('src', url)
+        $content.setAttribute('controls', true)
+      
+        $container.innerHTML = ''
+        $container.appendChild($content)
+      } catch(err) {
+        console.error(err)
+        $container.innerHTML = 'An error occurred while showing ' + uuid
+      }
+    })
   })
 })
