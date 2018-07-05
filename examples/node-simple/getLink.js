@@ -11,8 +11,8 @@ const casper = new Casper(web3)
 
 
 console.log('Getting link to the file with uuid:', uuid)
-casper.getFile(uuid)
+casper.getLink(uuid)
   .on('sc-connected', () => console.log('sc'))
   .on('node-found', ip => console.log('got node', ip))
-  .then(link => console.log('Got link:', link))
+  .then(link => console.log('Got link:', link.toString()))
   .catch(console.error)
