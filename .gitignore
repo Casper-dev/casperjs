@@ -69,3 +69,5 @@ examples/node-simple/yarn\.lock
 examples/browser-playground/yarn\.lock
 
 playground/
+
+examples/node-simple/meta\.txt
