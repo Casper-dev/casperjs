@@ -41,7 +41,8 @@ export default {
       casper.save(new Blob(['Playground example'], { type: 'text/plain' }))
             .then(uuid => {
               this.state = 'tested'
-              console.log('[Playground] checked upload', uuid)
+              console.log('[Playground] checked upload, successful')
+              console.log(`[Playground] Try running casper.getLink('XxHxSMm2Gty6qSNMukw2Du').then(console.log) and open the link that fill show up`)
             })
             .catch(err => {
               console.error(err)
