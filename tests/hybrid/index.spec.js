@@ -1,4 +1,3 @@
-const { mockEth } = require('../sc_testing_utils')
 const { getFileSize, uuidToHash } = require('../../src/utils')
 const CasperPromise = require('../../src/promise')
 
@@ -7,58 +6,46 @@ jest.mock('../../src/requestAny', () => function() {
   return mockRequest.apply(this, arguments)
 })
 
+
+// mock web3 and sc
+const web3 = { eth: {} }
+let mockGetUploadNodes = jest.fn()
+let mockGetStoringNodes = jest.fn()
+jest.mock('../../src/eth/sc.js', () => ({
+  getUploadNodes: function() {
+    return mockGetUploadNodes.call(this, ...arguments)
+  },
+  getStoringNodes: function() {
+    return mockGetStoringNodes.call(this, ...arguments)
+  }
+}))
+
 const Casper = require('../../src/index')
 
 
-const testGettingStoringNodes = method => {
-  it('gets stroing nodes from sc', async done => {
-    const uuid = '12sdadsa21414sdad5'
-    const showStoringPeers = jest.fn().mockReturnValue([])
-    const web3 = {eth: mockEth({
-      showStoringPeers
-    })}
-    
-    const casperapi = new Casper(web3)
-    await casperapi[method](uuid)
-
-    expect(showStoringPeers).toHaveBeenCalledWith(uuidToHash(uuid))
-    done()
-  })
-}
-
-
-// Would separate this into 2 more atomic test suites later
 describe('casperapi', () => {
-  let file
-  let uuid = '12sdadsa21414sdad5'
+  let file, casperapi
+  const uuid = '12sdadsa21414sdad5'
+
   beforeEach(() => {
     file = new Buffer('sample')
     mockRequest = jest.fn().mockReturnValueOnce(CasperPromise(r => r('{}')))
+    mockGetUploadNodes = jest.fn().mockReturnValueOnce(Promise.resolve([]))
+    mockGetStoringNodes = jest.fn().mockReturnValueOnce(Promise.resolve([]))
   })
   
 
   it('passes web3 to sc', async done => {
-    const getPeers = jest.fn().mockReturnValue({})
-    const web3 = {eth: mockEth({
-      getPeers
-    })}
-    
     const casperapi = new Casper(web3)
     await casperapi.save(file)
 
-    expect(getPeers).toHaveBeenCalled()
+    expect(mockGetUploadNodes.mock.calls[0][0]).toEqual(web3.eth)
     done()
   })
 
 
   describe('save', () => {
-    let web3, casperapi, getPeers
-
     beforeEach(() => {
-      getPeers = jest.fn().mockReturnValue({})
-      web3 = {eth: mockEth({
-        getPeers
-      })}
       casperapi = new Casper(web3)
     })
 
@@ -67,7 +54,8 @@ describe('casperapi', () => {
       
       await casperapi.save(file)
   
-      expect(getPeers).toHaveBeenCalledWith(size, expect.any(Number))
+      expect(mockGetUploadNodes.mock.calls[0][1].fileSize)
+        .toEqual(size)
       done()  
     })
 
@@ -80,16 +68,9 @@ describe('casperapi', () => {
 
     it('passes the hosts from sc to request strategy', async done => {
       const ips = ['1.1.1.1', '2.2.2.2']
-      const getPeers = jest.fn().mockReturnValueOnce({
-        id1: 0,
-        id2: 1
-      })
-      const getNodeAddr = id => [ips[id], 0]
-      const localWeb3 = {eth: mockEth({
-        getPeers,
-        getNodeAddr
-      })}
-      const casperapi = new Casper(localWeb3)
+      const scReturn = ips.map(ip => ({ ip, ipfs: '', hash: '' }))
+      mockGetUploadNodes = jest.fn().mockReturnValueOnce(scReturn)
+      const casperapi = new Casper(web3)
 
       await casperapi.save(file)
 
@@ -101,23 +82,16 @@ describe('casperapi', () => {
     it('requests save from nodes (if file is new)', async done => {
       await casperapi.save(file)
       
-      expect(getPeers).toHaveBeenCalled()
+      expect(mockGetUploadNodes).toHaveBeenCalled()
       expect(mockRequest.mock.calls[0][0]).toBe('POST')
       done()
     })
 
     it('requests update from storing peers if (if file exists)', async done => {
       const ips = ['1.1.1.1', '2.2.2.2']
-      const getPeers = jest.fn().mockReturnValueOnce({
-        id1: 0,
-        id2: 1
-      })
-      const getNodeAddr = id => [ips[id], '']
-      const localWeb3 = {eth: mockEth({
-        getPeers,
-        getNodeAddr
-      })}
-      const casperapi = new Casper(localWeb3)
+      const scReturn = ips.map(ip => ({ ip, ipfs: '', hash: '' }))
+      mockGetUploadNodes = jest.fn().mockReturnValueOnce(scReturn)
+      const casperapi = new Casper(scReturn)
 
       await casperapi.save(file, uuid)
 
@@ -128,9 +102,11 @@ describe('casperapi', () => {
       done()
     })
 
-    it(`resolves with file's uuid`, async done => {
+    it('resolves with file\'s uuid', async done => {
       const uuid = '12sdadsa21414sdad5'
-      mockRequest = jest.fn().mockReturnValueOnce(CasperPromise(r => r(`{ "UUID": "${uuid}" }`)))
+      mockRequest = jest.fn().mockReturnValueOnce(
+        CasperPromise(r => r(`{ "UUID": "${uuid}" }`))
+      )
       
       const returned = await casperapi.save(file)
       
@@ -159,24 +135,20 @@ describe('casperapi', () => {
 
     it('throws if file type is unsupported', () => {
       expect(() => casperapi.save(10)).toThrow()
-      expect(getPeers).not.toHaveBeenCalled()
+      expect(mockGetUploadNodes).not.toHaveBeenCalled()
     })
   })
 
   describe('delete', () => {
     beforeEach(() => {
       showStoringPeers = jest.fn().mockReturnValue([])
-      web3 = {eth: mockEth({
-        showStoringPeers
-      })}
       casperapi = new Casper(web3)
     })
-
-    testGettingStoringNodes('delete')
 
     it('requests file deletion', async done => {
       await casperapi.delete(uuid)
 
+      expect(mockGetStoringNodes).toHaveBeenCalledTimes(1)
       const call = mockRequest.mock.calls[0]
       expect(call[0]).toBe('DELETE')
       expect(call[1].endsWith('file/' + uuid)).toBe(true)
@@ -185,21 +157,14 @@ describe('casperapi', () => {
   })
 
   describe('getFile', () => {
-    let web3, casperapi, getPeers
-
     beforeEach(() => {
-      showStoringPeers = jest.fn().mockReturnValue([])
-      web3 = {eth: mockEth({
-        showStoringPeers
-      })}
       casperapi = new Casper(web3)
     })
-
-    testGettingStoringNodes('getFile')
 
     it('requests the file', async done => {
       await casperapi.getFile(uuid)
 
+      expect(mockGetStoringNodes).toHaveBeenCalledTimes(1)
       const call = mockRequest.mock.calls[0]
       expect(call[0]).toBe('GET')
       expect(call[1].endsWith('file/' + uuid)).toBe(true)
@@ -237,18 +202,13 @@ describe('casperapi', () => {
 
   describe('getLink', () => {
     beforeEach(() => {
-      showStoringPeers = jest.fn().mockReturnValue([])
-      web3 = {eth: mockEth({
-        showStoringPeers
-      })}
       casperapi = new Casper(web3)
     })
 
-    testGettingStoringNodes('getLink')
-
     it('requests the sharing link', async done => {
       await casperapi.getLink(uuid)
-
+  
+      expect(mockGetStoringNodes).toHaveBeenCalledTimes(1)
       const call = mockRequest.mock.calls[0]
       expect(call[0]).toBe('POST')
       expect(call[1].endsWith('share/' + uuid)).toBe(true)
