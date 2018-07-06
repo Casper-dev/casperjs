@@ -28,8 +28,8 @@ window.addEventListener('load', () => {
 
     /* simple alternative w/ progress, 
        1) make this function async
-       2) const uuid = casper.save(file) 
-                          .on('progress', done => log('Download progress', done)) 
+       2) const uuid = await casper.save(file) 
+                                   .on('progress', done => log('Download progress', done)) 
        
        This appliies to all other functions too. You can find more infromation about async / await here
        https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function
