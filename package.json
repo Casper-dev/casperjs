@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "casperapi": "^0.0.9-b6",
     "vuepress": "^0.10.2",
+    "web3-eth": "^1.0.0-beta.34",
+    "webpack": "^4.15.1",
     "webpack-cli": "^2.0.15",
     "webpack-log": "^1.2.0",
     "webpack-merge": "^4.1.2",

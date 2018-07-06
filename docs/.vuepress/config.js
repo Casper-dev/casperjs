@@ -1,3 +1,6 @@
+const path = require('path')
+
+
 module.exports = {
   title: 'Casper API JS SDK',
   description: 'Casper API bindings in javascript',
@@ -25,5 +28,12 @@ module.exports = {
       { text: 'Support email', link: '/support/' },
       { text: 'Github', link: 'https://github.com/Casper-dev/casperjs' },
     ]
+  },
+
+  configureWebpack: (config, isServer) => {
+    // Bring back defaults
+    config.resolve.alias['scrypt'] = path.resolve(__dirname, '../../node_modules/scrypt.js/js.js')
+    config.resolve.alias['scrypt.js'] = path.resolve(__dirname, '../../node_modules/scrypt.js/js.js')
+    config.resolve.extensions = config.resolve.extensions.concat(['.wasm', '.mjs', '.js', '.json', '.node'])
   }
 }

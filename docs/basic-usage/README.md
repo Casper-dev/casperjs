@@ -23,7 +23,7 @@ const casper = new CasperApi(web3)
 
 Let's create a sample file and save it on the casper network
 ```js
-const myFile = Blob(['My file'], { type: 'text/plain' })
+const myFile = new Blob(['My file'], { type: 'text/plain' })
 const savePromise = casper.save(myFile)
 ```
 The value of `savePromise` is an extended native [Promise][using-promises].
@@ -44,5 +44,9 @@ Then we use [`casper.getFile`](/api/#casper-getFile) that fetches the file as a 
 
 ## Playground
 There is an initialized casperapi instance available in the global scope of this tab, feel free to play around with it in the console.
+
+<client-only>
+  <utils-playground />
+</client-only>
 
 [using-promises]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises
