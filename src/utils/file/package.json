@@ -1,6 +1,0 @@
-{
-  "name": "casper-file-utils",
-  "version": "0.0.1",
-  "main": "node",
-  "browser": "browser"
-}
