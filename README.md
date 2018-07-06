@@ -1,7 +1,7 @@
 # Casper JS · [![Build Status][travis-img]][travis-link]  [![codecov][codecov-img]][codecov-link]
 
 <p align="center">
-  <a href="https://vuejs.org" target="_blank" rel="noopener noreferrer">
+  <a href="https://casperproject.io/" target="_blank" rel="noopener noreferrer">
     <img width="400" src="https://demo.casperproject.io/img/casper-logo.svg" alt="Casper logo">
   </a>
 </p>
