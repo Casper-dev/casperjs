@@ -143,11 +143,7 @@ const getStoringNodes = (eth, { uuid, mode }) => new Promise((resolve, reject) =
 
   const fileHash = uuidToHash(uuid);
   sc.methods.showStoringPeers(fileHash).call().then(data => {
-    const nodeHashes = [];
-    for (let key in data) {
-      const hash = data[key];
-      if (hash.length) nodeHashes.push(hash);
-    }
+    const nodeHashes = Object.values(data);
 
     return Promise.all(nodeHashes.map(node => sc.methods.getNodeAddr(node).call()));
   }).then(ipPorts => ipPorts.filter(ipPort => ipPort[0])).then(ipPorts => ipPorts.map(ipPort => ipPort[0].replace(/:.*/, ''))).then(resolve);

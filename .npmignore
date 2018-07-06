@@ -1,1 +1,4 @@
 examples/
+docs/
+deploy.sh
+.travis.yml

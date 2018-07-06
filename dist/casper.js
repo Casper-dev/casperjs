@@ -178,11 +178,7 @@ var getStoringNodes = function getStoringNodes(eth, _ref2) {
 
     var fileHash = uuidToHash(uuid);
     sc.methods.showStoringPeers(fileHash).call().then(function (data) {
-      var nodeHashes = [];
-      for (var key in data) {
-        var hash = data[key];
-        if (hash.length) nodeHashes.push(hash);
-      }
+      var nodeHashes = Object.values(data);
 
       return Promise.all(nodeHashes.map(function (node) {
         return sc.methods.getNodeAddr(node).call();

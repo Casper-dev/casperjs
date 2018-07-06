@@ -8,7 +8,9 @@
     "test": "jest",
     "codecov": "codecov",
     "build": "webpack --mode=production --hide-modules && npm run build-dev",
-    "build-dev": "webpack --mode=development --hide-modules"
+    "build-dev": "webpack --mode=development --hide-modules",
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs"
   },
   "repository": {
     "type": "git",
@@ -31,6 +33,7 @@
     "koa": "^2.5.1",
     "koa-body": "^2.5.0",
     "uglifyjs-webpack-plugin": "^1.2.5",
+    "vuepress": "^0.10.2",
     "web3": "^1.0.0-beta.33",
     "webpack": "^4.6.0",
     "webpack-cli": "^2.0.14",
