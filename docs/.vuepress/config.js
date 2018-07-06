@@ -4,7 +4,7 @@ const path = require('path')
 module.exports = {
   title: 'Casper API JS SDK',
   description: 'Casper API bindings in javascript',
-  base: '/casperjs/',
+  base: '/',
   ga: 'UA-105436727-4',
   head: [
     ['link', { rel: 'shortcut icon', type: 'image/x-icon', href: '/logo.png' }],
