@@ -18,7 +18,7 @@ const casper = new CasperApi(web3)
 
 Let's see what more can be done here
 ```js
-CasperApi(blockchainProvider [, options])
+new CasperApi(blockchainProvider [, options])
 ```
 #### Parameters
 1. `Object` — Blockchain provider, for ethereum this would be `web3` or `web3-eth` (:hammer: neo coming soon). <br />
@@ -49,8 +49,7 @@ const casper = new CasperApi(web3, { mode: 'production' })
 ```
 
 
-
-<br /><br /><br />
+<ui-divider />
 
 
 
@@ -146,7 +145,7 @@ casper.getFile(uuid).then(() => console.log('done'))
 
 
 
-<br /><br /><br />
+<ui-divider />
 
 
 
@@ -178,7 +177,7 @@ casper.save(file)
 
 
 
-<br /><br /><br />
+<ui-divider />
 
 
 
@@ -207,7 +206,7 @@ casper.getFile(uuid)
 
 
 
-<br /><br /><br />
+<ui-divider />
 
 
 
@@ -232,7 +231,8 @@ casper.getLink(uuid)
 
 
 
-<br /><br /><br />
+<ui-divider />
+
 
 
 ## casper.delete
