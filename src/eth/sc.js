@@ -1,4 +1,4 @@
-const { parseSCString, uuidToHash } = require('../utils')
+const { parseSCString, uuidToHash, nodeIdToBytes } = require('../utils') 
 
 const SC_INTERFACE = require('./sc.abi.json')
 const SC_ADDR = {
@@ -29,16 +29,16 @@ const getUploadNodes = (eth, { fileSize, mode }) => new Promise((resolve, reject
 
   sc.methods.getPeers(fileSize, entropy).call()
     .then(data => {
-      const hashes = Object.values(data)
+      const nodeIds = Object.values(data)
 
       return Promise.all(
-        hashes.map(hash => new Promise((resolve, reject) =>
-          sc.methods.getNodeAddr(hash)
+        nodeIds.map(id => new Promise((resolve, reject) =>
+          sc.methods.getNodeAddr(id)
             .call()
             .then(ipPort => resolve({
               ip: ipPort[0].replace(/:.*/, ''), // removing thrift port
               ipfs: ipPort[1],
-              hash
+              hash: nodeIdToBytes(id)
             }))
             .catch(reject)
         ))

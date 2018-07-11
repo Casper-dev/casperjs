@@ -1,5 +1,6 @@
 const sha256 = require('js-sha256')
 const bs58 = require('./crypto/bs58')
+const hex = require('./crypto/hex')
 const { isFile, getFileSize } = require('./file')
 
 const parseSCString = hash => {
@@ -20,10 +21,18 @@ const uuidToHash = uuid => {
   return '0x' + sha
 }
 
+const nodeIdToBytes = id => {
+  const value = id.substr(2)
+  const bytes = hex.toBytes('1220' + value)
+  const base58 = bs58.encode(bytes)
+
+  return base58
+}
 
 module.exports = {
   parseSCString,
   isFile,
   getFileSize,
-  uuidToHash
+  uuidToHash,
+  nodeIdToBytes
 }

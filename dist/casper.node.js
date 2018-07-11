@@ -99,7 +99,7 @@ module.exports = [{"constant":true,"inputs":[{"name":"nodeID","type":"bytes32"}]
 "use strict";
 
 
-const { parseSCString, uuidToHash } = __webpack_require__(/*! ../utils */ "./src/utils/utils.js");
+const { parseSCString, uuidToHash, nodeIdToBytes } = __webpack_require__(/*! ../utils */ "./src/utils/utils.js");
 
 const SC_INTERFACE = __webpack_require__(/*! ./sc.abi.json */ "./src/eth/sc.abi.json");
 const SC_ADDR = {
@@ -128,12 +128,12 @@ const getUploadNodes = (eth, { fileSize, mode }) => new Promise((resolve, reject
   const entropy = Math.round(Math.random() * 100000);
 
   sc.methods.getPeers(fileSize, entropy).call().then(data => {
-    const hashes = Object.values(data);
+    const nodeIds = Object.values(data);
 
-    return Promise.all(hashes.map(hash => new Promise((resolve, reject) => sc.methods.getNodeAddr(hash).call().then(ipPort => resolve({
+    return Promise.all(nodeIds.map(id => new Promise((resolve, reject) => sc.methods.getNodeAddr(id).call().then(ipPort => resolve({
       ip: ipPort[0].replace(/:.*/, ''), // removing thrift port
       ipfs: ipPort[1],
-      hash
+      hash: nodeIdToBytes(id)
     })).catch(reject))));
   }).then(nodes => nodes.filter(node => node.ip)).then(resolve);
 });
@@ -535,31 +535,63 @@ bs58.decode = S => {
     return new Uint8Array(b); //return the final byte array in Uint8Array format
 };
 
-// bs58.encode = B => {
-//   let d = [],   //the array for storing the stream of base58 digits
-//       s = "",   //the result string variable that will be returned
-//       i,        //the iterator variable for the byte input
-//       j,        //the iterator variable for the base58 digit array (d)
-//       c,        //the carry amount variable that is used to overflow from the current base58 digit to the next base58 digit
-//       n;        //a temporary placeholder variable for the current base58 digit
-//   for(i in B) { //loop through each byte in the input stream
-//       j = 0,                           //reset the base58 digit iterator
-//       c = B[i];                        //set the initial carry amount equal to the current byte amount
-//       s += c || s.length ^ i ? "" : 1; //prepend the result string with a "1" (0 in base58) if the byte stream is zero and non-zero bytes haven't been seen yet (to ensure correct decode length)
-//       while(j in d || c) {             //start looping through the digits until there are no more digits and no carry amount
-//           n = d[j];                    //set the placeholder for the current base58 digit
-//           n = n ? n * 256 + c : c;     //shift the current base58 one byte and add the carry amount (or just add the carry amount if this is a new digit)
-//           c = n / 58 | 0;              //find the new carry amount (floored integer of current digit divided by 58)
-//           d[j] = n % 58;               //reset the current base58 digit to the remainder (the carry amount will pass on the overflow)
-//           j++                          //iterate to the next base58 digit
-//       }
-//   }
-//   while(j--)        //since the base58 digits are backwards, loop through them in reverse order
-//       s += A[d[j]]; //lookup the character associated with each base58 digit
-//   return s          //return the final base58 string
-// }
+bs58.encode = B => {
+    let d = [],
+        //the array for storing the stream of base58 digits
+    s = "",
+        //the result string variable that will be returned
+    i,
+        //the iterator variable for the byte input
+    j,
+        //the iterator variable for the base58 digit array (d)
+    c,
+        //the carry amount variable that is used to overflow from the current base58 digit to the next base58 digit
+    n; //a temporary placeholder variable for the current base58 digit
+    for (i in B) {
+        //loop through each byte in the input stream
+        j = 0, //reset the base58 digit iterator
+        c = B[i]; //set the initial carry amount equal to the current byte amount
+        s += c || s.length ^ i ? "" : 1; //prepend the result string with a "1" (0 in base58) if the byte stream is zero and non-zero bytes haven't been seen yet (to ensure correct decode length)
+        while (j in d || c) {
+            //start looping through the digits until there are no more digits and no carry amount
+            n = d[j]; //set the placeholder for the current base58 digit
+            n = n ? n * 256 + c : c; //shift the current base58 one byte and add the carry amount (or just add the carry amount if this is a new digit)
+            c = n / 58 | 0; //find the new carry amount (floored integer of current digit divided by 58)
+            d[j] = n % 58; //reset the current base58 digit to the remainder (the carry amount will pass on the overflow)
+            j++; //iterate to the next base58 digit
+        }
+    }
+    while (j--) //since the base58 digits are backwards, loop through them in reverse order
+    s += A[d[j]]; //lookup the character associated with each base58 digit
+    return s; //return the final base58 string
+};
 
 module.exports = bs58;
+
+/***/ }),
+
+/***/ "./src/utils/crypto/hex.js":
+/*!*********************************!*\
+  !*** ./src/utils/crypto/hex.js ***!
+  \*********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+const toBytes = hex => {
+  const bytes = [];
+  while (hex.length >= 2) {
+    bytes.push(parseInt(hex.substring(0, 2), 16));
+    hex = hex.substring(2, hex.length);
+  }
+  return bytes;
+};
+
+module.exports = {
+  toBytes
+};
 
 /***/ }),
 
@@ -602,6 +634,7 @@ module.exports = {
 
 const sha256 = __webpack_require__(/*! js-sha256 */ "js-sha256");
 const bs58 = __webpack_require__(/*! ./crypto/bs58 */ "./src/utils/crypto/bs58.js");
+const hex = __webpack_require__(/*! ./crypto/hex */ "./src/utils/crypto/hex.js");
 const { isFile, getFileSize } = __webpack_require__(/*! ./file */ "./src/utils/file/node.js");
 
 const parseSCString = hash => {
@@ -621,11 +654,20 @@ const uuidToHash = uuid => {
   return '0x' + sha;
 };
 
+const nodeIdToBytes = id => {
+  const value = id.substr(2);
+  const bytes = hex.toBytes('1220' + value);
+  const base58 = bs58.encode(bytes);
+
+  return base58;
+};
+
 module.exports = {
   parseSCString,
   isFile,
   getFileSize,
-  uuidToHash
+  uuidToHash,
+  nodeIdToBytes
 };
 
 /***/ }),

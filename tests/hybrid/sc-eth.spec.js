@@ -1,5 +1,5 @@
 const { mockEth, testScWrapperApi } = require('../sc_testing_utils')
-const { getFileSize, uuidToHash } = require('../../src/utils')
+const { getFileSize, uuidToHash, nodeIdToBytes } = require('../../src/utils')
 const wrapper = require('../../src/eth/sc')
 
 describe('sc-wrappers', () => {
@@ -65,11 +65,11 @@ describe('sc-wrappers', () => {
     it('gets upload nodes from the Contract', async done => {
       const fileSize = 156
       const getPeers = jest.fn().mockReturnValue({
-        id1: '0 hash',
-        id3: '1 hash',
-        id2: '2 hash',
+        id1: '0x10',
+        id3: '0x11',
+        id2: '0x12',
       })
-      const getNodeAddr = id => [ips[parseInt(id)], IPFS_IPPORT]
+      const getNodeAddr = id => [ips[parseInt(id.substr(2)) - 10], IPFS_IPPORT]
       const web3 = {eth: mockEth({
         getPeers,
         getNodeAddr
@@ -83,7 +83,7 @@ describe('sc-wrappers', () => {
       result.forEach((node, idx) => {
         expect(node.ip).toEqual(ips[idx].replace(/:.*/, ''))
         expect(node.ipfs).toEqual(IPFS_IPPORT)
-        expect(node.hash).toEqual(`${idx} hash`)
+        expect(node.hash).toEqual(nodeIdToBytes(`0x1${idx}`))
       })
 
       done()
@@ -92,14 +92,15 @@ describe('sc-wrappers', () => {
     it('filters out empty ips in getUploadNodes', async done => {
       const fileSize = 156
       const getPeers = jest.fn().mockReturnValue({
-        id1: '0 hash',
-        id3: '1 hash',
-        id2: '2 hash',
+        id1: '0x10',
+        id3: '0x11',
+        id2: '0x12',
       })
       const getNodeAddr = id => [
-        id === '1 hash' ? '' : ips[parseInt(id)], 
+        (id === '0x11') ? '' : ips[parseInt(id.substr(2)) - 10],
         IPFS_IPPORT
       ]
+      
       const web3 = {eth: mockEth({
         getPeers,
         getNodeAddr
@@ -112,7 +113,7 @@ describe('sc-wrappers', () => {
       expect(result.length).toEqual(ips.length - 1)
       expect(result[0].ip).toEqual(ips[0].replace(/:.*/, ''))
       expect(result[0].ipfs).toEqual(IPFS_IPPORT)
-      expect(result[0].hash).toEqual(`0 hash`)
+      expect(result[0].hash).toEqual(nodeIdToBytes(`0x10`))
       expect(result[1].ip).toEqual(ips[2].replace(/:.*/, '')) 
 
       done()
