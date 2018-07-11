@@ -1,5 +1,5 @@
 import Web3 from 'web3-eth'
-import Casper from '../../'
+import Casper from 'casperapi'
 
 import log from './log'
 
