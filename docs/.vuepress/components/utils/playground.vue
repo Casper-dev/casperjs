@@ -1,5 +1,12 @@
 <template>
-  <div> <strong>Playground status:</strong> {{stateMessage}} </div>
+  <div class="playground">
+    <div class="playground__col">
+      <strong>Playground status:</strong>
+    </div>
+    <div class="playground__col">
+      <vue-markdown :source="stateMessage" />
+    </div>
+  </div>
 </template>
 
 
@@ -10,15 +17,16 @@ const stateMessageLookup = {
   loading: 'Web3 is being loaded',
   web3err: 'Error loading web3, please check your internet connection',
   testing: 'Web3 loaded, testing connection to the casper network',
-  caspererr: 'Error connecting to the casper network, please see the console',
-  tested: 'Playground is ready! Check global variable `casper`',
+  caspererr: 'Error connecting to the casper network, please take a look in the console output `F12`',
+  tested: 'Playground is ready! Check global variable `casper`<br />*(you can do it using console `F12`)*',
 }
 
 
 window.global = {}
-  window.process = {
-    browser: true
-  }
+window.process = {
+  browser: true
+}
+const VueMarkdown = require('vue-markdown').default
 
 
 export default {
@@ -65,6 +73,35 @@ export default {
     stateMessage() {
       return stateMessageLookup[this.state]
     }
+  },
+
+  components: {
+    VueMarkdown
   }
 }
 </script>
+
+<style>
+.playground {
+  display: flex;
+  align-items: baseline;
+}
+
+.playground p {
+  margin: 0;
+}
+
+.playground__col + .playground__col {
+  margin-left: 10px;
+}
+
+@media screen and (max-width: 500px) {
+  .playground {
+    display: block;
+  }
+
+  .playground__col + .playground__col {
+    margin-left: 0;
+  }
+}
+</style>
