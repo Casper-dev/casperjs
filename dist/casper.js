@@ -99,7 +99,7 @@ var _require = __webpack_require__(/*! ../utils */ "./src/utils/utils.js"),
 
 var SC_INTERFACE = __webpack_require__(/*! ./sc.abi.json */ "./src/eth/sc.abi.json");
 var SC_ADDR = {
-  development: 'D5b080d8D0d028279E125d2AAbe3e0889DD64BB8',
+  development: '70956945E53886f71c7dd8c1543e155d5e069a1A',
   production: 'ff89Eb252F1E9C6638823C819DC0b2Ce3bFae7F5'
 };
 var sc = {
@@ -178,11 +178,7 @@ var getStoringNodes = function getStoringNodes(eth, _ref2) {
 
     var fileHash = uuidToHash(uuid);
     sc.methods.showStoringPeers(fileHash).call().then(function (data) {
-      var nodeHashes = [];
-      for (var key in data) {
-        var hash = data[key];
-        if (hash.length) nodeHashes.push(hash);
-      }
+      var nodeHashes = Object.values(data);
 
       return Promise.all(nodeHashes.map(function (node) {
         return sc.methods.getNodeAddr(node).call();

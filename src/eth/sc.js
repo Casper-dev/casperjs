@@ -2,7 +2,7 @@ const { parseSCString, uuidToHash } = require('../utils')
 
 const SC_INTERFACE = require('./sc.abi.json')
 const SC_ADDR = {
-  development: 'D5b080d8D0d028279E125d2AAbe3e0889DD64BB8',
+  development: '70956945E53886f71c7dd8c1543e155d5e069a1A',
   production:  'ff89Eb252F1E9C6638823C819DC0b2Ce3bFae7F5'
 }
 const sc = {

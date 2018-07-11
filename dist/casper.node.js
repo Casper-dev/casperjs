@@ -103,7 +103,7 @@ const { parseSCString, uuidToHash } = __webpack_require__(/*! ../utils */ "./src
 
 const SC_INTERFACE = __webpack_require__(/*! ./sc.abi.json */ "./src/eth/sc.abi.json");
 const SC_ADDR = {
-  development: 'D5b080d8D0d028279E125d2AAbe3e0889DD64BB8',
+  development: '70956945E53886f71c7dd8c1543e155d5e069a1A',
   production: 'ff89Eb252F1E9C6638823C819DC0b2Ce3bFae7F5'
 };
 const sc = {
@@ -143,11 +143,7 @@ const getStoringNodes = (eth, { uuid, mode }) => new Promise((resolve, reject) =
 
   const fileHash = uuidToHash(uuid);
   sc.methods.showStoringPeers(fileHash).call().then(data => {
-    const nodeHashes = [];
-    for (let key in data) {
-      const hash = data[key];
-      if (hash.length) nodeHashes.push(hash);
-    }
+    const nodeHashes = Object.values(data);
 
     return Promise.all(nodeHashes.map(node => sc.methods.getNodeAddr(node).call()));
   }).then(ipPorts => ipPorts.filter(ipPort => ipPort[0])).then(ipPorts => ipPorts.map(ipPort => ipPort[0].replace(/:.*/, ''))).then(resolve);

@@ -13,6 +13,11 @@ yarn
 ```
 
 ### 2
+```bash
+npm run start
+```
+
+### 3
 Save a file to get a uuid to be used in other examples
 (You are here for the source code anyway, so don't hesitate to look though it, this example is pretty small anyway)
 

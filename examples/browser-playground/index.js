@@ -1,5 +1,5 @@
 import Web3 from 'web3-eth'
-import Casper from 'casperapi'
+import Casper from '../../'
 
 import log from './log'
 
@@ -77,11 +77,12 @@ window.addEventListener('load', () => {
             const filename = prompt('Filename for downloaded file')
 
             // Creating a from-memory-download link
-            const url = window.encodeURIComponent(file)
+            const url = window.URL.createObjectURL(file)
             const $link = document.createElement('a')
             $link.setAttribute('href', url)
             $link.setAttribute('download', filename)
 
+            console.log(url)
             // Calling the link
             document.body.appendChild($link)
             $link.click()
