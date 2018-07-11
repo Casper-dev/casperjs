@@ -2130,9 +2130,9 @@ caseless@~0.12.0:
   version "0.12.0"
   resolved "https://registry.yarnpkg.com/caseless/-/caseless-0.12.0.tgz#1b681c21ff84033c826543090689420d187151dc"
 
-casperapi@^0.0.9-b7:
-  version "0.0.9-b7"
-  resolved "https://registry.yarnpkg.com/casperapi/-/casperapi-0.0.9-b7.tgz#d1791524fb33b2f8f40293d666477205abf00162"
+casperapi@^0.0.9-b8:
+  version "0.0.9-b8"
+  resolved "https://registry.yarnpkg.com/casperapi/-/casperapi-0.0.9-b8.tgz#1194fa7c5e9e653975170aec971e9de28db9fc98"
   dependencies:
     buffer-to-stream "^1.0.0"
     js-sha256 "^0.9.0"

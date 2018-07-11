@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "casperapi": "^0.0.9-b7",
+    "casperapi": "^0.0.9-b8",
     "vuepress": "^0.10.2",
     "web3-eth": "^1.0.0-beta.34",
     "webpack": "^4.15.1",
