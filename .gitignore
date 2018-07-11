@@ -71,3 +71,5 @@ examples/browser-playground/yarn\.lock
 playground/
 
 examples/node-simple/meta\.txt
+
+examples/browser-playground/dist/

@@ -12,7 +12,7 @@
   "dependencies": {
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.4",
-    "casperapi": "^0.0.9-b5",
+    "casperapi": "^0.0.10",
     "html-webpack-plugin": "^3.2.0",
     "web3-eth": "^1.0.0-beta.34",
     "webpack": "^4.14.0",

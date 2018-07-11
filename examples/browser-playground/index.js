@@ -137,6 +137,8 @@ window.addEventListener('load', () => {
       
         $container.innerHTML = ''
         $container.appendChild($content)
+
+        log('check out media tab', 'at the very bottom')
       } catch(err) {
         console.error(err)
         $container.innerHTML = 'An error occurred while showing ' + uuid

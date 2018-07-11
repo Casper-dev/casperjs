@@ -9,7 +9,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "casperapi": "^0.0.9-b5",
+    "casperapi": "^0.0.10",
     "web3-eth": "^1.0.0-beta.34"
   }
 }
