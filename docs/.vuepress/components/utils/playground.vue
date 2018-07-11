@@ -42,7 +42,7 @@ export default {
             .then(uuid => {
               this.state = 'tested'
               console.log('[Playground] checked upload, successful')
-              console.log(`[Playground] Try running casper.getLink('XxHxSMm2Gty6qSNMukw2Du').then(console.log) and open the link that fill show up`)
+              console.log(`[Playground] Try running casper.getLink('V2QD3E5wJvT9BUPoXraQnQ').then(console.log) and open the link that be will be returned`)
             })
             .catch(err => {
               console.error(err)
