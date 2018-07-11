@@ -52,4 +52,4 @@ There is an initialized casperapi instance available in the global scope of this
 [Playground with UI][playground]
 
 [using-promises]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises
-[playground]: /browser-playground.html
+[playground]: http://docs.casperproject.io/browser-playground.html
