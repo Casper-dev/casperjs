@@ -99,7 +99,7 @@ var _require = __webpack_require__(/*! ../utils */ "./src/utils/utils.js"),
 
 var SC_INTERFACE = __webpack_require__(/*! ./sc.abi.json */ "./src/eth/sc.abi.json");
 var SC_ADDR = {
-  development: '70956945E53886f71c7dd8c1543e155d5e069a1A',
+  development: 'b4854255e34a089FBae02709A35ddc854D238d0C',
   production: 'ff89Eb252F1E9C6638823C819DC0b2Ce3bFae7F5'
 };
 var sc = {
