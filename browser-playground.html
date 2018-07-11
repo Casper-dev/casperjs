@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title> Casper API Browser Playground </title>
+
+  <style>
+    body {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      margin: 0;
+      box-sizing: border-box;
+    }
+
+    body,
+    button,
+    input,
+    textarea {
+      font-family: 'Roboto', Arial, Helvetica, sans-serif;
+      box-sizing: border-box;
+    }
+
+    button {
+      border: 0;
+      /* color: white; */
+      background: #eee;
+      padding: 10px 20px 7px;
+      border-bottom: 3px solid transparent;
+      margin-right: 20px;
+    }
+
+    input,
+    textarea {
+      padding: 10px 20px;
+      background: #eee;
+      border: 0;
+      border-left: 3px solid black;
+      width: 100%;
+      resize: none;
+    }
+
+    input:focus,
+    textarea:focus,
+    button:hover,
+    button:focus {
+      border-color: #008cff;
+      outline: none;
+    }
+
+    #log {
+      flex: 1;
+      min-height: 400px;
+    }
+
+    #media-container>* {
+      width: 100%;
+    }
+
+    .row {
+      flex: 1;
+      display: flex;
+      flex-direction: row;
+    }
+
+    .col {
+      flex: 1 0 50%;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .col:first-child {
+      padding-right: 10px;
+    }
+
+    .col:last-child {
+      padding-left: 10px;
+    }
+
+    .github {
+      position: absolute;
+      top: 37px;
+      right: 20px;
+      height: 40px;
+      width: 40px;
+    }
+
+
+    @media screen and (max-width: 880px) {
+      .row {
+        flex-direction: column;
+      }
+
+      #actions {
+        margin: -10px;
+        display: flex;
+        flex-wrap: wrap;
+      }
+
+      #actions button {
+        margin: 10px;
+        flex: 1 0;
+        display: block;
+        white-space: nowrap;
+      }
+
+      .col:first-child {
+        padding-right: 0;
+      }
+
+      .col:last-child {
+        padding-left: 0px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <a href="https://github.com/Casper-dev/casperjs/tree/master/examples/browser-playground">
+    <img class="github"
+         src="https://assets-cdn.github.com/images/modules/logos_page/GitHub-Mark.png"
+         alt="Fork me on GitHub">
+  </a>
+
+
+  <h1> Casper API Browser Playground </h1>
+
+  <h3> Info: </h3>
+  <input type="file" id="file">
+  <br>
+  <input type="text" id="uuid" placeholder="uuid">
+
+  <br>
+
+  <h3> Actions: </h3>
+  <div id="actions">
+    <button id="save"> Save </button>
+    <button id="delete"> Delete </button>
+    <button id="download"> Download </button>
+    <button id="get-link"> Get Link </button>
+  </div>
+
+  <br>
+
+  <div class="row">
+    <div class="col">
+      <h3>
+        Log:
+      </h3>
+      <textarea id="log" placeholder="log" style="width: 100%"></textarea>
+    </div>
+    <div class="col">
+      <h3>
+        Media:
+      </h3>
+      <div id="media-container">
+        Try using Get as image \ Get as video \ Get as audio with some uuid
+      </div>
+    </div>
+  </div>
+<script type="text/javascript" src="main.js"></script></body>
+
+</html>

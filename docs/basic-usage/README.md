@@ -49,4 +49,7 @@ There is an initialized casperapi instance available in the global scope of this
   <utils-playground />
 </client-only>
 
+[Playground with UI][playground]
+
 [using-promises]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises
+[playground]: /browser-playground.html
