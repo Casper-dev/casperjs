@@ -3,7 +3,14 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 
 module.exports = (env, options) => ({
-  entry: path.resolve(__dirname, 'index.js'),
+  entry: {
+    'browser-playground': path.resolve(__dirname, 'index.js'),
+  },
+  
+  output: {
+    path: __dirname + '/dist',
+    filename: 'browser-playground'
+  },
 
   module: {
     rules: [{
@@ -24,7 +31,9 @@ module.exports = (env, options) => ({
   
   plugins: [
     new HtmlWebpackPlugin({
-      template: 'index.html'
+      template: 'index.html',
+      // Didn't find a way to tell webpack-dev-server to use not index.html
+      filename: options.mode === 'development' ? 'index.html' : 'browser-playground.html'
     })
   ]
 })

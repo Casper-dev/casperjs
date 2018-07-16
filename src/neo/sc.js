@@ -14,7 +14,7 @@ const getUploadNodes = (neo, { fileSize, mode }) => new Promise((resolve, reject
   const script = neo.sc.createScript({
     scriptHash: SC_ADDR[mode],
     operation: 'getpeers',
-    args: [fileSize, 1]
+    args: [fileSize, 4]
   })
 
   neo.rpc.Query.invokeScript(script)
