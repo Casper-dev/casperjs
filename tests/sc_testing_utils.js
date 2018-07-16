@@ -26,10 +26,11 @@ const mockEth = ({
   Contract.prototype = Object.prototype
 
   const eth = {
-    Contract
+    Contract,
+    sign: { 
+      call: 'eth_sign'
+    }
   }
-
-  eth.cool = getPeers.cool
 
   return eth
 }

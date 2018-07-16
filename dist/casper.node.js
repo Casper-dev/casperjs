@@ -99,7 +99,7 @@ module.exports = [{"constant":true,"inputs":[{"name":"nodeID","type":"bytes32"}]
 "use strict";
 
 
-const { parseSCString, uuidToHash, nodeIdToBytes } = __webpack_require__(/*! ../utils */ "./src/utils/utils.js");
+const { parseSCString, uuidToHash, nodeIdToBytes, entropy } = __webpack_require__(/*! ../utils */ "./src/utils/utils.js");
 
 const SC_INTERFACE = __webpack_require__(/*! ./sc.abi.json */ "./src/eth/sc.abi.json");
 const SC_ADDR = {
@@ -125,9 +125,8 @@ const getSC = (eth, mode) => {
 
 const getUploadNodes = (eth, { fileSize, mode }) => new Promise((resolve, reject) => {
   const sc = getSC(eth, mode);
-  const entropy = Math.round(Math.random() * 100000);
 
-  sc.methods.getPeers(fileSize, entropy).call().then(data => {
+  sc.methods.getPeers(fileSize, entropy()).call().then(data => {
     const nodeIds = Object.values(data);
 
     return Promise.all(nodeIds.map(id => new Promise((resolve, reject) => sc.methods.getNodeAddr(id).call().then(ipPort => resolve({
@@ -168,21 +167,27 @@ module.exports = {
 
 // we use commonsjs for node export
 const scEth = __webpack_require__(/*! ./eth/sc */ "./src/eth/sc.js");
+const scNeo = __webpack_require__(/*! ./neo/sc */ "./src/neo/sc.js");
 const CasperPromise = __webpack_require__(/*! ./promise */ "./src/promise.js");
 const requestAny = __webpack_require__(/*! ./requestAny */ "./src/requestAny.js");
 const utils = __webpack_require__(/*! ./utils */ "./src/utils/utils.js");
 
 const REST_PORT = 5001;
 const sc = {
-  eth: scEth
+  eth: scEth,
+  neo: scNeo
 };
 
 class Casper {
-  constructor(api, { blockchain = 'eth', mode = 'development' } = {}) {
-    // Later we will add more blockchains and use autodetection, etherium is the default mode
+  constructor(api, { blockchain, mode = 'development' } = {}) {
+    blockchain = blockchain ? blockchain : utils.detectBlockchain(api);
+    if (typeof blockchain === 'undefined') {
+      throw new Error('casperapi: Unsupported blockchain api, use web3 / web3-eth / neon-js');
+    }
+
     this.blockchain = blockchain;
     this.mode = mode;
-    if (this.blockchain === 'eth') this.blockchainAPI = api.eth || api;
+    if (this.blockchain === 'eth') this.blockchainAPI = api.eth || api;else this.blockchainAPI = api;
   }
 
   /**
@@ -273,6 +278,88 @@ class Casper {
 }
 
 module.exports = Casper;
+
+/***/ }),
+
+/***/ "./src/neo/sc.js":
+/*!***********************!*\
+  !*** ./src/neo/sc.js ***!
+  \***********************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+const { uuidToHash, nodeIdToBytes, entropy, neoDecode } = __webpack_require__(/*! ../utils */ "./src/utils/utils.js");
+
+const SC_ADDR = {
+  development: 'afbbe56378cd68fe045463bd5e3a2978f0ff37bb',
+  production: 'ff89Eb252F1E9C6638823C819DC0b2Ce3bFae7F5'
+};
+
+const RPC_ADDR = {
+  development: 'http://195.201.96.242:30333',
+  production: 'http://195.201.96.242:30333'
+};
+
+const getUploadNodes = (neo, { fileSize, mode }) => new Promise((resolve, reject) => {
+  const script = neo.sc.createScript({
+    scriptHash: SC_ADDR[mode],
+    operation: 'getpeers',
+    args: [fileSize, 1]
+  });
+
+  neo.rpc.Query.invokeScript(script).execute(RPC_ADDR[mode]).then(res => {
+    const result = res.result.stack[0].value;
+    const nodeIds = result.filter(x => x.value.length).map(x => x.value);
+    return nodeIds;
+  }).then(nodeIds => Promise.all(nodeIds.map(id => {
+    const script = neo.sc.createScript({
+      scriptHash: SC_ADDR[mode],
+      operation: 'getinfo',
+      args: [id]
+    });
+
+    return neo.rpc.Query.invokeScript(script).execute(RPC_ADDR[mode]).then(res => {
+      const result = res.result.stack[0].value;
+      const [ip, ipfs] = neoDecode(neo, [String, String], result.slice(2));
+      return {
+        ip: ip.replace(/:.*/, ''),
+        ipfs,
+        hash: neo.u.hexstring2str(id)
+      };
+    });
+  }))).then(resolve);
+});
+
+const getStoringNodes = (neo, { uuid, mode }) => new Promise((resolve, reject) => {
+  const fileHash = uuidToHash(uuid);
+  const script = neo.sc.createScript({
+    scriptHash: SC_ADDR[mode],
+    operation: 'getstoringpeers',
+    args: [fileHash.substr(2)] // neo dislikes 0x
+  });
+
+  neo.rpc.Query.invokeScript(script).execute(RPC_ADDR[mode]).then(res => {
+    const result = res.result.stack[0].value;
+    const nodeIds = result.filter(x => x.value.length).map(x => x.value);
+    return nodeIds;
+  }).then(nodeIds => Promise.all(nodeIds.map(id => {
+    const script = neo.sc.createScript({
+      scriptHash: SC_ADDR[mode],
+      operation: 'getinfo',
+      args: [id]
+    });
+
+    return neo.rpc.Query.invokeScript(script).execute(RPC_ADDR[mode]).then(res => neoDecode(String, res.result.stack[0].value[2]));
+  }))).then(ips => ips.filter(ip => ip.length)).then(ips => ips.map(ip => ip.replace(/:.*/, ''))).then(resolve);
+});
+
+module.exports = {
+  getUploadNodes,
+  getStoringNodes
+};
 
 /***/ }),
 
@@ -655,11 +742,50 @@ const uuidToHash = uuid => {
 };
 
 const nodeIdToBytes = id => {
-  const value = id.substr(2);
+  const value = id.substr(0, 2) === '0x' ? id.substr(2) : id;
   const bytes = hex.toBytes('1220' + value);
   const base58 = bs58.encode(bytes);
 
   return base58;
+};
+
+const entropy = () => Math.round(Math.random() * 100000);
+
+const neoDecodeOne = (neo, type, res) => {
+  switch (type) {
+    case Number:
+      switch (res.type) {
+        case 'Integer':
+          return parseInt(res.value);
+        case 'ByteArray':
+          const hex = neo.u.reverseHex(res.value);
+          return parseInt(hex, 16);
+      }
+
+    case String:
+      return neo.u.hexstring2str(res.value);
+
+    default:
+      throw new Error(`casperapi: Unsupported neo decode pair: ${res.type} -> ${typeof type()}`);
+  }
+};
+const neoDecode = (neo, desiredTypes, results) => {
+  if (Array.isArray(desiredTypes)) {
+    if (results.length < desiredTypes.length) throw new Error(`casperapi: Result to short, cannont convert ${results.length} of ${desiredTypes.length}`);
+    return desiredTypes.map((type, idx) => neoDecodeOne(neo, type, results[idx]));
+  }
+
+  return neoDecodeOne(neo, desiredTypes, results);
+};
+
+const detectBlockchain = api => {
+  if (!api instanceof Object) return;
+
+  if (api.sign && api.sign.call === 'eth_sign' || api.eth && api.eth.sign && api.sign.call === 'eth_sign') {
+    return 'eth';
+  } else if (api.CONST && api.CONST.NEO_NETWORK) {
+    return 'neo';
+  }
 };
 
 module.exports = {
@@ -667,7 +793,10 @@ module.exports = {
   isFile,
   getFileSize,
   uuidToHash,
-  nodeIdToBytes
+  nodeIdToBytes,
+  entropy,
+  neoDecode,
+  detectBlockchain
 };
 
 /***/ }),

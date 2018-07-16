@@ -1,4 +1,4 @@
-const { parseSCString, uuidToHash, nodeIdToBytes } = require('../utils') 
+const { parseSCString, uuidToHash, nodeIdToBytes, entropy } = require('../utils') 
 
 const SC_INTERFACE = require('./sc.abi.json')
 const SC_ADDR = {
@@ -12,7 +12,7 @@ const sc = {
 const getSC = (eth, mode) => {
   // initiing casper-sc is somewhat pricy, so we try to get it from cache
   for(let pair of sc[mode]) {
-    if(pair.eth === eth) return pair.sc
+    if (pair.eth === eth) return pair.sc
   }
 
   // conneced to another web3 instance or created for the first time
@@ -25,9 +25,8 @@ const getSC = (eth, mode) => {
 
 const getUploadNodes = (eth, { fileSize, mode }) => new Promise((resolve, reject) => {
   const sc = getSC(eth, mode)
-  const entropy = Math.round(Math.random() * 100000)
 
-  sc.methods.getPeers(fileSize, entropy).call()
+  sc.methods.getPeers(fileSize, entropy()).call()
     .then(data => {
       const nodeIds = Object.values(data)
 

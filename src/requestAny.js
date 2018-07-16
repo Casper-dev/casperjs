@@ -11,7 +11,7 @@ const requestAny = (
   config = {}
 ) => CasperPromise((resolve, reject, emit) => {
   ips = ips.filter(ip => ip !== '0.0.0.0')
-  if(ips.length === 0) reject(new Error('casperapi: No hosts to handle request'))
+  if (ips.length === 0) reject(new Error('casperapi: No hosts to handle request'))
   
   // preparation
   const hosts = ips.map(ip => ({
@@ -29,13 +29,13 @@ const requestAny = (
   }
 
   const handleProgress = progressHost => event => {
-    if( ! championHost) setChampion(progressHost)
+    if ( ! championHost) setChampion(progressHost)
 
     hosts
       .filter(host => host !== championHost)
       .map(host => host.abortRequest())
 
-    if(progressHost === championHost) {
+    if (progressHost === championHost) {
       emit('progress', event)
     }
   }
@@ -54,14 +54,14 @@ const requestAny = (
       .on('progress', handleProgress(host))
       .then(response => {
         // avoiding multiple resolves
-        if( ! championHost) setChampion(host)
-        if(host === championHost) resolve(response)
+        if ( ! championHost) setChampion(host)
+        if (host === championHost) resolve(response)
       })
       .catch(err => {
         // console.log('Host err', err, host)
         host.rejected = true
 
-        if(host === championHost) {
+        if (host === championHost) {
           // trying other requests that didn't fail
           const possibleIps = hosts
                                 .filter(hostWorthTrying)
@@ -75,7 +75,7 @@ const requestAny = (
             .catch(err => {
               reject(new Error('casperapi: All hosts are unreachable'))
             })
-        } else if(hosts.filter(hostWorthTrying).length === 0) {
+        } else if (hosts.filter(hostWorthTrying).length === 0) {
           reject(new Error('casperapi: All hosts are unreachable'))
         }
       })

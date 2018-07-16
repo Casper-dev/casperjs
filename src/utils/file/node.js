@@ -7,8 +7,8 @@ const isFile = file => ( file instanceof Buffer
 )
 
 const getFileSize = file => {
-  if(file instanceof stream.Readable) return getStreamLength(file)
-  if(file instanceof Buffer) return new Promise((resolve => resolve(file.byteLength)))
+  if (file instanceof stream.Readable) return getStreamLength(file)
+  if (file instanceof Buffer) return new Promise((resolve => resolve(file.byteLength)))
 }
 
 

@@ -1,12 +1,12 @@
 function on(event, cb) {
-  if(!this.subscribers[event]) this.subscribers[event] = []
+  if ( ! this.subscribers[event]) this.subscribers[event] = []
   this.subscribers[event].push(cb)
   return this
 }
 
 
 function emit(event, message) {
-  if(this.subscribers[event]) this.subscribers[event].forEach(cb => cb(message))
+  if (this.subscribers[event]) this.subscribers[event].forEach(cb => cb(message))
 }
 
 

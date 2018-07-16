@@ -1,5 +1,6 @@
 // we use commonsjs for node export
 const scEth = require('./eth/sc')
+const scNeo = require('./neo/sc')
 const CasperPromise = require('./promise')
 const requestAny = require('./requestAny')
 const utils = require('./utils')
@@ -7,16 +8,22 @@ const utils = require('./utils')
 
 const REST_PORT = 5001
 const sc = {
-  eth: scEth
+  eth: scEth,
+  neo: scNeo
 }
 
 
 class Casper {
-  constructor(api, { blockchain='eth', mode='development' } = {}) {
-    // Later we will add more blockchains and use autodetection, etherium is the default mode
+  constructor(api, { blockchain, mode='development' } = {}) {
+    blockchain = blockchain ? blockchain : utils.detectBlockchain(api)
+    if (typeof blockchain === 'undefined') {
+      throw new Error('casperapi: Unsupported blockchain api, use web3 / web3-eth / neon-js')
+    }
+
     this.blockchain = blockchain
     this.mode = mode
-    if(this.blockchain === 'eth') this.blockchainAPI = api.eth || api
+    if (this.blockchain === 'eth') this.blockchainAPI = api.eth || api
+    else this.blockchainAPI = api
   }
 
   /**
@@ -28,7 +35,7 @@ class Casper {
    */
   save(file, uuid = false) {
     return CasperPromise((resolve, reject, emit) => {
-      if( ! utils.isFile(file)) {
+      if ( ! utils.isFile(file)) {
         throw new TypeError('casperapi: file type must be File | Blob | Buffer | stream.Readable')
       }
 
@@ -46,7 +53,7 @@ class Casper {
           }
 
           let method, url
-          if(uuid) {
+          if (uuid) {
             // Update
             method = 'PUT'
             url = `http://{host}:${REST_PORT}/casper/v0/file/${uuid}`

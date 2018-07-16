@@ -26,18 +26,18 @@ const makeRequest = ({
 
     // dispatching request
     const req = request(requestConfig, (err, response, data) => {
-      if(err) {
+      if (err) {
         return reject(err)
       }
       resolve(data)
     })
 
-    if(file) {
+    if (file) {
       // upload progress
       let uploaded = 0
       let total = 0
       let filesize = undefined
-      if(file instanceof Buffer) {
+      if (file instanceof Buffer) {
         filesize = file.byteLength
         file = toStream(file)
       }
@@ -52,7 +52,7 @@ const makeRequest = ({
       form.on('data', chunk => {
         // this is form read progress but for fs.createReadStream it's realistic as http reads this in chunks
         uploaded += chunk.length
-        if(total) emit('progress', uploaded / total)
+        if (total) emit('progress', uploaded / total)
       })
     } else {
       // download progress
@@ -64,7 +64,7 @@ const makeRequest = ({
   
       req.on('data', chunk => {
         downloaded += chunk.length
-        if(total) emit('progress', downloaded / total)
+        if (total) emit('progress', downloaded / total)
       })
     }
 

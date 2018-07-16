@@ -1,5 +1,5 @@
 const isFile = file => {
-  if(file instanceof Blob) return true
+  if (file instanceof Blob) return true
   return false
 }
 

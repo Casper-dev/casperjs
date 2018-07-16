@@ -96,7 +96,8 @@ module.exports = [{"constant":true,"inputs":[{"name":"nodeID","type":"bytes32"}]
 var _require = __webpack_require__(/*! ../utils */ "./src/utils/utils.js"),
     parseSCString = _require.parseSCString,
     uuidToHash = _require.uuidToHash,
-    nodeIdToBytes = _require.nodeIdToBytes;
+    nodeIdToBytes = _require.nodeIdToBytes,
+    entropy = _require.entropy;
 
 var SC_INTERFACE = __webpack_require__(/*! ./sc.abi.json */ "./src/eth/sc.abi.json");
 var SC_ADDR = {
@@ -147,9 +148,8 @@ var getUploadNodes = function getUploadNodes(eth, _ref) {
       mode = _ref.mode;
   return new Promise(function (resolve, reject) {
     var sc = getSC(eth, mode);
-    var entropy = Math.round(Math.random() * 100000);
 
-    sc.methods.getPeers(fileSize, entropy).call().then(function (data) {
+    sc.methods.getPeers(fileSize, entropy()).call().then(function (data) {
       var nodeIds = Object.values(data);
 
       return Promise.all(nodeIds.map(function (id) {
@@ -219,29 +219,34 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 // we use commonsjs for node export
 var scEth = __webpack_require__(/*! ./eth/sc */ "./src/eth/sc.js");
+var scNeo = __webpack_require__(/*! ./neo/sc */ "./src/neo/sc.js");
 var CasperPromise = __webpack_require__(/*! ./promise */ "./src/promise.js");
 var requestAny = __webpack_require__(/*! ./requestAny */ "./src/requestAny.js");
 var utils = __webpack_require__(/*! ./utils */ "./src/utils/utils.js");
 
 var REST_PORT = 5001;
 var sc = {
-  eth: scEth
+  eth: scEth,
+  neo: scNeo
 };
 
 var Casper = function () {
   function Casper(api) {
     var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
-        _ref$blockchain = _ref.blockchain,
-        blockchain = _ref$blockchain === undefined ? 'eth' : _ref$blockchain,
+        blockchain = _ref.blockchain,
         _ref$mode = _ref.mode,
         mode = _ref$mode === undefined ? 'development' : _ref$mode;
 
     _classCallCheck(this, Casper);
 
-    // Later we will add more blockchains and use autodetection, etherium is the default mode
+    blockchain = blockchain ? blockchain : utils.detectBlockchain(api);
+    if (typeof blockchain === 'undefined') {
+      throw new Error('casperapi: Unsupported blockchain api, use web3 / web3-eth / neon-js');
+    }
+
     this.blockchain = blockchain;
     this.mode = mode;
-    if (this.blockchain === 'eth') this.blockchainAPI = api.eth || api;
+    if (this.blockchain === 'eth') this.blockchainAPI = api.eth || api;else this.blockchainAPI = api;
   }
 
   /**
@@ -377,6 +382,129 @@ var Casper = function () {
 }();
 
 module.exports = Casper;
+
+/***/ }),
+
+/***/ "./src/neo/sc.js":
+/*!***********************!*\
+  !*** ./src/neo/sc.js ***!
+  \***********************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+var _require = __webpack_require__(/*! ../utils */ "./src/utils/utils.js"),
+    uuidToHash = _require.uuidToHash,
+    nodeIdToBytes = _require.nodeIdToBytes,
+    entropy = _require.entropy,
+    neoDecode = _require.neoDecode;
+
+var SC_ADDR = {
+  development: 'afbbe56378cd68fe045463bd5e3a2978f0ff37bb',
+  production: 'ff89Eb252F1E9C6638823C819DC0b2Ce3bFae7F5'
+};
+
+var RPC_ADDR = {
+  development: 'http://195.201.96.242:30333',
+  production: 'http://195.201.96.242:30333'
+};
+
+var getUploadNodes = function getUploadNodes(neo, _ref) {
+  var fileSize = _ref.fileSize,
+      mode = _ref.mode;
+  return new Promise(function (resolve, reject) {
+    var script = neo.sc.createScript({
+      scriptHash: SC_ADDR[mode],
+      operation: 'getpeers',
+      args: [fileSize, 1]
+    });
+
+    neo.rpc.Query.invokeScript(script).execute(RPC_ADDR[mode]).then(function (res) {
+      var result = res.result.stack[0].value;
+      var nodeIds = result.filter(function (x) {
+        return x.value.length;
+      }).map(function (x) {
+        return x.value;
+      });
+      return nodeIds;
+    }).then(function (nodeIds) {
+      return Promise.all(nodeIds.map(function (id) {
+        var script = neo.sc.createScript({
+          scriptHash: SC_ADDR[mode],
+          operation: 'getinfo',
+          args: [id]
+        });
+
+        return neo.rpc.Query.invokeScript(script).execute(RPC_ADDR[mode]).then(function (res) {
+          var result = res.result.stack[0].value;
+
+          var _neoDecode = neoDecode(neo, [String, String], result.slice(2)),
+              _neoDecode2 = _slicedToArray(_neoDecode, 2),
+              ip = _neoDecode2[0],
+              ipfs = _neoDecode2[1];
+
+          return {
+            ip: ip.replace(/:.*/, ''),
+            ipfs: ipfs,
+            hash: neo.u.hexstring2str(id)
+          };
+        });
+      }));
+    }).then(resolve);
+  });
+};
+
+var getStoringNodes = function getStoringNodes(neo, _ref2) {
+  var uuid = _ref2.uuid,
+      mode = _ref2.mode;
+  return new Promise(function (resolve, reject) {
+    var fileHash = uuidToHash(uuid);
+    var script = neo.sc.createScript({
+      scriptHash: SC_ADDR[mode],
+      operation: 'getstoringpeers',
+      args: [fileHash.substr(2)] // neo dislikes 0x
+    });
+
+    neo.rpc.Query.invokeScript(script).execute(RPC_ADDR[mode]).then(function (res) {
+      var result = res.result.stack[0].value;
+      var nodeIds = result.filter(function (x) {
+        return x.value.length;
+      }).map(function (x) {
+        return x.value;
+      });
+      return nodeIds;
+    }).then(function (nodeIds) {
+      return Promise.all(nodeIds.map(function (id) {
+        var script = neo.sc.createScript({
+          scriptHash: SC_ADDR[mode],
+          operation: 'getinfo',
+          args: [id]
+        });
+
+        return neo.rpc.Query.invokeScript(script).execute(RPC_ADDR[mode]).then(function (res) {
+          return neoDecode(String, res.result.stack[0].value[2]);
+        });
+      }));
+    }).then(function (ips) {
+      return ips.filter(function (ip) {
+        return ip.length;
+      });
+    }).then(function (ips) {
+      return ips.map(function (ip) {
+        return ip.replace(/:.*/, '');
+      });
+    }).then(resolve);
+  });
+};
+
+module.exports = {
+  getUploadNodes: getUploadNodes,
+  getStoringNodes: getStoringNodes
+};
 
 /***/ }),
 
@@ -746,6 +874,8 @@ module.exports = {
 "use strict";
 
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 var sha256 = __webpack_require__(/*! js-sha256 */ "js-sha256");
 var bs58 = __webpack_require__(/*! ./crypto/bs58 */ "./src/utils/crypto/bs58.js");
 var hex = __webpack_require__(/*! ./crypto/hex */ "./src/utils/crypto/hex.js");
@@ -774,11 +904,54 @@ var uuidToHash = function uuidToHash(uuid) {
 };
 
 var nodeIdToBytes = function nodeIdToBytes(id) {
-  var value = id.substr(2);
+  var value = id.substr(0, 2) === '0x' ? id.substr(2) : id;
   var bytes = hex.toBytes('1220' + value);
   var base58 = bs58.encode(bytes);
 
   return base58;
+};
+
+var entropy = function entropy() {
+  return Math.round(Math.random() * 100000);
+};
+
+var neoDecodeOne = function neoDecodeOne(neo, type, res) {
+  switch (type) {
+    case Number:
+      switch (res.type) {
+        case 'Integer':
+          return parseInt(res.value);
+        case 'ByteArray':
+          var _hex = neo.u.reverseHex(res.value);
+          return parseInt(_hex, 16);
+      }
+
+    case String:
+      return neo.u.hexstring2str(res.value);
+
+    default:
+      throw new Error('casperapi: Unsupported neo decode pair: ' + res.type + ' -> ' + _typeof(type()));
+  }
+};
+var neoDecode = function neoDecode(neo, desiredTypes, results) {
+  if (Array.isArray(desiredTypes)) {
+    if (results.length < desiredTypes.length) throw new Error('casperapi: Result to short, cannont convert ' + results.length + ' of ' + desiredTypes.length);
+    return desiredTypes.map(function (type, idx) {
+      return neoDecodeOne(neo, type, results[idx]);
+    });
+  }
+
+  return neoDecodeOne(neo, desiredTypes, results);
+};
+
+var detectBlockchain = function detectBlockchain(api) {
+  if (!api instanceof Object) return;
+
+  if (api.sign && api.sign.call === 'eth_sign' || api.eth && api.eth.sign && api.sign.call === 'eth_sign') {
+    return 'eth';
+  } else if (api.CONST && api.CONST.NEO_NETWORK) {
+    return 'neo';
+  }
 };
 
 module.exports = {
@@ -786,7 +959,10 @@ module.exports = {
   isFile: isFile,
   getFileSize: getFileSize,
   uuidToHash: uuidToHash,
-  nodeIdToBytes: nodeIdToBytes
+  nodeIdToBytes: nodeIdToBytes,
+  entropy: entropy,
+  neoDecode: neoDecode,
+  detectBlockchain: detectBlockchain
 };
 
 /***/ }),

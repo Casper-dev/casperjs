@@ -91,7 +91,7 @@ describe('casperapi', () => {
       const ips = ['1.1.1.1', '2.2.2.2']
       const scReturn = ips.map(ip => ({ ip, ipfs: '', hash: '' }))
       mockGetUploadNodes = jest.fn().mockReturnValueOnce(scReturn)
-      const casperapi = new Casper(scReturn)
+      const casperapi = new Casper(web3)
 
       await casperapi.save(file, uuid)
 

@@ -31,7 +31,7 @@ module.exports = (env, options) => {
     plugins: []
   }
 
-  if(options.mode === 'development') {
+  if (options.mode === 'development') {
     baseConfig.devtool = 'source-map'
   }
   
@@ -73,7 +73,7 @@ module.exports = (env, options) => {
   })
 
   const configs = [browserBundleConfig]
-  if(options.mode === 'development') configs.push(nodeConfig)
+  if (options.mode === 'development') configs.push(nodeConfig)
 
   return configs
 }

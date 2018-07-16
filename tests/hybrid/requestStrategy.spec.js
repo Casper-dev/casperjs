@@ -180,7 +180,7 @@ describe('requestStrategy', () => {
     
 
     mockRequest.mockImplementation(({ url }) => {
-      if(url === 'http://1.1.1.1/bla') {
+      if (url === 'http://1.1.1.1/bla') {
         return wrapAsReq(CasperPromise((resolve, reject, emit) => {
           // slow, but it resolves
           setTimeout(() => {
