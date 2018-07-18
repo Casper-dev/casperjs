@@ -8,7 +8,10 @@ module.exports = {
   ga: 'UA-105436727-4',
   head: [
     ['link', { rel: 'shortcut icon', type: 'image/x-icon', href: '/logo.png' }],
-    ['link', { rel: 'icon', href: '/logo.png' }]
+    ['link', { rel: 'icon', href: '/logo.png' }],
+    ['meta', { property: 'og:title', content: 'Casper API Docs' }],
+    ['meta', { property: 'og:description', content: 'JS Docs for Casper API infrastructure' }],
+    ['meta', { property: 'og:image', content: '/casper-og.jpg' }],
   ],
 
   themeConfig: {
